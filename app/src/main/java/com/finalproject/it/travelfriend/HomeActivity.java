@@ -8,26 +8,26 @@ import android.widget.Button;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Button mLogin,mRegister;
+    Button mGuide,mTourist;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        mLogin = findViewById(R.id.btn_login);
-        mRegister = findViewById(R.id.btn_register);
+        mGuide = findViewById(R.id.btn_guide);
+        mTourist = findViewById(R.id.btn_tourist);
 
-        mRegister.setOnClickListener(new View.OnClickListener() {
+        mGuide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomeActivity.this,RegisterActivity.class));
+                startActivity(new Intent(HomeActivity.this,HomeGuideActivity.class));
             }
         });
 
-        mLogin.setOnClickListener(new View.OnClickListener() {
+        mTourist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(HomeActivity.this,LoginActivity.class));
+                startActivity(new Intent(HomeActivity.this,HomeUserActivity.class));
             }
         });
     }

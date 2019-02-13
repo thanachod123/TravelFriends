@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    tools:context=".HomeActivity"
+    tools:context=".HomeGuideActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <ImageView
@@ -18,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo" />
+        app:layout_constraintVertical_bias="0.498"
+        app:srcCompat="@drawable/guide" />
 
     <TextView
         android:id="@+id/textview"
@@ -28,7 +29,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="@string/txt_Welcome"
+        android:text="Guide"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView10"
@@ -36,26 +37,29 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_guide"
+        android:id="@+id/btn_register"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/bt_border"
-        android:text="I am a guide"
+        android:text="I am new"
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_tourist"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_tourist"
+        android:id="@+id/btn_login"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
-        android:background="@drawable/bt_border"
-        android:text="i am a tourist"
+        android:background="@drawable/bt_border2"
+        android:text="Sign in"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

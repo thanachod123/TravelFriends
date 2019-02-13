@@ -1,9 +1,9 @@
 package com.finalproject.it.travelfriend.Model;
 
-public class UserData {
-    String email, name, surname, phone, password, gender, profile_image, province, district;
+public class GuideData {
+    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district;
 
-    public UserData(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district) {
+    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -11,9 +11,12 @@ public class UserData {
         this.password = password;
         this.gender = gender;
         this.profile_image = profile_image;
+        this.certificate_image = certificate_image;
+        this.license_image = license_image;
+        this.citizen_image = citizen_image;
         this.province = province;
         this.district = district;
-    }
+        }
 
     public String getEmail() {
         return email;
@@ -29,6 +32,14 @@ public class UserData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
     }
 
     public String getPhone() {
@@ -63,12 +74,28 @@ public class UserData {
         this.profile_image = profile_image;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getCertificate_image() {
+        return certificate_image;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setCertificate_image(String certificate_image) {
+        this.certificate_image = certificate_image;
+    }
+
+    public String getLicense_image() {
+        return license_image;
+    }
+
+    public void setLicense_image(String license_image) {
+        this.license_image = license_image;
+    }
+
+    public String getCitizen_image() {
+        return citizen_image;
+    }
+
+    public void setCitizen_image(String citizen_image) {
+        this.citizen_image = citizen_image;
     }
 
     public String getProvince() {
@@ -89,7 +116,7 @@ public class UserData {
 
     @Override
     public String toString() {
-        return "UserData{" +
+        return "GuideData{" +
                 "email='" + email + '\'' +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
@@ -97,6 +124,9 @@ public class UserData {
                 ", password='" + password + '\'' +
                 ", gender='" + gender + '\'' +
                 ", profile_image='" + profile_image + '\'' +
+                ", certificate_image='" + certificate_image + '\'' +
+                ", license_image='" + license_image + '\'' +
+                ", citizen_image='" + citizen_image + '\'' +
                 ", province='" + province + '\'' +
                 ", district='" + district + '\'' +
                 '}';

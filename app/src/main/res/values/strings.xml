@@ -4,6 +4,7 @@
     <string name="txt_login">Already Have an Account</string>
     <string name="txt_register">Need an Account</string>
     <string name="users">Users</string>
+    <string name="guides">Guides</string>
 
     <!--FACEBOOK-->
     <string name="facebook_app_id">2327010737511302</string>
