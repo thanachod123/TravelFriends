@@ -30,7 +30,7 @@
                 android:layout_height="35dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/ic_back" />
+                app:srcCompat="@drawable/ic_back2" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_profile_image"
@@ -74,7 +74,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
-                            android:hint="Name" />
+                            android:hint="ชื่อ" />
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
@@ -102,7 +102,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
-                            android:hint="Surname" />
+                            android:hint="นามสกุล" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -131,7 +131,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
-                            android:hint="Email" />
+                            android:hint="อีเมลล์" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -160,7 +160,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
-                            android:hint="Phone" />
+                            android:hint="เบอร์โทรศัพท์" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -189,7 +189,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
-                            android:hint="Password"
+                            android:hint="รหัสผ่าน"
                             android:inputType="textPassword" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -219,7 +219,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
-                            android:hint="Province" />
+                            android:hint="จังหวัด" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -248,7 +248,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
-                            android:hint="District" />
+                            android:hint="อำเภอ" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -260,20 +260,19 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="30dp"
                         app:srcCompat="@drawable/ic_age_24dp" />
+
                     <fr.ganfra.materialspinner.MaterialSpinner
                         android:id="@+id/spinner_age"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="65dp"
                         android:layout_below="@+id/TextInputLayout_7"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="-14dp"
                         android:layout_marginRight="10dp"
                         android:layout_toRightOf="@+id/imageView8"
                         app:ms_arrowColor="@color/colorAccent"
                         app:ms_arrowSize="16dp"
                         app:ms_floatingLabelColor="@color/colorAccent"
                         app:ms_floatingLabelText="Select your Age"
-                        app:ms_hint="Age"
                         app:ms_multiline="true" />
 
                     <TextView
@@ -282,8 +281,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/imageView8"
                         android:layout_marginLeft="10dp"
-                        android:layout_marginTop="25dp"
-                        android:text="Gender :"
+                        android:layout_marginTop="37dp"
+                        android:text="เพศ :"
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -301,7 +300,8 @@
                             android:id="@+id/rb_male"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Male"
+                            android:layout_marginTop="5dp"
+                            android:text="ชาย"
                             android:textColor="@color/colorAccent" />
 
                         <RadioButton
@@ -309,7 +309,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
-                            android:text="Female"
+                            android:layout_marginTop="5dp"
+                            android:text="หญิง"
                             android:textColor="@color/colorAccent" />
                     </RadioGroup>
 
@@ -404,23 +405,23 @@
                         android:layout_toRightOf="@+id/imageView9" />
 
                     <Button
-                        android:id="@+id/btn_register"
+                        android:id="@+id/btn_login"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/citizen_img"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="36dp"
                         android:layout_marginBottom="24dp"
-                        android:background="@drawable/bt_border"
+                        android:background="@drawable/bt_border2"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="20dp"
                         android:paddingRight="20dp"
                         android:paddingBottom="10dp"
-                        android:text="Register"
+                        android:text="สมัครสมาชิก"
                         android:textAllCaps="false"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/yellow"
                         android:textSize="24sp" />
                 </RelativeLayout>
             </ScrollView>

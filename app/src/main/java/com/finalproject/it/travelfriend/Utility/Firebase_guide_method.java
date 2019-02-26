@@ -2,6 +2,7 @@ package com.finalproject.it.travelfriend.Utility;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Model.GuideData;
@@ -13,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class Firebase_guide_method {
+    private static final String TAG = "FirebaseMethods";
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
     DatabaseReference mReference;
@@ -40,9 +42,9 @@ public class Firebase_guide_method {
                 });
     }
 
-    public void send_new_guide_data(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district) {
+    public void send_new_guide_data(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age) {
 
-        GuideData guideData = new GuideData(email, name, surname, phone, password, gender, profile_image, certificate_image, license_image, citizen_image, province, district);
+        GuideData guideData = new GuideData(email, name, surname, phone, password, gender, profile_image, certificate_image, license_image, citizen_image, province, district, age);
         mReference.child("Guides").child(guideID).setValue(guideData);
     }
 }

@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">TravelFriend</string>
-    <string name="txt_Welcome">Welcome to\n TravelFriend App</string>
+    <string name="txt_Welcome1">ยินดีต้อนรับเข้าสู่</string>
+    <string name="txt_Welcome2">"แอพพลิเคชั่นค้นหาเพื่อนแนะนำการท่องเที่ยว"</string>
+    <string name="txt_Welcome3">ฉันคือ "ผู้นำเที่ยว"</string>
+    <string name="txt_Welcome4">ฉันคือ "นักท่องเที่ยว"</string>
     <string name="txt_login">Already Have an Account</string>
     <string name="txt_register">Need an Account</string>
     <string name="users">Users</string>
@@ -16,5 +19,8 @@
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

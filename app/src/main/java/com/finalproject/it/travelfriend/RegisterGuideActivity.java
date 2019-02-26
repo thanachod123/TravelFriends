@@ -1,6 +1,7 @@
 package com.finalproject.it.travelfriend;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,14 +12,17 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Utility.Firebase_guide_method;
-import com.finalproject.it.travelfriend.Utility.Firebase_user_method;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +39,10 @@ import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RegisterGuideActivity extends AppCompatActivity {
@@ -46,6 +54,9 @@ public class RegisterGuideActivity extends AppCompatActivity {
     Button mRegister;
     RadioGroup mGender;
     RadioButton mGenderOption;
+    TextView tv_gender,tv_certificate,tv_license,tv_citizen;
+    Spinner spinnerAge;
+
 
     //Firebase Variables
     Firebase_guide_method firebase_guide_method;
@@ -56,7 +67,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
     StorageReference mStorage;
 
     //Variables
-    String strEmail,strName,strPhone,strGender,strPassword,strSurname,strProvince,strDistrict;
+    String strEmail,strName,strPhone,strGender,strPassword,strSurname,strProvince,strDistrict,strAge;
     private static final int request_Code_ProfileIMG = 5;
     private static final int request_Code_CertificateIMG = 6;
     private static final int request_Code_LicenseIMG = 7;
@@ -84,12 +95,34 @@ public class RegisterGuideActivity extends AppCompatActivity {
         mName = findViewById(R.id.edt_Name);
         mPhone = findViewById(R.id.edt_Phone);
         mPassword = findViewById(R.id.edt_Password);
-        mRegister = findViewById(R.id.btn_register);
+        mRegister = findViewById(R.id.btn_login);
         back_bt = findViewById(R.id.btn_back);
         mGender = findViewById(R.id.rg_gender);
         mSurname = findViewById(R.id.edt_Surname);
         mProvince = findViewById(R.id.edt_Province);
         mDistrict = findViewById(R.id.edt_District);
+        tv_gender = findViewById(R.id.tv_gender);
+        tv_certificate = findViewById(R.id.tv_certificate);
+        tv_citizen = findViewById(R.id.tv_citizen);
+        tv_license = findViewById(R.id.tv_license);
+        spinnerAge = findViewById(R.id.spinner_age);
+
+        List age = new ArrayList<Integer>();
+        for (int i = 20; i <= 60; i++){
+            age.add(Integer.toString(i));
+        }
+        ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(
+                this, android.R.layout.simple_spinner_dropdown_item,age);
+        spinnerArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+        spinnerAge.setAdapter(spinnerArrayAdapter);
+
+        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
+        tv_gender.setTypeface(myCustomFont);
+        tv_certificate.setTypeface(myCustomFont);
+        tv_citizen.setTypeface(myCustomFont);
+        tv_license.setTypeface(myCustomFont);
+        mRegister.setTypeface(myCustomFont);
+
 
         mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -263,6 +296,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
         strPassword = mPassword.getText().toString();
         strProvince = mProvince.getText().toString();
         strDistrict = mDistrict.getText().toString();
+        strAge = spinnerAge.getSelectedItem().toString();
 
 //        if (check_input(strEmail,strName,strPhone,strPassword)){
         if (strName.trim().isEmpty()){
@@ -327,7 +361,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict);
+                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge);
                             select_image();
                             Toast.makeText(RegisterGuideActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();

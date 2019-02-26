@@ -1,9 +1,9 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class UserData {
-    String email, name, surname, phone, password, gender, profile_image, province, district;
+    String email, name, surname, phone, password, gender, profile_image, province, district, citizen_image;
 
-    public UserData(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district) {
+    public UserData(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district, String citizen_image) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -13,6 +13,7 @@ public class UserData {
         this.profile_image = profile_image;
         this.province = province;
         this.district = district;
+        this.citizen_image = citizen_image;
     }
 
     public String getEmail() {
@@ -87,6 +88,14 @@ public class UserData {
         this.district = district;
     }
 
+    public String getCitizen_image() {
+        return citizen_image;
+    }
+
+    public void setCitizen_image(String citizen_image) {
+        this.citizen_image = citizen_image;
+    }
+
     @Override
     public String toString() {
         return "UserData{" +
@@ -99,6 +108,7 @@ public class UserData {
                 ", profile_image='" + profile_image + '\'' +
                 ", province='" + province + '\'' +
                 ", district='" + district + '\'' +
+                ", citizen_image='" + citizen_image + '\'' +
                 '}';
     }
 }

@@ -4,9 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context=".HomeActivity"
     tools:layout_editor_absoluteY="25dp">
+
+    <com.jgabrielfreitas.core.BlurImageView
+        android:id="@+id/BlurImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/background_home"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imageView10"
@@ -21,16 +33,35 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textview"
+        android:id="@+id/text_welcome1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:text="@string/txt_Welcome1"
+        android:textColor="@color/colorAccent"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/text_welcome2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_welcome2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="@string/txt_Welcome"
+        android:includeFontPadding="false"
+        android:text="@string/txt_Welcome2"
         android:textColor="@color/colorAccent"
-        android:textSize="24sp"
+        android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/imageView10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -43,19 +74,23 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/bt_border"
-        android:text="I am a guide"
+        android:text='ฉันคือ "ผู้นำเที่ยว"'
         android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/btn_tourist"
+        android:textStyle="bold"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_login"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_tourist"
+        android:id="@+id/btn_login"
         android:layout_width="352dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:background="@drawable/bt_border"
-        android:text="i am a tourist"
+        android:text='ฉันคือ "นักท่องเที่ยว"'
+        android:textStyle="bold"
+        android:textSize="28sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

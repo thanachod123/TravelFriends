@@ -1,6 +1,7 @@
 package com.finalproject.it.travelfriend;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.finalproject.it.travelfriend.Utility.Firebase_user_method;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -39,6 +42,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     ImageView back_bt;
     CircleImageView profile_image;
     TextInputEditText mName,mEmail,mPhone,mPassword,mSurname,mProvince,mDistrict;
+    ImageView mUploadCitizen,mCitizen;
     Button mRegister;
     RadioGroup mGender;
     RadioButton mGenderOption;
@@ -51,10 +55,13 @@ public class RegisterUserActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener mAuthListener;
     StorageReference mStorage;
 
+    TextView tv_gender,tv_citizen;
+
     //Variables
     String strEmail,strName,strPhone,strGender,strPassword,strSurname,strProvince,strDistrict;
     private static final int request_Code = 5;
-    Uri imageUri;
+    private static final int request_Code_CitizenIMG = 8;
+    Uri imageUri,Citizen_imageUri;
     String userId;
 
     @Override
@@ -72,12 +79,21 @@ public class RegisterUserActivity extends AppCompatActivity {
         mName = findViewById(R.id.edt_Name);
         mPhone = findViewById(R.id.edt_Phone);
         mPassword = findViewById(R.id.edt_Password);
-        mRegister = findViewById(R.id.btn_register);
+        mRegister = findViewById(R.id.btn_login);
         back_bt = findViewById(R.id.btn_back);
         mGender = findViewById(R.id.rg_gender);
         mSurname = findViewById(R.id.edt_Surname);
         mProvince = findViewById(R.id.edt_Province);
         mDistrict = findViewById(R.id.edt_District);
+        tv_gender = findViewById(R.id.tv_gender);
+        tv_citizen = findViewById(R.id.tv_citizen);
+        mUploadCitizen = findViewById(R.id.imageView8);
+        mCitizen = findViewById(R.id.citizen_img);
+
+        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
+        tv_gender.setTypeface(myCustomFont);
+        tv_citizen.setTypeface(myCustomFont);
+        mRegister.setTypeface(myCustomFont);
 
         mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -110,6 +126,16 @@ public class RegisterUserActivity extends AppCompatActivity {
                 startActivityForResult(intent,request_Code);
             }
         });
+
+        mUploadCitizen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                intent.setType("image/*");
+                startActivityForResult(intent,request_Code_CitizenIMG);
+            }
+        });
         setupFirebaseAuthentication();
     }
 
@@ -136,6 +162,11 @@ public class RegisterUserActivity extends AppCompatActivity {
                 Exception error = result.getError();
             }
         }
+        if (requestCode == request_Code_CitizenIMG && resultCode == RESULT_OK
+                && data != null &&data.getData() != null){
+            Citizen_imageUri = data.getData();
+            Picasso.with(this).load(Citizen_imageUri).into(mCitizen);
+        }
     }
 
     private void select_image(){
@@ -150,6 +181,19 @@ public class RegisterUserActivity extends AppCompatActivity {
                     final String strProfileImage = String.valueOf(downloadUrl);
                     mReference.child(getString(R.string.users)).child(userId).child("profile_image").setValue(strProfileImage);
 
+                }
+            });
+        }
+        if (Citizen_imageUri != null){
+            StorageReference imageCitizenPath = mStorage.child(getString(R.string.users)).child(userId).child(Citizen_imageUri.getLastPathSegment());
+            imageCitizenPath.putFile(Citizen_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!urlTask.isSuccessful());
+                    Uri downloadUrlCitizen = urlTask.getResult();
+                    final String strCitizenImage = String.valueOf(downloadUrlCitizen);
+                    mReference.child(getString(R.string.users)).child(userId).child("citizen_image").setValue(strCitizenImage);
                 }
             });
         }
@@ -228,7 +272,7 @@ public class RegisterUserActivity extends AppCompatActivity {
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_user_method.send_new_user_data(strEmail,strName,strPhone,strPassword,strGender,"Default",strSurname,strProvince,strDistrict);
+                            firebase_user_method.send_new_user_data(strEmail,strName,strPhone,strPassword,strGender,"Default",strSurname,strProvince,strDistrict,"Default");
                             select_image();
                             Toast.makeText(RegisterUserActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();

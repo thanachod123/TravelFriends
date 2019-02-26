@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_home_24dp"
+        android:title="หน้าหลัก"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/navigation_package"
+        android:icon="@drawable/ic_package_24dp"
+        android:title="แพ็คเกจ"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/navigation_notification"
+        android:icon="@drawable/ic_notifications_24dp"
+        android:title="แจ้งเตือน"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/ic_name_24dp"
+        android:title="ข้อมูลส่วนตัว"
+        app:showAsAction="withText" />
+
+</menu>

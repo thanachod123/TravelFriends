@@ -54,7 +54,8 @@
         <activity android:name=".RegisterGuideActivity" />
         <activity android:name=".HomeUserActivity" />
         <activity android:name=".HomeGuideActivity" />
-        <activity android:name=".LoginGuideActivity"></activity>
+        <activity android:name=".LoginGuideActivity" />
+        <activity android:name=".MainGuideActivity"></activity>
     </application>
 
 </manifest>

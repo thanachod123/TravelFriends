@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -60,6 +61,8 @@ public class LoginUserActivity extends AppCompatActivity {
 
     AVLoadingIndicatorView pd;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,7 +84,7 @@ public class LoginUserActivity extends AppCompatActivity {
         setupFacebook();
 
         //Email
-        mLogin = findViewById(R.id.btn_register);
+        mLogin = findViewById(R.id.btn_login);
         mEmail = findViewById(R.id.edt_Email);
         mPassword = findViewById(R.id.edt_Password);
         mLogin.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +94,8 @@ public class LoginUserActivity extends AppCompatActivity {
             }
         });
 
-        pd = findViewById(R.id.avi);
+        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
+        mLogin.setTypeface(myCustomFont);
 
     }
     /**
@@ -104,26 +108,22 @@ public class LoginUserActivity extends AppCompatActivity {
         String strEmail,strPassword;
         strEmail = mEmail.getText().toString();
         strPassword = mPassword.getText().toString();
-        pd.show();
 
         if (strEmail.equals("") || strPassword.equals("")){
             Toast.makeText(this, "Please Enter Email and Password", Toast.LENGTH_SHORT).show();
-            pd.hide();
         }
         else {
             mAuth.signInWithEmailAndPassword(strEmail,strPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        Intent intent = new Intent(LoginUserActivity.this,MainUserActivity.class);
+                        Intent intent = new Intent(LoginUserActivity.this,MainGuideActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
                         Toast.makeText(LoginUserActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                        pd.hide();
                     }
                     else {
                         Toast.makeText(LoginUserActivity.this, "Please enter Correct email \n and Password", Toast.LENGTH_SHORT).show();
-                        pd.hide();
                     }
                 }
             });
@@ -181,7 +181,7 @@ public class LoginUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            startActivity(new Intent(LoginUserActivity.this,MainUserActivity.class));
+                            startActivity(new Intent(LoginUserActivity.this,MainGuideActivity.class));
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -231,7 +231,7 @@ public class LoginUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
-                            startActivity(new Intent(LoginUserActivity.this,MainUserActivity.class));
+                            startActivity(new Intent(LoginUserActivity.this,MainGuideActivity.class));
 
                         } else {
                             // If sign in fails, display a message to the user.

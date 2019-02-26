@@ -43,10 +43,10 @@ public class Firebase_user_method {
                 });
     }
 
-    public void send_new_user_data(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district){
+    public void send_new_user_data(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district, String citizen_image){
 
-        UserData userData = new UserData(email,name,phone,password,gender,profile_image,surname,province,district);
-        mReference.child("Guides").child(userID).setValue(userData);
+        UserData userData = new UserData(email,name,phone,password,gender,profile_image,surname,province,district,citizen_image);
+        mReference.child("Users").child(userID).setValue(userData);
     }
 
 

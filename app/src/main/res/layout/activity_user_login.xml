@@ -62,7 +62,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@null"
-                        android:hint="Email" />
+                        android:hint="อีเมลล์" />
                 </android.support.design.widget.TextInputLayout>
 
 
@@ -103,13 +103,13 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@null"
-                        android:hint="Password"
+                        android:hint="รหัสผ่าน"
                         android:inputType="textPassword" />
                 </android.support.design.widget.TextInputLayout>
             </RelativeLayout>
 
             <Button
-                android:id="@+id/btn_register"
+                android:id="@+id/btn_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/relative2"
@@ -120,7 +120,7 @@
                 android:paddingTop="10dp"
                 android:paddingEnd="50dp"
                 android:paddingBottom="10dp"
-                android:text="SIGN IN"
+                android:text="เข้าสู่ระบบ"
                 android:textAllCaps="false"
                 android:textSize="24sp" />
 
@@ -129,7 +129,7 @@
                 style="@style/AVLoadingIndicatorView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btn_register"
+                android:layout_below="@id/btn_login"
                 android:layout_centerHorizontal="true"
                 android:visibility="gone"
                 app:indicatorColor="@color/black"
@@ -139,7 +139,7 @@
                 android:id="@+id/linear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/btn_register"
+                android:layout_below="@id/btn_login"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="50dp"
                 android:gravity="center"
@@ -149,7 +149,7 @@
                     android:id="@+id/google_sign_in"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/btn_register"
+                    android:layout_below="@+id/btn_login"
                     android:layout_centerHorizontal="true" />
 
                 <com.facebook.login.widget.LoginButton

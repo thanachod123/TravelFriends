@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#FEEAE6</color>
-    <color name="colorPrimaryDark">#FEDBD0</color>
+    <color name="colorPrimary">#f6d55c</color>
+    <color name="colorPrimaryDark">#173f5f</color>
     <color name="colorAccent">#442c2e</color>
     <color name="white">#ffffff</color>
+    <color name="yellow">#f6d55c</color>
+    <color name="purple">#900c3f</color>
     <color name="black">#000000</color>
 
     <item name="visible" type="id"/>
