@@ -1,12 +1,12 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class GuideData {
-    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age;
+    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age, role;
 
     public GuideData() {
     }
 
-    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age) {
+    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -20,6 +20,7 @@ public class GuideData {
         this.province = province;
         this.district = district;
         this.age = age;
+        this.role = role;
         }
 
     public String getEmail() {
@@ -126,6 +127,14 @@ public class GuideData {
         this.age = age;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
         return "GuideData{" +
@@ -142,6 +151,7 @@ public class GuideData {
                 ", province='" + province + '\'' +
                 ", district='" + district + '\'' +
                 ", age='" + age + '\'' +
+                ", role='" + role + '\'' +
                 '}';
     }
 }

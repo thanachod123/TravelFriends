@@ -231,7 +231,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
 
     private void select_image(){
         if (Profile_imageUri != null){
-            StorageReference imageProfilePath = mStorage.child(getString(R.string.guides)).child(guideId).child(Profile_imageUri.getLastPathSegment());
+            StorageReference imageProfilePath = mStorage.child(getString(R.string.users)).child(guideId).child(Profile_imageUri.getLastPathSegment());
             imageProfilePath.putFile(Profile_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -239,13 +239,13 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     while (!urlTask.isSuccessful());
                     Uri downloadUrlProfile = urlTask.getResult();
                     final String strProfileImage = String.valueOf(downloadUrlProfile);
-                    mReference.child(getString(R.string.guides)).child(guideId).child("profile_image").setValue(strProfileImage);
+                    mReference.child(getString(R.string.users)).child(guideId).child("profile_image").setValue(strProfileImage);
 
                 }
             });
         }
         if (Certificate_imageUri != null){
-            StorageReference imageCertificatePath = mStorage.child(getString(R.string.guides)).child(guideId).child(Certificate_imageUri.getLastPathSegment());
+            StorageReference imageCertificatePath = mStorage.child(getString(R.string.users)).child(guideId).child(Certificate_imageUri.getLastPathSegment());
             imageCertificatePath.putFile(Certificate_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -253,13 +253,13 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     while (!urlTask.isSuccessful());
                     Uri downloadUrlCertificate = urlTask.getResult();
                     final String strCertificateImage = String.valueOf(downloadUrlCertificate);
-                    mReference.child(getString(R.string.guides)).child(guideId).child("certificate_image").setValue(strCertificateImage);
+                    mReference.child(getString(R.string.users)).child(guideId).child("certificate_image").setValue(strCertificateImage);
 
                 }
             });
         }
         if (License_imageUri != null){
-            StorageReference imageLicensePath = mStorage.child(getString(R.string.guides)).child(guideId).child(License_imageUri.getLastPathSegment());
+            StorageReference imageLicensePath = mStorage.child(getString(R.string.users)).child(guideId).child(License_imageUri.getLastPathSegment());
             imageLicensePath.putFile(License_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -267,13 +267,13 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     while (!urlTask.isSuccessful());
                     Uri downloadUrlLicense = urlTask.getResult();
                     final String strLicenseImage = String.valueOf(downloadUrlLicense);
-                    mReference.child(getString(R.string.guides)).child(guideId).child("license_image").setValue(strLicenseImage);
+                    mReference.child(getString(R.string.users)).child(guideId).child("license_image").setValue(strLicenseImage);
 
                 }
             });
         }
         if (Citizen_imageUri != null){
-            StorageReference imageCitizenPath = mStorage.child(getString(R.string.guides)).child(guideId).child(Citizen_imageUri.getLastPathSegment());
+            StorageReference imageCitizenPath = mStorage.child(getString(R.string.users)).child(guideId).child(Citizen_imageUri.getLastPathSegment());
             imageCitizenPath.putFile(Citizen_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -281,7 +281,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     while (!urlTask.isSuccessful());
                     Uri downloadUrlCitizen = urlTask.getResult();
                     final String strCitizenImage = String.valueOf(downloadUrlCitizen);
-                    mReference.child(getString(R.string.guides)).child(guideId).child("citizen_image").setValue(strCitizenImage);
+                    mReference.child(getString(R.string.users)).child(guideId).child("citizen_image").setValue(strCitizenImage);
 
                 }
             });
@@ -361,7 +361,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge);
+                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge,"guide");
                             select_image();
                             Toast.makeText(RegisterGuideActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();

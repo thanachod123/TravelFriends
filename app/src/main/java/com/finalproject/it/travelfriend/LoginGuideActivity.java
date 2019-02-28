@@ -33,7 +33,13 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.security.MessageDigest;
@@ -44,12 +50,14 @@ public class LoginGuideActivity extends AppCompatActivity {
 
     //    FirebaseVariables
     FirebaseAuth mAuth;
+    DatabaseReference mReference;
+
 
     //    Email&Password Variables
     Button mLogin;
     EditText mEmail,mPassword;
 
-    AVLoadingIndicatorView pd;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,18 +70,20 @@ public class LoginGuideActivity extends AppCompatActivity {
         mLogin = findViewById(R.id.btn_login);
         mEmail = findViewById(R.id.edt_Email);
         mPassword = findViewById(R.id.edt_Password);
+
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 emailSignIn();
             }
         });
-
         Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
         mLogin.setTypeface(myCustomFont);
 
 
     }
+
+
     /**
      *
      * Email&Password
@@ -95,11 +105,36 @@ public class LoginGuideActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        Intent intent = new Intent(LoginGuideActivity.this,MainGuideActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        Toast.makeText(LoginGuideActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        String RegisteredUserID = currentUser.getUid();
+                        mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(RegisteredUserID);
+                        mReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String userType = dataSnapshot.child("role").getValue().toString();
+                                if (userType.equals("tourist")){
+                                    Intent intentTourist = new Intent(LoginGuideActivity.this,MainUserActivity.class);
+                                    intentTourist.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intentTourist);
+                                    Toast.makeText(LoginGuideActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else if (userType.equals("guide")){
+                                    Intent intentGuide = new Intent(LoginGuideActivity.this,MainGuideActivity.class);
+                                    intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intentGuide);
+                                    Toast.makeText(LoginGuideActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                } else {
+                                    Toast.makeText(LoginGuideActivity.this, "Failed Login", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+                            }
 
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                     else {
                         Toast.makeText(LoginGuideActivity.this, "Please enter Correct email \n and Password", Toast.LENGTH_SHORT).show();
@@ -107,8 +142,11 @@ public class LoginGuideActivity extends AppCompatActivity {
                     }
                 }
             });
+
+
         }
     }
+
 
     private void printKeyHash() {
         try {
