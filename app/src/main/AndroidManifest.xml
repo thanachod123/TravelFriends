@@ -47,15 +47,24 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainUserActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".RegisterGuideActivity" />
+        <activity android:name=".RegisterGuideActivity"
+            android:label="สมัครสมาชิกเป็นผู้นำเที่ยว"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name=".HomeUserActivity" />
         <activity android:name=".HomeGuideActivity" />
-        <activity android:name=".LoginGuideActivity" />
-        <activity android:name=".MainGuideActivity"></activity>
+        <activity android:name=".LoginGuideActivity"
+            android:label="เข้าสู่ระบบผู้นำเที่ยว"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".MainGuideActivity"/>
+        <activity android:name=".Guide.EditProfileGuide"
+            android:label="แก้ไขโปรไฟล์"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".Guide.ChangePasswordGuide"
+            android:label="เปลี่ยนรหัสผ่าน"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".Guide.CreatePackage.CreatePackageGuide"
+            android:label="แพ็คเกจนำเที่ยว"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
     </application>
 
 </manifest>

@@ -4,16 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/yellow"
     tools:context=".LoginGuideActivity">
 
-    <ImageView
-        android:id="@+id/btn_back"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:srcCompat="@drawable/ic_back" />
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"></include>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -40,7 +36,7 @@
 
 
                 <ImageView
-                    android:id="@+id/imageView1"
+                    android:id="@+id/img_profileMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -50,7 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="10dp"
-                    android:layout_toRightOf="@+id/imageView1"
+                    android:layout_toRightOf="@+id/img_profileMenu"
                     android:background="@drawable/edittext_circle_bg">
 
                     <android.support.design.widget.TextInputEditText
@@ -109,7 +105,7 @@
             </RelativeLayout>
 
             <Button
-                android:id="@+id/btn_login"
+                android:id="@+id/btn_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/relative2"
@@ -122,18 +118,8 @@
                 android:paddingBottom="10dp"
                 android:text="เข้าสู่ระบบ"
                 android:textAllCaps="false"
+                android:textColor="@color/colorAccent"
                 android:textSize="24sp" />
-
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/avi"
-                style="@style/AVLoadingIndicatorView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btn_login"
-                android:layout_centerHorizontal="true"
-                android:visibility="gone"
-                app:indicatorColor="@color/black"
-                app:indicatorName="LineScalePulseOutRapidIndicator" />
 
 
         </RelativeLayout>

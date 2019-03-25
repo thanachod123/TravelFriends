@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/background_register">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/txt_nametrip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="จุดหมายปลายทาง"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Spinner
+                    android:id="@+id/spinner_destination"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/txt_nametrip"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/spinnerProvince"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_nametrip" />
+
+                <TextView
+                    android:id="@+id/txt_main_activities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="ประเภทกิจกรรม (เลือกได้มากกว่า 1 ประเภท)"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_destination" />
+
+                <TextView
+                    android:id="@+id/txt_language"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="ภาษาที่ใช้สื่อสาร"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_activities" />
+
+                <Spinner
+                    android:id="@+id/spinner_activities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/spinnerActivities"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_main_activities" />
+
+                <Spinner
+                    android:id="@+id/spinner_languages "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:entries="@array/spinnerLanguage"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_language" />
+
+                <TextView
+                    android:id="@+id/txt_transportation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="36dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="ประเภทยานพาหนะ"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_languages " />
+
+                <ImageView
+                    android:id="@+id/img_scooter"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_transportation"
+                    app:srcCompat="@drawable/scooter" />
+
+                <ImageView
+                    android:id="@+id/img_car"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="22dp"
+                    app:layout_constraintEnd_toStartOf="@+id/img_scooter"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_transportation"
+                    app:srcCompat="@drawable/car" />
+
+                <ImageView
+                    android:id="@+id/img_van"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@+id/img_scooter"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_transportation"
+                    app:srcCompat="@drawable/van" />
+
+                <ImageView
+                    android:id="@+id/img_jetski"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="22dp"
+                    app:layout_constraintEnd_toStartOf="@+id/img_bicycle"
+                    app:layout_constraintTop_toBottomOf="@+id/img_car"
+                    app:srcCompat="@drawable/jetboating" />
+
+                <ImageView
+                    android:id="@+id/img_bicycle"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_scooter"
+                    app:srcCompat="@drawable/bicycle" />
+
+                <ImageView
+                    android:id="@+id/img_more"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@+id/img_bicycle"
+                    app:layout_constraintTop_toBottomOf="@+id/img_van"
+                    app:srcCompat="@drawable/selectedmore" />
+
+                <Button
+                    android:id="@+id/btn_save_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:background="@drawable/bt_border3"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="บันทึกและไปต่อ"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.477"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_vehicle" />
+
+                <EditText
+                    android:id="@+id/edt_vehicle"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    android:ems="10"
+                    android:fontFamily="@font/fclamoon"
+                    android:hint="อื่นๆโปรดระบุ"
+                    android:inputType="text"
+                    app:layout_constraintEnd_toEndOf="@+id/img_more"
+                    app:layout_constraintTop_toBottomOf="@+id/img_more" />
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

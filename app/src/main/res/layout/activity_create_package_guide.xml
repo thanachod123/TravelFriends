@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/yellow"
+    tools:context=".Guide.EditProfileGuide">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"></include>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextAppearance="@style/FontForTabLayout"
+        app:tabTextColor="@color/colorAccent">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/stepOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="พื้นฐาน" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/stepTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ภาพรวม" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/stepThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="รายละเอียด" />
+        <android.support.design.widget.TabItem
+            android:id="@+id/stepFour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ราคา" />
+        <android.support.design.widget.TabItem
+            android:id="@+id/stepFive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="เสร็จสิ้น" />
+
+    </android.support.design.widget.TabLayout>
+
+    <com.finalproject.it.travelfriend.Guide.CreatePackage.NonSwipeableViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>

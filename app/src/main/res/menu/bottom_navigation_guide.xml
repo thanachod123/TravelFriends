@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/navigation_home"
-        android:icon="@drawable/ic_home_24dp"
-        android:title="หน้าหลัก"
+        android:icon="@drawable/booking_24dp"
+        android:title="การจอง"
         app:showAsAction="withText" />
 
     <item

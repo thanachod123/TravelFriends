@@ -1,12 +1,12 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class GuideData {
-    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age, role;
+    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age, role,status_allow;
 
     public GuideData() {
     }
 
-    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role) {
+    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role,String status_allow) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -21,6 +21,7 @@ public class GuideData {
         this.district = district;
         this.age = age;
         this.role = role;
+        this.status_allow = status_allow;
         }
 
     public String getEmail() {
@@ -135,6 +136,14 @@ public class GuideData {
         this.role = role;
     }
 
+    public String getStatus_allow() {
+        return status_allow;
+    }
+
+    public void setStatus_allow(String status_allow) {
+        this.status_allow = status_allow;
+    }
+
     @Override
     public String toString() {
         return "GuideData{" +
@@ -152,6 +161,7 @@ public class GuideData {
                 ", district='" + district + '\'' +
                 ", age='" + age + '\'' +
                 ", role='" + role + '\'' +
+                ", status_allow='" + status_allow + '\'' +
                 '}';
     }
 }

@@ -84,7 +84,7 @@ public class LoginUserActivity extends AppCompatActivity {
         setupFacebook();
 
         //Email
-        mLogin = findViewById(R.id.btn_login);
+        mLogin = findViewById(R.id.btn_register);
         mEmail = findViewById(R.id.edt_Email);
         mPassword = findViewById(R.id.edt_Password);
         mLogin.setOnClickListener(new View.OnClickListener() {

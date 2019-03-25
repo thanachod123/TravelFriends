@@ -7,6 +7,11 @@
     android:background="@color/colorPrimary"
     tools:context=".RegisterGuideActivity">
 
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"></include>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,17 +25,10 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="84dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/background_register">
-
-            <ImageView
-                android:id="@+id/btn_back"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/ic_back2" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_profile_image"
@@ -54,18 +52,19 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imageView1"
+                        android:id="@+id/img_profileMenu"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
                         app:srcCompat="@drawable/ic_name_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_toRightOf="@+id/imageView1"
                         android:layout_margin="10dp"
+                        android:layout_toRightOf="@+id/img_profileMenu"
                         android:background="@drawable/edittext_circle_bg">
 
                         <android.support.design.widget.TextInputEditText
@@ -81,10 +80,11 @@
                         android:id="@+id/imageView2"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_below="@id/imageView1"
+                        android:layout_below="@id/img_profileMenu"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="30dp"
                         app:srcCompat="@drawable/ic_surname_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_2"
                         android:layout_width="match_parent"
@@ -114,6 +114,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="30dp"
                         app:srcCompat="@drawable/ic_email_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_3"
                         android:layout_width="match_parent"
@@ -136,13 +137,14 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
-                    android:id="@+id/imageView4"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_below="@id/imageView3"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    app:srcCompat="@drawable/ic_phone_24dp" />
+                        android:id="@+id/imageView4"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/imageView3"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        app:srcCompat="@drawable/ic_phone_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_4"
                         android:layout_width="match_parent"
@@ -172,6 +174,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="30dp"
                         app:srcCompat="@drawable/ic_password_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_5"
                         android:layout_width="match_parent"
@@ -202,6 +205,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="30dp"
                         app:srcCompat="@drawable/ic_province_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_6"
                         android:layout_width="match_parent"
@@ -231,6 +235,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="30dp"
                         app:srcCompat="@drawable/ic_district_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_7"
                         android:layout_width="match_parent"
@@ -286,6 +291,7 @@
                         android:textColor="@color/colorAccent"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
                     <RadioGroup
                         android:id="@+id/rg_gender"
                         android:layout_width="wrap_content"
@@ -315,16 +321,16 @@
                     </RadioGroup>
 
                     <TextView
-                    android:id="@+id/tv_certificate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_gender"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="สำเนาใบรับรองประวัติพฤติกรรม :"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                        android:id="@+id/tv_certificate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_gender"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="สำเนาใบรับรองประวัติพฤติกรรม :"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/imageView9"
@@ -345,16 +351,16 @@
                         android:layout_toRightOf="@+id/imageView9" />
 
                     <TextView
-                    android:id="@+id/tv_license"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/imageView9"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="10dp"
-                    android:text="สำเนาบัตรมัคคุเทศก์ :"
-                    android:textColor="@color/colorAccent"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                        android:id="@+id/tv_license"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imageView9"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:text="สำเนาบัตรมัคคุเทศก์ :"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/imageView10"
@@ -405,14 +411,14 @@
                         android:layout_toRightOf="@+id/imageView9" />
 
                     <Button
-                        android:id="@+id/btn_login"
+                        android:id="@+id/btn_register"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/citizen_img"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="36dp"
                         android:layout_marginBottom="24dp"
-                        android:background="@drawable/bt_border2"
+                        android:background="@drawable/bt_border3"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
                         android:paddingTop="10dp"
@@ -421,7 +427,7 @@
                         android:paddingBottom="10dp"
                         android:text="สมัครสมาชิก"
                         android:textAllCaps="false"
-                        android:textColor="@color/yellow"
+                        android:textColor="@color/white"
                         android:textSize="24sp" />
                 </RelativeLayout>
             </ScrollView>

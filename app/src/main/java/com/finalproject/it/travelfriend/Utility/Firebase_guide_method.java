@@ -42,9 +42,9 @@ public class Firebase_guide_method {
                 });
     }
 
-    public void send_new_guide_data(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role) {
+    public void send_new_guide_data(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role, String status_allow) {
 
-        GuideData guideData = new GuideData(email, name, surname, phone, password, gender, profile_image, certificate_image, license_image, citizen_image, province, district, age, role);
+        GuideData guideData = new GuideData(email, name, surname, phone, password, gender, profile_image, certificate_image, license_image, citizen_image, province, district, age, role, status_allow);
         mReference.child("Users").child(guideID).setValue(guideData);
     }
 }

@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.finalproject.it.travelfriend.FragmentGuide.HomeGuideFragment;
-import com.finalproject.it.travelfriend.FragmentGuide.NotificationGuideFragment;
-import com.finalproject.it.travelfriend.FragmentGuide.PackageGuideFragment;
-import com.finalproject.it.travelfriend.FragmentGuide.ProfileGuideFragment;
+import com.finalproject.it.travelfriend.Guide.BookingGuideFragment;
+import com.finalproject.it.travelfriend.Guide.NotificationGuideFragment;
+import com.finalproject.it.travelfriend.Guide.PackageGuideFragment;
+import com.finalproject.it.travelfriend.Guide.ProfileGuideFragment;
+import com.jaeger.library.StatusBarUtil;
 
 public class MainGuideActivity extends AppCompatActivity {
 
@@ -21,6 +22,10 @@ public class MainGuideActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.yellow));
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new BookingGuideFragment()).commit();
     }
     private BottomNavigationView.OnNavigationItemSelectedListener navListener=
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -30,7 +35,7 @@ public class MainGuideActivity extends AppCompatActivity {
 
                     switch (menuItem.getItemId()) {
                         case R.id.navigation_home:
-                            selectedFragment = new HomeGuideFragment();
+                            selectedFragment = new BookingGuideFragment();
                             break;
                         case R.id.navigation_package:
                             selectedFragment = new PackageGuideFragment();

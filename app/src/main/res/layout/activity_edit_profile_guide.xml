@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".Guide.EditProfileGuide">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"></include>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/app_bar"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="84dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/background_register">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_profile_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:src="@drawable/user_profile"
+                app:civ_border_color="@color/colorPrimary"
+                app:civ_border_width="5dp" />
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_profile_image">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_profileMenu"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="20dp"
+                        app:srcCompat="@drawable/ic_name_24dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/TextInputLayout_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="10dp"
+                        android:layout_toRightOf="@+id/img_profileMenu"
+                        android:background="@drawable/edittext_circle_bg">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edt_Name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@null"
+                            android:hint="ชื่อ" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/img_profileMenu"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        app:srcCompat="@drawable/ic_surname_24dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/TextInputLayout_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/TextInputLayout_1"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toRightOf="@+id/imageView2"
+                        android:background="@drawable/edittext_circle_bg">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edt_Surname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@null"
+                            android:hint="นามสกุล" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/imageView2"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        app:srcCompat="@drawable/ic_phone_24dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/TextInputLayout_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/TextInputLayout_2"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toRightOf="@+id/imageView3"
+                        android:background="@drawable/edittext_circle_bg">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edt_Phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@null"
+                            android:hint="เบอร์โทรศัพท์" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/imageView3"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        app:srcCompat="@drawable/ic_province_24dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/TextInputLayout_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/TextInputLayout_3"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toRightOf="@+id/imageView4"
+                        android:background="@drawable/edittext_circle_bg">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edt_Province"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@null"
+                            android:hint="จังหวัด" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/imageView4"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        app:srcCompat="@drawable/ic_district_24dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/TextInputLayout_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/TextInputLayout_4"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toRightOf="@+id/imageView5"
+                        android:background="@drawable/edittext_circle_bg">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edt_District"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:background="@null"
+                            android:hint="อำเภอ" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_below="@id/imageView5"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        app:srcCompat="@drawable/ic_age_24dp" />
+
+                    <fr.ganfra.materialspinner.MaterialSpinner
+                        android:id="@+id/spinner_age"
+                        android:layout_width="match_parent"
+                        android:layout_height="65dp"
+                        android:layout_below="@+id/TextInputLayout_5"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toRightOf="@+id/imageView6"
+                        app:ms_arrowColor="@color/colorAccent"
+                        app:ms_arrowSize="16dp"
+                        app:ms_floatingLabelColor="@color/colorAccent"
+                        app:ms_floatingLabelText="Select your Age"
+                        app:ms_multiline="true" />
+
+                    <TextView
+                        android:id="@+id/tv_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/imageView6"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="37dp"
+                        android:text="เพศ :"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_below="@id/spinner_age"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="18dp"
+                        android:layout_toEndOf="@id/tv_gender"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_male"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:text="ชาย"
+                            android:textColor="@color/colorAccent" />
+
+                        <RadioButton
+                            android:id="@+id/rb_female"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginTop="5dp"
+                            android:text="หญิง"
+                            android:textColor="@color/colorAccent" />
+                    </RadioGroup>
+
+                    <Button
+                        android:id="@+id/btn_save_change"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_gender"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="36dp"
+                        android:layout_marginBottom="24dp"
+                        android:background="@drawable/bt_border3"
+                        android:paddingStart="20dp"
+                        android:paddingLeft="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingEnd="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="10dp"
+                        android:text="บันทึกการเปลี่ยนแปลง"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="24sp" />
+                </RelativeLayout>
+            </ScrollView>
+
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

@@ -79,7 +79,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         mName = findViewById(R.id.edt_Name);
         mPhone = findViewById(R.id.edt_Phone);
         mPassword = findViewById(R.id.edt_Password);
-        mRegister = findViewById(R.id.btn_login);
+        mRegister = findViewById(R.id.btn_register);
         back_bt = findViewById(R.id.btn_back);
         mGender = findViewById(R.id.rg_gender);
         mSurname = findViewById(R.id.edt_Surname);
@@ -95,20 +95,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         tv_citizen.setTypeface(myCustomFont);
         mRegister.setTypeface(myCustomFont);
 
-        mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                mGenderOption = mGender.findViewById(i);
-                switch (i){
-                    case R.id.rb_male:
-                        strGender = mGenderOption.getText().toString();
-                        break;
-                    case R.id.rb_female:
-                        strGender = mGenderOption.getText().toString();
-                        break;
-                }
-            }
-        });
 
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -207,6 +193,20 @@ public class RegisterUserActivity extends AppCompatActivity {
         strPassword = mPassword.getText().toString();
         strProvince = mProvince.getText().toString();
         strDistrict = mDistrict.getText().toString();
+        mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                mGenderOption = mGender.findViewById(i);
+                switch (i){
+                    case R.id.rb_male:
+                        strGender = mGenderOption.getText().toString();
+                        break;
+                    case R.id.rb_female:
+                        strGender = mGenderOption.getText().toString();
+                        break;
+                }
+            }
+        });
 
 //        if (check_input(strEmail,strName,strPhone,strPassword)){
         if (strName.trim().isEmpty()){

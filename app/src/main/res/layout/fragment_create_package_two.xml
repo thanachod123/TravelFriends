@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/background_register">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <TextView
+                    android:id="@+id/txt_nametrip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="ตั้งชื่อการเดินทาง"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txt_summarytrip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="22dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="สรุปการเดินทางของคุณ"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_nametrip" />
+
+                <TextView
+                    android:id="@+id/txt_photo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="22dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="รูปภาพ"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_summarytrip" />
+
+                <EditText
+                    android:id="@+id/edt_nametrip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittext_circle_bg"
+                    android:ems="10"
+                    android:fontFamily="@font/fclamoon"
+                    android:hint="อยุธยา ราชธานีเก่าน่าเที่ยว เมืองแห่งมรดกโลก"
+                    android:inputType="text"
+                    android:paddingStart="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_nametrip" />
+
+                <EditText
+                    android:id="@+id/edt_summarytrip"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/edittext_circle_bg"
+                    android:ems="10"
+                    android:fontFamily="@font/fclamoon"
+                    android:gravity="top|left"
+                    android:hint="   อยุธยา ราชธานีกรุงเก่าเมื่อครั้งอดีตของไทย ที่มีความเจริญรุ่งเรืองมากว่า 417 ปี แม้ว่าจะถูกทำลายจากภัยสงคราม แต่ก็ยังคงเหลือโบราณสถานและโบราณวัตถุสำคัญต่าง ๆ ที่สะท้อนให้เห็นถึงความเจริญรุ่งเรืองของยุคสมัย จนในปี 2534 องค์กรยูเนสโกประกาศขึ้นทะเบียนอุทยานประวัติศาสตร์พระนครศรีอยุธยาให้เป็นเมืองมรดกโลก และนั่นยิ่งทำให้อยุธยากลายเป็นหนึ่งในจุดหมายปลางทางท่องเที่ยวที่ได้รับความสนใจทั้งจากนักท่องเที่ยวชายไทยและต่างชาติ"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:paddingStart="10dp"
+                    android:paddingTop="3dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="3dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_summarytrip" />
+
+                <ImageView
+                    android:id="@+id/img_upload"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_photo"
+                    app:srcCompat="@drawable/package_image" />
+
+                <Button
+                    android:id="@+id/btn_save_next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="48dp"
+                    android:background="@drawable/bt_border3"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="บันทึกและไปต่อ"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/btn_back"
+                    app:layout_constraintTop_toBottomOf="@+id/img_upload" />
+
+                <Button
+                    android:id="@+id/btn_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bt_border"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="ย้อนกลับ"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_save_next"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_upload" />
+
+            </android.support.constraint.ConstraintLayout>
+        </ScrollView>
+
+    </RelativeLayout>
+
+</RelativeLayout>

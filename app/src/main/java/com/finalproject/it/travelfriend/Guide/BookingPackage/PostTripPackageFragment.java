@@ -1,4 +1,4 @@
-package com.finalproject.it.travelfriend.FragmentGuide;
+package com.finalproject.it.travelfriend.Guide.BookingPackage;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 
 import com.finalproject.it.travelfriend.R;
 
-public class HomeGuideFragment extends Fragment {
+public class PostTripPackageFragment extends Fragment {
 
-    @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home_guide,container,false);
+        final View view = inflater.inflate(R.layout.fragment_post_trip_package, container, false);
+
+        return view;
     }
 }

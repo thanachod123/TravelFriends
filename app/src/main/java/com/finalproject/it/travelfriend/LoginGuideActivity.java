@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -15,59 +16,56 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.jaeger.library.StatusBarUtil;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class LoginGuideActivity extends AppCompatActivity {
     private static final String TAG = "LoginUserActivity";
-
     //    FirebaseVariables
     FirebaseAuth mAuth;
     DatabaseReference mReference;
 
-
     //    Email&Password Variables
     Button mLogin;
     EditText mEmail,mPassword;
-
+    Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_login);
+        toolbar = findViewById(R.id.app_bar);
+        toolbar.setTitleTextAppearance(this, R.style.FontForActionBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back_app_bar));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        StatusBarUtil.setTransparent(LoginGuideActivity.this);
         //Firebase
         mAuth = FirebaseAuth.getInstance();
 
         //Email
-        mLogin = findViewById(R.id.btn_login);
+        mLogin = findViewById(R.id.btn_register);
         mEmail = findViewById(R.id.edt_Email);
         mPassword = findViewById(R.id.edt_Password);
 
@@ -79,22 +77,16 @@ public class LoginGuideActivity extends AppCompatActivity {
         });
         Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
         mLogin.setTypeface(myCustomFont);
-
-
     }
-
-
     /**
      *
      * Email&Password
      *
      * **/
-
     private void emailSignIn() {
         String strEmail,strPassword;
         strEmail = mEmail.getText().toString();
         strPassword = mPassword.getText().toString();
-
 
         if (strEmail.equals("") || strPassword.equals("")){
             Toast.makeText(this, "Please Enter Email and Password", Toast.LENGTH_SHORT).show();
@@ -108,45 +100,44 @@ public class LoginGuideActivity extends AppCompatActivity {
                         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                         String RegisteredUserID = currentUser.getUid();
                         mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(RegisteredUserID);
-                        mReference.addValueEventListener(new ValueEventListener() {
+                        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 String userType = dataSnapshot.child("role").getValue().toString();
+                                String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
                                 if (userType.equals("tourist")){
-                                    Intent intentTourist = new Intent(LoginGuideActivity.this,MainUserActivity.class);
-                                    intentTourist.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intentTourist);
-                                    Toast.makeText(LoginGuideActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                } else if (userType.equals("guide")){
-                                    Intent intentGuide = new Intent(LoginGuideActivity.this,MainGuideActivity.class);
+//                                    Intent intentTourist = new Intent(LoginGuideActivity.this,MainUserActivity.class);
+//                                    intentTourist.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                    startActivity(intentTourist);
+//                                    Toast.makeText(LoginGuideActivity.this, "เข้าสู่ระบบสำเร็จ", Toast.LENGTH_SHORT).show();
+//                                    finish();
+                                } else if (userType.equals("guide") && guideStatus.equals("true")) {
+                                    Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
                                     intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intentGuide);
-                                    Toast.makeText(LoginGuideActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginGuideActivity.this, "เข้าสู่ระบบสำเร็จ", Toast.LENGTH_SHORT).show();
                                     finish();
+                                } else if (userType.equals("guide") && guideStatus.equals("false")) {
+                                    mAuth.signOut();
+                                    Toast.makeText(LoginGuideActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
                                 } else {
+                                    mAuth.signOut();
                                     Toast.makeText(LoginGuideActivity.this, "Failed Login", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
                             }
-
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
-
                             }
                         });
                     }
                     else {
                         Toast.makeText(LoginGuideActivity.this, "Please enter Correct email \n and Password", Toast.LENGTH_SHORT).show();
-
                     }
                 }
             });
-
-
         }
     }
-
 
     private void printKeyHash() {
         try {

@@ -1,5 +1,4 @@
 package com.finalproject.it.travelfriend;
-
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -8,11 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -35,11 +34,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +45,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RegisterGuideActivity extends AppCompatActivity {
     private static final String TAG = "RegisterGuideActivity";
-    ImageView back_bt;
+
     CircleImageView profile_image;
     TextInputEditText mName,mEmail,mPhone,mPassword,mSurname,mProvince,mDistrict;
     ImageView mUploadCertificate,mUploadLicense,mUploadCitizen,mCertificate,mLicense,mCitizen;
@@ -56,7 +54,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
     RadioButton mGenderOption;
     TextView tv_gender,tv_certificate,tv_license,tv_citizen;
     Spinner spinnerAge;
-
+    Toolbar toolbar;
 
     //Firebase Variables
     Firebase_guide_method firebase_guide_method;
@@ -79,6 +77,19 @@ public class RegisterGuideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_guide);
+        toolbar = findViewById(R.id.app_bar);
+        toolbar.setTitleTextAppearance(this, R.style.FontForActionBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back_app_bar));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        StatusBarUtil.setTransparent(RegisterGuideActivity.this);
 
         firebase_guide_method = new Firebase_guide_method(this);
         mDatabase = FirebaseDatabase.getInstance();
@@ -95,8 +106,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
         mName = findViewById(R.id.edt_Name);
         mPhone = findViewById(R.id.edt_Phone);
         mPassword = findViewById(R.id.edt_Password);
-        mRegister = findViewById(R.id.btn_login);
-        back_bt = findViewById(R.id.btn_back);
+        mRegister = findViewById(R.id.btn_register);
         mGender = findViewById(R.id.rg_gender);
         mSurname = findViewById(R.id.edt_Surname);
         mProvince = findViewById(R.id.edt_Province);
@@ -185,6 +195,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 startActivityForResult(intent,request_Code_CitizenIMG);
             }
         });
+
         setupFirebaseAuthentication();
     }
 
@@ -361,7 +372,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge,"guide");
+                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge,"guide","false");
                             select_image();
                             Toast.makeText(RegisterGuideActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();

@@ -22,7 +22,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         mGuide = findViewById(R.id.btn_guide);
-        mTourist = findViewById(R.id.btn_login);
+        mTourist = findViewById(R.id.btn_register);
         blurImageView = findViewById(R.id.BlurImageView);
         text_welcome1 = findViewById(R.id.text_welcome1);
         text_welcome2 = findViewById(R.id.text_welcome2);
