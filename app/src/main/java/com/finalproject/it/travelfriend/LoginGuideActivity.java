@@ -60,7 +60,7 @@ public class LoginGuideActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        StatusBarUtil.setTransparent(LoginGuideActivity.this);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
         //Firebase
         mAuth = FirebaseAuth.getInstance();
 
@@ -75,8 +75,6 @@ public class LoginGuideActivity extends AppCompatActivity {
                 emailSignIn();
             }
         });
-        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
-        mLogin.setTypeface(myCustomFont);
     }
     /**
      *
@@ -104,26 +102,23 @@ public class LoginGuideActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 String userType = dataSnapshot.child("role").getValue().toString();
-                                String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
                                 if (userType.equals("tourist")){
-//                                    Intent intentTourist = new Intent(LoginGuideActivity.this,MainUserActivity.class);
-//                                    intentTourist.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                    startActivity(intentTourist);
-//                                    Toast.makeText(LoginGuideActivity.this, "เข้าสู่ระบบสำเร็จ", Toast.LENGTH_SHORT).show();
-//                                    finish();
-                                } else if (userType.equals("guide") && guideStatus.equals("true")) {
-                                    Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
+                                    Intent intentGuide = new Intent(LoginGuideActivity.this, MainUserActivity.class);
                                     intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intentGuide);
-                                    Toast.makeText(LoginGuideActivity.this, "เข้าสู่ระบบสำเร็จ", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                } else if (userType.equals("guide") && guideStatus.equals("false")) {
-                                    mAuth.signOut();
-                                    Toast.makeText(LoginGuideActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    mAuth.signOut();
-                                    Toast.makeText(LoginGuideActivity.this, "Failed Login", Toast.LENGTH_SHORT).show();
-                                    return;
+                                } else if (userType.equals("guide")) {
+                                    String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
+                                    if (guideStatus.equals("true")){
+                                        Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
+                                        intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intentGuide);
+                                    }
+                                } else if (userType.equals("guide")) {
+                                    String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
+                                    if (guideStatus.equals("false")){
+                                        mAuth.signOut();
+                                        Toast.makeText(LoginGuideActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
                             }
                             @Override

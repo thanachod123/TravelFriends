@@ -67,7 +67,7 @@ public class CreatePackageStepFive extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MainGuideActivity.class);
-                PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"รอการตรวจสอบ");
+                PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"รอการตรวจสอบ","รอการตรวจสอบ_"+strPackage_type);
                 mReference.child("Packages").child(packageID).setValue(packageData);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -118,6 +118,8 @@ public class CreatePackageStepFive extends Fragment {
                             strImage = "default";
                         }
                         Picasso.with(getActivity()).load(strImage).placeholder(R.drawable.package_image).into(img_upload);
+
+
                     }
 
                     @Override

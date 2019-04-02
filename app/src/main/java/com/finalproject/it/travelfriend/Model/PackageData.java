@@ -1,12 +1,12 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class PackageData {
-    String guideId,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status;
+    String guideId,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status,status_type;
 
     public PackageData(){
     }
 
-    public PackageData(String guideId,String name, String description, String image, String province, String package_type, String vehicle_type, String schedule, String number_tourist, String price_per_person, String bank, String bank_number, String language, String package_status) {
+    public PackageData(String guideId, String name, String description, String image, String province, String package_type, String vehicle_type, String schedule, String number_tourist, String price_per_person, String bank, String bank_number, String language, String package_status, String status_type) {
         this.guideId = guideId;
         this.name = name;
         this.description = description;
@@ -21,6 +21,7 @@ public class PackageData {
         this.bank_number = bank_number;
         this.language = language;
         this.package_status = package_status;
+        this.status_type = status_type;
     }
 
     public String getGuideId() {
@@ -135,6 +136,14 @@ public class PackageData {
         this.package_status = package_status;
     }
 
+    public String getStatus_type() {
+        return status_type;
+    }
+
+    public void setStatus_type(String status_type) {
+        this.status_type = status_type;
+    }
+
     @Override
     public String toString() {
         return "PackageData{" +
@@ -152,6 +161,7 @@ public class PackageData {
                 ", bank_number='" + bank_number + '\'' +
                 ", language='" + language + '\'' +
                 ", package_status='" + package_status + '\'' +
+                ", status_type='" + status_type + '\'' +
                 '}';
     }
 }

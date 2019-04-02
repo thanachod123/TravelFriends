@@ -67,7 +67,7 @@ public class PackageGuideFragment extends Fragment {
                 holder.txtProvincePackage.setText(model.getProvince());
                 holder.txtStatusPackage.setText(model.getPackage_status());
                 Picasso.with(getActivity()).load(model.getImage()).placeholder(R.drawable.package_image).into(holder.imgPackage);
-                holder.cardView.setOnClickListener(new View.OnClickListener() {
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent intentEditPackage = new Intent(getActivity(),CreatePackageGuide.class);
@@ -97,7 +97,7 @@ public class PackageGuideFragment extends Fragment {
                 Intent intentCreatePackage = new Intent(getActivity(),CreatePackageGuide.class);
                 String packageId = mReference.push().getKey();
                 intentCreatePackage.putExtra("PackageID",packageId);
-                PackageData packageData = new PackageData(guideID,"เพิ่มชื่อแพ็คเกจของคุณที่นี่","เพิ่มรายละเอียดกแพ็คเกจของคุณ","default","","","","","","","","","","ยังไม่สมบูรณ์");
+                PackageData packageData = new PackageData(guideID,"เพิ่มชื่อแพ็คเกจของคุณที่นี่","เพิ่มรายละเอียดกแพ็คเกจของคุณ","default","","","","","","","","","","ยังไม่สมบูรณ์","");
                 mReference.child(packageId).setValue(packageData);
                 startActivity(intentCreatePackage);
             }

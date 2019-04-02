@@ -93,7 +93,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/txt_main_activities" />
 
                 <Spinner
-                    android:id="@+id/spinner_languages "
+                    android:id="@+id/spinner_languages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -115,7 +115,7 @@
                     android:textColor="@color/colorAccent"
                     android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/spinner_languages " />
+                    app:layout_constraintTop_toBottomOf="@+id/spinner_languages" />
 
                 <ImageView
                     android:id="@+id/img_scooter"

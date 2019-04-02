@@ -21,11 +21,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
+import com.finalproject.it.travelfriend.Model.UserDataSocial;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,18 +30,22 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class LoginUserActivity extends AppCompatActivity {
     private static final String TAG = "LoginUserActivity";
-    private static final int RC_SIGN_IN = 9001;
 
 //    FirebaseVariables
     FirebaseAuth mAuth;
+    DatabaseReference mReference;
 
 //    GoogleVariables
     SignInButton gSignInButton;
@@ -59,28 +59,15 @@ public class LoginUserActivity extends AppCompatActivity {
     Button mLogin;
     EditText mEmail,mPassword;
 
-    AVLoadingIndicatorView pd;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
+
         //Firebase
         mAuth = FirebaseAuth.getInstance();
 
-        //Google
-        signinGSO();
-        gSignInButton = findViewById(R.id.google_sign_in);
-        gSignInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                google_sign_in_process();
-            }
-        });
-
-        //Facebook1,
+        //Facebook
         setupFacebook();
 
         //Email
@@ -93,10 +80,6 @@ public class LoginUserActivity extends AppCompatActivity {
                 emailSignIn();
             }
         });
-
-        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
-        mLogin.setTypeface(myCustomFont);
-
     }
     /**
      *
@@ -116,14 +99,42 @@ public class LoginUserActivity extends AppCompatActivity {
             mAuth.signInWithEmailAndPassword(strEmail,strPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()){
-                        Intent intent = new Intent(LoginUserActivity.this,MainGuideActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                        Toast.makeText(LoginUserActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    if (task.isSuccessful()) {
+                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                        String RegisteredUserID = currentUser.getUid();
+                        mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(RegisteredUserID);
+                        mReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String userType = dataSnapshot.child("role").getValue().toString();
+                                if (userType.equals("tourist")){
+                                    Intent intentGuide = new Intent(LoginUserActivity.this, MainUserActivity.class);
+                                    intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intentGuide);
+                                } else if (userType.equals("guide")) {
+                                    String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
+                                    if (guideStatus.equals("true")){
+                                        Intent intentGuide = new Intent(LoginUserActivity.this, MainGuideActivity.class);
+                                        intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        startActivity(intentGuide);
+                                    }
+                                } else if (userType.equals("guide")) {
+                                    String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
+                                    if (guideStatus.equals("false")){
+                                        mAuth.signOut();
+                                        Toast.makeText(LoginUserActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    } else {
                         Toast.makeText(LoginUserActivity.this, "Please enter Correct email \n and Password", Toast.LENGTH_SHORT).show();
+
                     }
                 }
             });
@@ -159,17 +170,8 @@ public class LoginUserActivity extends AppCompatActivity {
                 // ...
             }
         });
-
-// ...
-//        @Override
-//        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//            super.onActivityResult(requestCode, resultCode, data);
-//
-//            // Pass the activity result back to the Facebook SDK
-//            mCallbackManager.onActivityResult(requestCode, resultCode, data);
-//        }
-
     }
+
     private void handleFacebookAccessToken(AccessToken token) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
@@ -179,18 +181,16 @@ public class LoginUserActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            startActivity(new Intent(LoginUserActivity.this,MainGuideActivity.class));
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginUserActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            boolean newUserFacebook = task.getResult().getAdditionalUserInfo().isNewUser();
+                            if (newUserFacebook) {
+                                FirebaseUser firebaseUserFacebook = mAuth.getCurrentUser();
+                                UserDataSocial userData = new UserDataSocial(firebaseUserFacebook.getEmail(), firebaseUserFacebook.getDisplayName(), "", "ชาย", "", "", "", "", "","tourist");
+                                FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUserFacebook.getUid()).setValue(userData);
+                                startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
+                            } else {
+                                startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
+                            }
                         }
-
-                        // ...
                     }
                 });
     }
@@ -200,50 +200,6 @@ public class LoginUserActivity extends AppCompatActivity {
      *  Google
      *
      * **/
-    private  void signinGSO(){
-        // Configure Google Sign In
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
-                .enableAutoManage(this, new GoogleApiClient.OnConnectionFailedListener() {
-                    @Override
-                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-                    }
-                })
-                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                .build();
-    }
-    private void google_sign_in_process() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + account.getId());
-
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            startActivity(new Intent(LoginUserActivity.this,MainGuideActivity.class));
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(LoginUserActivity.this, "Auth Failed", Toast.LENGTH_SHORT).show();
-
-                        }
-                        // ...
-                    }
-                });
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -251,17 +207,17 @@ public class LoginUserActivity extends AppCompatActivity {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-            if (result.isSuccess()){
-                GoogleSignInAccount account = result.getSignInAccount();
-                firebaseAuthWithGoogle(account);
-            }else
-            {
-                Log.w(TAG,"Google sign in failed");
-            }
-
-        }
+//        if (requestCode == RC_SIGN_IN) {
+//            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+//            if (result.isSuccess()){
+//                GoogleSignInAccount account = result.getSignInAccount();
+//                firebaseAuthWithGoogle(account);
+//            }else
+//            {
+//                Log.w(TAG,"Google sign in failed");
+//            }
+//
+//        }
     }
 
     private void printKeyHash() {

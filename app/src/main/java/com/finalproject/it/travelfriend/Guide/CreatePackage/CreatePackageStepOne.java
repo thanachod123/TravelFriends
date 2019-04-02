@@ -1,7 +1,5 @@
 package com.finalproject.it.travelfriend.Guide.CreatePackage;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -9,11 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -21,9 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.finalproject.it.travelfriend.Model.GuideData;
 import com.finalproject.it.travelfriend.Model.PackageData;
 import com.finalproject.it.travelfriend.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,7 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 public class CreatePackageStepOne extends Fragment {
     Button btnSaveNext;
@@ -229,7 +220,7 @@ public class CreatePackageStepOne extends Fragment {
             strProvince = spinnerProvince.getSelectedItem().toString();
             strPackage_type = spinnerPackageType.getSelectedItem().toString();
             strLanguage = spinnerLanguage.getSelectedItem().toString();
-            PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์");
+            PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type);
             mReference.child("Packages").child(packageID).setValue(packageData);
             viewPager.setCurrentItem(getItem(+1),true);
             return true;
@@ -237,7 +228,7 @@ public class CreatePackageStepOne extends Fragment {
         strProvince = spinnerProvince.getSelectedItem().toString();
         strPackage_type = spinnerPackageType.getSelectedItem().toString();
         strLanguage = spinnerLanguage.getSelectedItem().toString();
-        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์");
+        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type);
         mReference.child("Packages").child(packageID).setValue(packageData);
         viewPager.setCurrentItem(getItem(+1),true);
         return true;

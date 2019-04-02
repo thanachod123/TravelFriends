@@ -7,6 +7,10 @@
     android:background="@color/colorPrimary"
     tools:context=".RegisterUserActivity">
 
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"></include>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,50 +26,48 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:layout_marginTop="84dp"
             android:background="@drawable/background_register">
-
-            <ImageView
-                android:id="@+id/btn_back"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/ic_back2" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/iv_profile_image"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="20dp"
-                android:src="@drawable/user_profile"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="1dp" />
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/iv_profile_image">
+                android:layout_height="wrap_content">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_profile_image"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginBottom="28dp"
+                        android:src="@drawable/user_profile"
+                        app:civ_border_color="#FF000000"
+                        app:civ_border_width="1dp" />
+
                     <ImageView
                         android:id="@+id/img_profileMenu"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_below="@+id/iv_profile_image"
+                        android:layout_marginLeft="16dp"
                         android:layout_marginTop="20dp"
                         app:srcCompat="@drawable/ic_name_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_1"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_below="@+id/iv_profile_image"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="10dp"
                         android:layout_toRightOf="@+id/img_profileMenu"
-                        android:layout_margin="10dp"
                         android:background="@drawable/edittext_circle_bg">
 
                         <android.support.design.widget.TextInputEditText
@@ -74,6 +76,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
+                            android:fontFamily="@font/fclamoon"
                             android:hint="ชื่อ" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -82,16 +85,17 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_below="@id/img_profileMenu"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="25dp"
                         app:srcCompat="@drawable/ic_surname_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/TextInputLayout_1"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_marginBottom="10dp"
                         android:layout_toRightOf="@+id/imageView2"
                         android:background="@drawable/edittext_circle_bg">
@@ -102,6 +106,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
+                            android:fontFamily="@font/fclamoon"
                             android:hint="นามสกุล" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -111,16 +116,17 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_below="@id/imageView2"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="25dp"
                         app:srcCompat="@drawable/ic_email_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_3"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/TextInputLayout_2"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_marginBottom="10dp"
                         android:layout_toRightOf="@+id/imageView2"
                         android:background="@drawable/edittext_circle_bg">
@@ -131,6 +137,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
+                            android:fontFamily="@font/fclamoon"
                             android:hint="อีเมลล์" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -140,16 +147,17 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_below="@id/imageView3"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="25dp"
                         app:srcCompat="@drawable/ic_phone_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_4"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/TextInputLayout_3"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_marginBottom="10dp"
                         android:layout_toRightOf="@+id/imageView3"
                         android:background="@drawable/edittext_circle_bg">
@@ -160,6 +168,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
+                            android:fontFamily="@font/fclamoon"
                             android:hint="เบอร์โทรศัพท์" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -169,16 +178,17 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_below="@id/imageView4"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="25dp"
                         app:srcCompat="@drawable/ic_password_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_5"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/TextInputLayout_4"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_marginBottom="10dp"
                         android:layout_toRightOf="@+id/imageView4"
                         android:background="@drawable/edittext_circle_bg">
@@ -189,6 +199,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
+                            android:fontFamily="@font/fclamoon"
                             android:hint="รหัสผ่าน"
                             android:inputType="textPassword" />
 
@@ -199,16 +210,17 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_below="@id/imageView5"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="25dp"
                         app:srcCompat="@drawable/ic_province_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_6"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/TextInputLayout_5"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_marginBottom="10dp"
                         android:layout_toRightOf="@+id/imageView5"
                         android:background="@drawable/edittext_circle_bg">
@@ -219,6 +231,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
+                            android:fontFamily="@font/fclamoon"
                             android:hint="จังหวัด" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -228,16 +241,17 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_below="@id/imageView6"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="25dp"
                         app:srcCompat="@drawable/ic_district_24dp" />
+
                     <android.support.design.widget.TextInputLayout
                         android:id="@+id/TextInputLayout_7"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/TextInputLayout_6"
                         android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
+                        android:layout_marginEnd="16dp"
                         android:layout_marginBottom="10dp"
                         android:layout_toRightOf="@+id/imageView7"
                         android:background="@drawable/edittext_circle_bg">
@@ -248,6 +262,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
                             android:background="@null"
+                            android:fontFamily="@font/fclamoon"
                             android:hint="อำเภอ" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -257,8 +272,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/imageView7"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="30dp"
+                        android:fontFamily="@font/fclamoon"
                         android:text="เพศ :"
                         android:textColor="@color/colorAccent"
                         android:textSize="24sp" />
@@ -276,6 +292,7 @@
                             android:id="@+id/rb_male"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:fontFamily="@font/fclamoon"
                             android:text="ชาย"
                             android:textColor="@color/colorAccent" />
 
@@ -284,6 +301,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="16dp"
+                            android:fontFamily="@font/fclamoon"
                             android:text="หญิง"
                             android:textColor="@color/colorAccent" />
                     </RadioGroup>
@@ -293,11 +311,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_gender"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="16dp"
                         android:layout_marginTop="10dp"
+                        android:fontFamily="@font/fclamoon"
                         android:text="สำเนาบัตรประชาชน :"
                         android:textColor="@color/colorAccent"
-                        android:textSize="18sp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <ImageView
@@ -305,17 +324,20 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_below="@id/tv_citizen"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="16dp"
                         android:layout_marginTop="10dp"
                         app:srcCompat="@drawable/ic_upload_image" />
 
                     <ImageView
                         android:id="@+id/citizen_img"
-                        android:layout_width="100dp"
+                        android:layout_width="0dp"
                         android:layout_height="100dp"
                         android:layout_below="@id/tv_citizen"
-                        android:layout_marginLeft="10dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginStart="16dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_toEndOf="@+id/imageView8"
                         android:layout_toRightOf="@+id/imageView8" />
 
                     <Button
@@ -327,6 +349,7 @@
                         android:layout_marginTop="36dp"
                         android:layout_marginBottom="24dp"
                         android:background="@drawable/bt_border3"
+                        android:fontFamily="@font/fclamoon"
                         android:paddingStart="20dp"
                         android:paddingLeft="20dp"
                         android:paddingTop="10dp"

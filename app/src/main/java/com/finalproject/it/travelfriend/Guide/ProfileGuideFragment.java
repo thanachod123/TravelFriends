@@ -32,7 +32,7 @@ public class ProfileGuideFragment extends Fragment {
     DatabaseReference mReference;
     FirebaseAuth mAuth;
 
-    String guideId,name,surname,password,profile_image;
+    String guideId,name,surname,profile_image;
 
     @Nullable
     @Override
@@ -50,10 +50,9 @@ public class ProfileGuideFragment extends Fragment {
         getUser_Profile_Data();
 
         int[] resId = {R.drawable.resume
-                    , R.drawable.change_password
                 , R.drawable.power_button};
 
-        String[] list = { "แก้ไขโปรไฟล์","เปลี่ยนรหัสผ่าน","ออกจากระบบ"};
+        String[] list = { "แก้ไขโปรไฟล์","ออกจากระบบ"};
 
         AdapterProfileGuide adapterProfileGuide  = new AdapterProfileGuide(getContext(),list,resId);
         ListView listView = view.findViewById(R.id.listViewSetting);
@@ -68,11 +67,6 @@ public class ProfileGuideFragment extends Fragment {
                         startActivity(intentEditProfile);
                         break;
                     case 1:
-                        Intent changePassword = new Intent(getActivity(), ChangePasswordGuide.class);
-                        changePassword.putExtra("GuidePassword",password);
-                        startActivity(changePassword);
-                        break;
-                    case 2:
                         mAuth.signOut();
                         Intent signOut = new Intent(getActivity(), HomeActivity.class);
                         startActivity(signOut);
@@ -90,9 +84,11 @@ public class ProfileGuideFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         name = dataSnapshot.child("name").getValue().toString();
                         surname = dataSnapshot.child("surname").getValue().toString();
-                        password = dataSnapshot.child("password").getValue().toString();
                         profile_image = dataSnapshot.child("profile_image").getValue().toString();
                         mName.setText(name+" "+surname);
+                        if ("".equalsIgnoreCase(profile_image)){
+                            profile_image = "default";
+                        }
                         Picasso.with(getContext()).load(profile_image).placeholder(R.drawable.default_profile).into(iv_profile_image);
 
                     }

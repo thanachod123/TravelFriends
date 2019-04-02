@@ -1,27 +1,22 @@
 package com.finalproject.it.travelfriend.Guide.CreatePackage;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.finalproject.it.travelfriend.Guide.EditProfileGuide;
 import com.finalproject.it.travelfriend.Model.PackageData;
 import com.finalproject.it.travelfriend.R;
-import com.finalproject.it.travelfriend.RegisterGuideActivity;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -34,8 +29,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -110,7 +103,7 @@ public class CreatePackageStepTwo extends Fragment {
             edt_summaryTrip.requestFocus();
             return false;
         }
-        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์");
+        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type);
         mReference.child("Packages").child(packageID).setValue(packageData);
         viewPager.setCurrentItem(getItemFornext(+1),true);
         return true;
@@ -156,7 +149,7 @@ public class CreatePackageStepTwo extends Fragment {
             Package_imageUri = data.getData();
             Picasso.with(getActivity()).load(Package_imageUri).into(img_upload);
 
-            StorageReference imagePackagePath = mStorage.child(getString(R.string.guides)).child(guideID).child(packageID).child("ImagePackage.jpg");
+            StorageReference imagePackagePath = mStorage.child("Packages").child(guideID).child(packageID).child("ImagePackage.jpg");
             imagePackagePath.putFile(Package_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

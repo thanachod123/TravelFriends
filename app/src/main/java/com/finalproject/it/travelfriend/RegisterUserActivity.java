@@ -1,13 +1,13 @@
 package com.finalproject.it.travelfriend;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
@@ -18,6 +18,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.finalproject.it.travelfriend.Utility.Firebase_user_method;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -31,6 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -55,6 +57,7 @@ public class RegisterUserActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener mAuthListener;
     StorageReference mStorage;
 
+    Toolbar toolbar;
     TextView tv_gender,tv_citizen;
 
     //Variables
@@ -68,6 +71,19 @@ public class RegisterUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
+        toolbar = findViewById(R.id.app_bar);
+        toolbar.setTitleTextAppearance(this, R.style.FontForActionBar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back_app_bar));
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
 
         firebase_user_method = new Firebase_user_method(this);
         mDatabase = FirebaseDatabase.getInstance();
@@ -80,7 +96,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         mPhone = findViewById(R.id.edt_Phone);
         mPassword = findViewById(R.id.edt_Password);
         mRegister = findViewById(R.id.btn_register);
-        back_bt = findViewById(R.id.btn_back);
         mGender = findViewById(R.id.rg_gender);
         mSurname = findViewById(R.id.edt_Surname);
         mProvince = findViewById(R.id.edt_Province);
@@ -89,12 +104,6 @@ public class RegisterUserActivity extends AppCompatActivity {
         tv_citizen = findViewById(R.id.tv_citizen);
         mUploadCitizen = findViewById(R.id.imageView8);
         mCitizen = findViewById(R.id.citizen_img);
-
-        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
-        tv_gender.setTypeface(myCustomFont);
-        tv_citizen.setTypeface(myCustomFont);
-        mRegister.setTypeface(myCustomFont);
-
 
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,7 +217,6 @@ public class RegisterUserActivity extends AppCompatActivity {
             }
         });
 
-//        if (check_input(strEmail,strName,strPhone,strPassword)){
         if (strName.trim().isEmpty()){
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
             mName.requestFocus();

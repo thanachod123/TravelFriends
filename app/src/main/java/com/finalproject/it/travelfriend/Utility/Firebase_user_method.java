@@ -1,6 +1,8 @@
 package com.finalproject.it.travelfriend.Utility;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.Toast;
 
@@ -44,10 +46,12 @@ public class Firebase_user_method {
     }
 
     public void send_new_user_data(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district, String citizen_image){
-
-        UserData userData = new UserData(email,name,phone,password,gender,profile_image,surname,province,district,citizen_image);
+        UserData userData = new UserData(email,name,phone,password,gender,profile_image,surname,province,district,citizen_image,"tourist");
         mReference.child("Users").child(userID).setValue(userData);
     }
 
-
+    public static void redirect(Activity activity, Class<?> activityClass) {
+        activity.startActivity(new Intent(activity, activityClass));
+        activity.finish();
+    }
 }

@@ -8,13 +8,15 @@ import android.widget.TextView;
 
 import com.finalproject.it.travelfriend.R;
 
+import org.w3c.dom.Text;
+
 public class ViewHolderPackageGuide extends RecyclerView.ViewHolder {
     TextView txtNamePackage;
+    TextView txtNameGuide;
     TextView txtDescPackage;
     TextView txtStatusPackage;
     TextView txtProvincePackage;
     ImageView imgPackage;
-    CardView cardView;
 
     public ViewHolderPackageGuide(View itemView){
         super(itemView);
@@ -22,7 +24,8 @@ public class ViewHolderPackageGuide extends RecyclerView.ViewHolder {
         txtDescPackage = itemView.findViewById(R.id.txt_descPackage);
         txtStatusPackage = itemView.findViewById(R.id.txt_statusPackage);
         txtProvincePackage = itemView.findViewById(R.id.txt_provincePackage);
+        txtNameGuide = itemView.findViewById(R.id.txt_guide_name);
         imgPackage = itemView.findViewById(R.id.img_package);
-        cardView = itemView.findViewById(R.id.cardView);
+
     }
 }

@@ -83,7 +83,7 @@ public class CreatePackageStepFour extends Fragment {
             edt_bank_number.requestFocus();
             return false;
         }
-        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์");
+        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type);
         mReference.child("Packages").child(packageID).setValue(packageData);
         viewPager.setCurrentItem(getItemFornext(+1),true);
         return true;

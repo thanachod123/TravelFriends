@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/navigation_home_user"
+        android:icon="@drawable/ic_home_24dp"
+        android:title="หน้าหลัก"
+        app:showAsAction="withText"
+        />
+
+    <item
+        android:id="@+id/navigation_booking_user"
+        android:icon="@drawable/ic_package_24dp"
+        android:title="การจอง"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/navigation_search_user"
+        android:icon="@drawable/ic_search_24dp"
+        android:title="ค้นหา"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/navigation_profile_user"
+        android:icon="@drawable/ic_name_24dp"
+        android:title="ข้อมูฃส่วนตัว"
+        app:showAsAction="withText"
+        />
+
+</menu>

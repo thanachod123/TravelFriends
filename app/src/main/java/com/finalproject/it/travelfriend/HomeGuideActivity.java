@@ -12,7 +12,6 @@ import com.jgabrielfreitas.core.BlurImageView;
 
 public class HomeGuideActivity extends AppCompatActivity {
     Button mRegister,mLogin;
-    TextView txt_guide1,txt_guide2;
     BlurImageView blurImageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,14 +20,6 @@ public class HomeGuideActivity extends AppCompatActivity {
         blurImageView = findViewById(R.id.BlurImageView);
         mRegister = findViewById(R.id.btn_register);
         mLogin = findViewById(R.id.btn_login);
-        txt_guide1 = findViewById(R.id.text_guide1);
-        txt_guide2 = findViewById(R.id.text_tourist2);
-
-        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
-        txt_guide1.setTypeface(myCustomFont);
-        txt_guide2.setTypeface(myCustomFont);
-        mRegister.setTypeface(myCustomFont);
-        mLogin.setTypeface(myCustomFont);
 
         blurImageView.setBlur(5);
 

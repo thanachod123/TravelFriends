@@ -89,7 +89,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        StatusBarUtil.setTransparent(RegisterGuideActivity.this);
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
 
         firebase_guide_method = new Firebase_guide_method(this);
         mDatabase = FirebaseDatabase.getInstance();
@@ -111,10 +111,6 @@ public class RegisterGuideActivity extends AppCompatActivity {
         mSurname = findViewById(R.id.edt_Surname);
         mProvince = findViewById(R.id.edt_Province);
         mDistrict = findViewById(R.id.edt_District);
-        tv_gender = findViewById(R.id.tv_gender);
-        tv_certificate = findViewById(R.id.tv_certificate);
-        tv_citizen = findViewById(R.id.tv_citizen);
-        tv_license = findViewById(R.id.tv_license);
         spinnerAge = findViewById(R.id.spinner_age);
 
         List age = new ArrayList<Integer>();
@@ -125,14 +121,6 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 this, android.R.layout.simple_spinner_dropdown_item,age);
         spinnerArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
         spinnerAge.setAdapter(spinnerArrayAdapter);
-
-        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
-        tv_gender.setTypeface(myCustomFont);
-        tv_certificate.setTypeface(myCustomFont);
-        tv_citizen.setTypeface(myCustomFont);
-        tv_license.setTypeface(myCustomFont);
-        mRegister.setTypeface(myCustomFont);
-
 
         mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -202,7 +190,6 @@ public class RegisterGuideActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
 
         if (requestCode == request_Code_ProfileIMG && resultCode == RESULT_OK) {
             Uri imagePath = data.getData();
@@ -387,6 +374,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
             }
         };
     }
+
     @Override
     protected void onStart() {
         super.onStart();

@@ -20,7 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterUserActivity" />
+        <activity
+            android:name=".RegisterUserActivity"
+            android:label="สมัครเป็นนักท่องเที่ยว"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".LoginUserActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
@@ -47,24 +50,62 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterGuideActivity"
+        <activity
+            android:name=".RegisterGuideActivity"
             android:label="สมัครสมาชิกเป็นผู้นำเที่ยว"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".HomeUserActivity" />
         <activity android:name=".HomeGuideActivity" />
-        <activity android:name=".LoginGuideActivity"
+        <activity
+            android:name=".LoginGuideActivity"
             android:label="เข้าสู่ระบบผู้นำเที่ยว"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity android:name=".MainGuideActivity"/>
-        <activity android:name=".Guide.EditProfileGuide"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".MainGuideActivity" />
+        <activity
+            android:name=".Guide.EditProfileGuide"
             android:label="แก้ไขโปรไฟล์"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity android:name=".Guide.ChangePasswordGuide"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Guide.ChangePasswordGuide"
             android:label="เปลี่ยนรหัสผ่าน"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
-        <activity android:name=".Guide.CreatePackage.CreatePackageGuide"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Guide.CreatePackage.CreatePackageGuide"
             android:label="แพ็คเกจนำเที่ยว"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".MainUserActivity" />
+        <activity
+            android:name=".User.EditProfileUser"
+            android:label="แก้ไขโปรไฟล์"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".User.Category.History"
+            android:label="การท่องเที่ยวเชิงประวัติศาสตร์"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".User.Category.Adventure"
+            android:label="การท่องเที่ยวเชิงผจญภัย"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".User.Category.Art"
+            android:label="การท่องเที่ยวเชิงศิลปะ"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".User.Category.Culture"
+            android:label="การท่องเที่ยวเชิงวัฒนธรรม"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".User.Category.Nature"
+            android:label="การท่องเที่ยวเชิงธรรมชาติ"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".User.RegisterPackage.DetailPackage" />
+        <activity
+            android:name=".User.RegisterPackage.RequestPackageStepOne"
+            android:label="การจองแพ็คเกจขั้นตอนที่ 1"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".User.RegisterPackage.RequestPackageStepTwo"
+            android:label="การจองแพ็คเกจขั้นตอนที่ 2"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
     </application>
 
 </manifest>

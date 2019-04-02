@@ -60,6 +60,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@null"
+                        android:fontFamily="@font/fclamoon"
                         android:hint="อีเมลล์" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -101,6 +102,7 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginBottom="10dp"
                         android:background="@null"
+                        android:fontFamily="@font/fclamoon"
                         android:hint="รหัสผ่าน"
                         android:inputType="textPassword" />
                 </android.support.design.widget.TextInputLayout>
@@ -114,6 +116,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bt_border"
+                android:fontFamily="@font/fclamoon"
                 android:paddingStart="50dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="50dp"
@@ -122,17 +125,6 @@
                 android:textAllCaps="false"
                 android:textColor="@color/colorAccent"
                 android:textSize="24sp" />
-
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/avi"
-                style="@style/AVLoadingIndicatorView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/btn_register"
-                android:layout_centerHorizontal="true"
-                android:visibility="gone"
-                app:indicatorColor="@color/black"
-                app:indicatorName="LineScalePulseOutRapidIndicator" />
 
             <LinearLayout
                 android:id="@+id/linear"
@@ -144,12 +136,12 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <com.google.android.gms.common.SignInButton
-                    android:id="@+id/google_sign_in"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/btn_register"
-                    android:layout_centerHorizontal="true" />
+                <!--<com.google.android.gms.common.SignInButton-->
+                    <!--android:id="@+id/google_sign_in"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_below="@+id/btn_register"-->
+                    <!--android:layout_centerHorizontal="true" />-->
 
                 <com.facebook.login.widget.LoginButton
                     android:id="@+id/facebook_sign_in"
