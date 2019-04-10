@@ -10,7 +10,8 @@ import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.TextView;
 
-import com.finalproject.it.travelfriend.Guide.CreatePackage.CreatePackageGuide;
+import com.finalproject.it.travelfriend.MainUserActivity;
+import com.finalproject.it.travelfriend.Model.BookingData;
 import com.finalproject.it.travelfriend.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -73,6 +74,7 @@ public class RequestPackageStepOne extends AppCompatActivity {
         packageID = getIntent().getExtras().getString("PackageID");
         strNumTourist ="1";
         numberTourist =1;
+
         getPackageData();
 
         btnPositive.setOnClickListener(new View.OnClickListener() {
@@ -111,15 +113,10 @@ public class RequestPackageStepOne extends AppCompatActivity {
         btnRequestBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentRequestPackageStepOne = new Intent(RequestPackageStepOne.this,RequestPackageStepTwo.class);
-                intentRequestPackageStepOne.putExtra("guideID", guideID);
-                intentRequestPackageStepOne.putExtra("touristID", touristID);
-                intentRequestPackageStepOne.putExtra("packageID", packageID);
-                intentRequestPackageStepOne.putExtra("strDate", strDate);
-                intentRequestPackageStepOne.putExtra("strNumTourist", strNumTourist);
-                intentRequestPackageStepOne.putExtra("strTotalPrice", strTotalPrice);
-                intentRequestPackageStepOne.putExtra("strBank", strBank);
-                intentRequestPackageStepOne.putExtra("strBankNumber",strBankNumber);
+                Intent intentRequestPackageStepOne = new Intent(RequestPackageStepOne.this,MainUserActivity.class);
+                String strBookingId = mReference.push().getKey();
+                BookingData bookingData = new BookingData(guideID,touristID,packageID,strDate,strNumTourist,strTotalPrice,"Default","รอการตอบรับ_"+touristID,"รอการตอบรับ_"+guideID,"not_accept_booking","default");
+                mReference.child("Booking").child(strBookingId).setValue(bookingData);
                 startActivity(intentRequestPackageStepOne);
             }
         });
@@ -147,4 +144,5 @@ public class RequestPackageStepOne extends AppCompatActivity {
             }
         });
     }
+
 }

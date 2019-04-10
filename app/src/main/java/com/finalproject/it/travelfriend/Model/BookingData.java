@@ -1,12 +1,12 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class BookingData {
-    String guideId, touristId, packageId, booking_date, booking_number_tourist, booking_total_price, booking_money_transfer_slip, status_touristId, status_guideId;
+    String guideId, touristId, packageId, booking_date, booking_number_tourist, booking_total_price, booking_money_transfer_slip, status_touristId, status_guideId, request_status, booking_image;
 
     public BookingData(){
     }
 
-    public BookingData(String guideId, String touristId, String packageId, String booking_date, String booking_number_tourist, String booking_total_price, String booking_money_transfer_slip, String status_touristId, String status_guideId) {
+    public BookingData(String guideId, String touristId, String packageId, String booking_date, String booking_number_tourist, String booking_total_price, String booking_money_transfer_slip, String status_touristId, String status_guideId, String request_status, String booking_image) {
         this.guideId = guideId;
         this.touristId = touristId;
         this.packageId = packageId;
@@ -16,6 +16,8 @@ public class BookingData {
         this.booking_money_transfer_slip = booking_money_transfer_slip;
         this.status_touristId = status_touristId;
         this.status_guideId = status_guideId;
+        this.request_status = request_status;
+        this.booking_image = booking_image;
     }
 
     public String getGuideId() {
@@ -90,6 +92,22 @@ public class BookingData {
         this.status_guideId = status_guideId;
     }
 
+    public String getRequest_status() {
+        return request_status;
+    }
+
+    public void setRequest_status(String request_status) {
+        this.request_status = request_status;
+    }
+
+    public String getBooking_image() {
+        return booking_image;
+    }
+
+    public void setBooking_image(String booking_image) {
+        this.booking_image = booking_image;
+    }
+
     @Override
     public String toString() {
         return "BookingData{" +
@@ -102,6 +120,8 @@ public class BookingData {
                 ", booking_money_transfer_slip='" + booking_money_transfer_slip + '\'' +
                 ", status_touristId='" + status_touristId + '\'' +
                 ", status_guideId='" + status_guideId + '\'' +
+                ", request_status='" + request_status + '\'' +
+                ", booking_image='" + booking_image + '\'' +
                 '}';
     }
 }

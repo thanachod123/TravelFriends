@@ -1,4 +1,4 @@
-package com.finalproject.it.travelfriend.User.RegisterPackage;
+package com.finalproject.it.travelfriend.Guide.WorkProceduresGuide;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,9 +12,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.finalproject.it.travelfriend.MainGuideActivity;
 import com.finalproject.it.travelfriend.MainUserActivity;
-import com.finalproject.it.travelfriend.Model.BookingData;
 import com.finalproject.it.travelfriend.R;
+import com.finalproject.it.travelfriend.User.RegisterPackage.RequestPackageStepTwo;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -28,28 +29,29 @@ import com.google.firebase.storage.UploadTask;
 import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
-public class RequestPackageStepTwo extends AppCompatActivity {
+public class CheckEndTrip extends AppCompatActivity {
+    TextView txtTouristName;
+    ImageView imgBooking;
     Toolbar toolbar;
-    TextView txtBank,txtNumberBank,txtTotalPrice;
-    String strBank,strBankNumber,strTotalMoney,strBookingId,strPackageID;
-    ImageView imgMoneyTransferSlip;
-    private static final int request_Code_IMG_Money_Transfer_Slip = 11;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferencePackage;
+    DatabaseReference mReferenceBooking,mReferenceUser;
+    String strBookingId,strTouristName,strTouristSurname,strTouristId,strGuideId;
     StorageReference mStorage;
-    Uri IMG_Money_Transfer_Slip_Uri;
-    Button btnRequestPackage;
+    Uri IMG_Booking_Uri;
+    Button btnCheckEndTrip;
+    private static final int request_Code_IMG_Booking = 11;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_request_package_step_two);
+        setContentView(R.layout.activity_check_end_trip);
+
+        imgBooking = findViewById(R.id.img_booking);
+        btnCheckEndTrip = findViewById(R.id.btn_check_endtrip);
+        txtTouristName = findViewById(R.id.txt_tourist_name);
         toolbar = findViewById(R.id.app_bar);
         toolbar.setTitleTextAppearance(this, R.style.FontForActionBar);
-        txtBank = findViewById(R.id.txt_bank);
-        txtNumberBank = findViewById(R.id.txt_number_bank);
-        txtTotalPrice = findViewById(R.id.txt_total_price);
-        imgMoneyTransferSlip = findViewById(R.id.img_money_tranfer_slip);
-        btnRequestPackage = findViewById(R.id.btn_request_package);
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -64,59 +66,43 @@ public class RequestPackageStepTwo extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceBooking = mDatabase.getReference().child("Booking");
-        mReferencePackage = mDatabase.getReference().child("Packages");
+        mReferenceUser = mDatabase.getReference().child("Users");
         mStorage = FirebaseStorage.getInstance().getReference();
         strBookingId = getIntent().getExtras().getString("BookingId");
         bindData();
 
-        imgMoneyTransferSlip.setOnClickListener(new View.OnClickListener() {
+        imgBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_IMG_Money_Transfer_Slip);
+                startActivityForResult(intent,request_Code_IMG_Booking);
             }
         });
-
-        btnRequestPackage.setOnClickListener(new View.OnClickListener() {
+        btnCheckEndTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentRequestPackageStepTwo = new Intent(RequestPackageStepTwo.this,MainUserActivity.class);
+                Intent intentCheckEndtrip = new Intent(CheckEndTrip.this,MainGuideActivity.class);
                 select_image();
-                startActivity(intentRequestPackageStepTwo);
+                startActivity(intentCheckEndtrip);
             }
         });
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == request_Code_IMG_Money_Transfer_Slip && resultCode == RESULT_OK
-                && data != null &&data.getData() != null){
-            IMG_Money_Transfer_Slip_Uri = data.getData();
-            Picasso.with(this).load(IMG_Money_Transfer_Slip_Uri).into(imgMoneyTransferSlip);
-        }
     }
 
     private void bindData() {
         mReferenceBooking.child(strBookingId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                strPackageID = dataSnapshot.child("packageId").getValue(String.class);
-                strTotalMoney = dataSnapshot.child("booking_total_price").getValue(String.class);
-
-                mReferencePackage.child(strPackageID).addValueEventListener(new ValueEventListener() {
+                strTouristId = dataSnapshot.child("touristId").getValue(String.class);
+                strGuideId = dataSnapshot.child("guideId").getValue(String.class);
+                mReferenceUser.child(strTouristId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        strBank = dataSnapshot.child("bank").getValue(String.class);
-                        strBankNumber = dataSnapshot.child("bank_number").getValue(String.class);
+                        strTouristName = dataSnapshot.child("name").getValue(String.class);
+                        strTouristSurname = dataSnapshot.child("surname").getValue(String.class);
 
-                        txtBank.setText(strBank);
-                        txtNumberBank.setText(strBankNumber);
-                        txtTotalPrice.setText(strTotalMoney+ " THB");
+                        txtTouristName.setText(strTouristName +" "+ strTouristSurname);
                     }
 
                     @Override
@@ -131,24 +117,33 @@ public class RequestPackageStepTwo extends AppCompatActivity {
 
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == request_Code_IMG_Booking && resultCode == RESULT_OK
+                && data != null &&data.getData() != null){
+            IMG_Booking_Uri = data.getData();
+            Picasso.with(this).load(IMG_Booking_Uri).into(imgBooking);
+        }
     }
 
     private void select_image(){
-        if (IMG_Money_Transfer_Slip_Uri != null){
-            StorageReference imageMTSPath = mStorage.child("Booking").child(strBookingId).child("Money_Transfer_Slip.jpg");
-            imageMTSPath.putFile(IMG_Money_Transfer_Slip_Uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        if (IMG_Booking_Uri != null){
+            StorageReference imageMTSPath = mStorage.child("Booking").child(strBookingId).child("Booking_Image.jpg");
+            imageMTSPath.putFile(IMG_Booking_Uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!urlTask.isSuccessful());
-                    Uri downloadUrlMTS = urlTask.getResult();
-                    final String strMTSimage = String.valueOf(downloadUrlMTS);
-                    mReferenceBooking.child(strBookingId).child("booking_money_transfer_slip").setValue(strMTSimage);
-                    mReferenceBooking.child(strBookingId).child("request_status").setValue("wait_check_payment");
+                    Uri downloadUrlBookingImg = urlTask.getResult();
+                    final String strBookingImg = String.valueOf(downloadUrlBookingImg);
+                    mReferenceBooking.child(strBookingId).child("booking_image").setValue(strBookingImg);
+                    mReferenceBooking.child(strBookingId).child("status_guideId").setValue("จบลงไปแล้ว_"+strGuideId);
                 }
             });
         }
     }
-
 }

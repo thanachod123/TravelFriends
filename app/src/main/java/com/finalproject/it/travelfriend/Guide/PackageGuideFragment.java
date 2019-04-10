@@ -1,6 +1,5 @@
 package com.finalproject.it.travelfriend.Guide;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -9,16 +8,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Guide.CreatePackage.CreatePackageGuide;
-import com.finalproject.it.travelfriend.Guide.ViewHolderPackageGuide;
 import com.finalproject.it.travelfriend.Model.PackageData;
 import com.finalproject.it.travelfriend.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -50,7 +46,6 @@ public class PackageGuideFragment extends Fragment {
         tv_package2 = view.findViewById(R.id.tv_package2);
         btn_CreatePackage = view.findViewById(R.id.btn_CreatePackage);
         recyclerViewPackage = view.findViewById(R.id.recyclerViewPackage);
-        recyclerViewPackage.setHasFixedSize(true);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
@@ -59,6 +54,7 @@ public class PackageGuideFragment extends Fragment {
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
                 .setQuery(mReference.orderByChild("guideId").equalTo(guideID),PackageData.class).build();
+
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageGuide>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ViewHolderPackageGuide holder, final int position, @NonNull PackageData model) {

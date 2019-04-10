@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -101,11 +102,22 @@
         <activity android:name=".User.RegisterPackage.DetailPackage" />
         <activity
             android:name=".User.RegisterPackage.RequestPackageStepOne"
-            android:label="การจองแพ็คเกจขั้นตอนที่ 1"
+            android:label="การจองแพ็คเกจ"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".User.RegisterPackage.RequestPackageStepTwo"
-            android:label="การจองแพ็คเกจขั้นตอนที่ 2"
+        <activity
+            android:name=".User.RegisterPackage.RequestPackageStepTwo"
+            android:label="การชำระเงิน"
             android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".Guide.WorkProceduresGuide.CheckPayment"
+            android:label="ตรวจสอบการชำระเงิน"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".User.WorkProceduresUser.DetailBooking" />
+
+        <activity android:name=".Guide.WorkProceduresGuide.CheckEndTrip"
+            android:label="จบการนำเที่ยว"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity android:name=".Guide.WorkProceduresGuide.DetailBookingGuide"></activity>
     </application>
 
 </manifest>
