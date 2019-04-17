@@ -1,14 +1,11 @@
 package com.finalproject.it.travelfriend.Guide;
 
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.finalproject.it.travelfriend.R;
-
-import org.w3c.dom.Text;
 
 public class ViewHolderPackageGuide extends RecyclerView.ViewHolder {
     TextView txtNamePackage;

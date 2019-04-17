@@ -1,6 +1,7 @@
 package com.finalproject.it.travelfriend.Guide.CreatePackage;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Model.PackageData;
@@ -25,12 +28,12 @@ public class CreatePackageStepThree extends Fragment {
     EditText edt_schedule;
     Button btnSaveNext,btnBack;
     NonSwipeableViewPager viewPager;
-
+    ImageView btnPinMap;
     FirebaseDatabase mDatabase;
     DatabaseReference mReference;
     FirebaseAuth mAuth;
-
-    String strProvince,strPackage_type,strVehicle_type,strBank,strBank_number,strDescription,strImage,strName,strNumberTourist,strPrice_per_person,strSchedule,strLanguage;
+    TextView txtPlace;
+    String strProvince,strPackage_type,strVehicle_type,strBank,strBank_number,strDescription,strImage,strName,strNumberTourist,strPrice_per_person,strSchedule,strLanguage,strNameLocation,strLat,strLng,strLocationName;
     String guideID,packageID;
 
     @Nullable
@@ -42,19 +45,29 @@ public class CreatePackageStepThree extends Fragment {
         btnBack = view.findViewById(R.id.btn_back);
         edt_schedule= view.findViewById(R.id.edt_schedule);
         viewPager = getActivity().findViewById(R.id.view_pager);
-
+        txtPlace = view.findViewById(R.id.txt_place);
+        btnPinMap = view.findViewById(R.id.btn_pin_map);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference();
         guideID = mAuth.getCurrentUser().getUid();
         getPackageData();
 
+        btnPinMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CreatePackageMapsActivity.class);
+                intent.putExtra("PackageId",packageID);
+                startActivity(intent);
+            }
+        });
         btnSaveNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createPackageStepThree();
             }
         });
+
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,6 +95,12 @@ public class CreatePackageStepThree extends Fragment {
                         strPrice_per_person = dataSnapshot.child("price_per_person").getValue(String.class);
                         strSchedule = dataSnapshot.child("schedule").getValue(String.class);
                         strLanguage = dataSnapshot.child("language").getValue(String.class);
+                        strNameLocation =dataSnapshot.child("location_name").getValue(String.class);
+                        strLat = dataSnapshot.child("lat").getValue(String.class);
+                        strLng = dataSnapshot.child("lng").getValue(String.class);
+                        strLocationName = dataSnapshot.child("location_name").getValue(String.class);
+
+                        txtPlace.setText(strNameLocation);
                         edt_schedule.setText(strSchedule);
                     }
 
@@ -94,13 +113,19 @@ public class CreatePackageStepThree extends Fragment {
 
     private boolean createPackageStepThree() {
         strSchedule = edt_schedule.getText().toString();
+        strNameLocation = txtPlace.getText().toString();
 
         if (strSchedule.trim().isEmpty()){
             Toast.makeText(getActivity(), "โปรดระบุแผนการท่องเที่ยว", Toast.LENGTH_SHORT).show();
             edt_schedule.requestFocus();
             return false;
         }
-        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type);
+        else if (strNameLocation.trim().isEmpty()){
+            Toast.makeText(getActivity(), "โปรดระบุสถานที่ท่องเที่ยว", Toast.LENGTH_SHORT).show();
+            txtPlace.requestFocus();
+            return false;
+        }
+        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type,strLat,strLng,strLocationName,"0.0");
         mReference.child("Packages").child(packageID).setValue(packageData);
         viewPager.setCurrentItem(getItemFornext(+1),true);
         return true;

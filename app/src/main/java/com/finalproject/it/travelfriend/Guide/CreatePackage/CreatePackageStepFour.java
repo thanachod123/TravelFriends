@@ -32,7 +32,7 @@ public class CreatePackageStepFour extends Fragment {
     FirebaseDatabase mDatabase;
     DatabaseReference mReference;
     String guideID,packageID;
-    String strProvince,strPackage_type,strVehicle_type,strBank,strBank_number,strDescription,strImage,strName,strNumberTourist,strPrice_per_person,strSchedule,strLanguage;
+    String strProvince,strPackage_type,strVehicle_type,strBank,strBank_number,strDescription,strImage,strName,strNumberTourist,strPrice_per_person,strSchedule,strLanguage,strLat,strLng,strLocationName;
 
 
     @Nullable
@@ -83,7 +83,7 @@ public class CreatePackageStepFour extends Fragment {
             edt_bank_number.requestFocus();
             return false;
         }
-        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type);
+        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type,strLat,strLng,strLocationName,"0.0");
         mReference.child("Packages").child(packageID).setValue(packageData);
         viewPager.setCurrentItem(getItemFornext(+1),true);
         return true;
@@ -108,6 +108,9 @@ public class CreatePackageStepFour extends Fragment {
                         strPrice_per_person = dataSnapshot.child("price_per_person").getValue(String.class);
                         strSchedule = dataSnapshot.child("schedule").getValue(String.class);
                         strLanguage = dataSnapshot.child("language").getValue(String.class);
+                        strLat = dataSnapshot.child("lat").getValue(String.class);
+                        strLng = dataSnapshot.child("lng").getValue(String.class);
+                        strLocationName = dataSnapshot.child("location_name").getValue(String.class);
 
                         spinner_max_guest.setSelection(((ArrayAdapter<String>)spinner_max_guest.getAdapter()).getPosition(strNumberTourist));
                         spinner_bank.setSelection(((ArrayAdapter<String>)spinner_bank.getAdapter()).getPosition(strBank));

@@ -8,8 +8,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -18,6 +21,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 public class CheckPayment extends AppCompatActivity {
     Toolbar toolbar;
     TextView txtBank,txtNumberBank,txtTotalPrice;
@@ -25,7 +30,7 @@ public class CheckPayment extends AppCompatActivity {
     Button btnCheckPayment;
     String strBookingId,strPackageID,strBank,strBankNumber,strTotalMoney,strMTS,strGuideId,strTouristId;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferencePackage;
+    DatabaseReference mReferenceBooking,mReferencePackage , mReferenceNotification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +58,9 @@ public class CheckPayment extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceBooking = mDatabase.getReference().child("Booking");
         mReferencePackage = mDatabase.getReference().child("Packages");
+        mReferenceNotification = mDatabase.getReference().child("Notification").child("NotificationAcceptPayment");
         strBookingId = getIntent().getExtras().getString("BookingId");
+
         bindData();
         btnCheckPayment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +69,23 @@ public class CheckPayment extends AppCompatActivity {
                 mReferenceBooking.child(strBookingId).child("status_guideId").setValue("กำลังจะเกิดขึ้น_"+strGuideId);
                 mReferenceBooking.child(strBookingId).child("status_touristId").setValue("กำลังจะเกิดขึ้น_"+strTouristId);
                 finish();
+
+                HashMap<String , String > notification = new HashMap<>();
+                notification.put("from" , strGuideId);
+
+                mReferenceNotification.child(strTouristId).push()
+                        .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+
+                            Toast.makeText(getApplicationContext() , "send notification !! " , Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+                });
+
 
             }
         });

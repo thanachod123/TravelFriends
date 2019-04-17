@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.jaeger.library.StatusBarUtil;
 
 import java.security.MessageDigest;
@@ -36,7 +37,7 @@ public class LoginGuideActivity extends AppCompatActivity {
     private static final String TAG = "LoginUserActivity";
     //    FirebaseVariables
     FirebaseAuth mAuth;
-    DatabaseReference mReference;
+    DatabaseReference mReference , Userref;
 
     //    Email&Password Variables
     Button mLogin;
@@ -48,6 +49,7 @@ public class LoginGuideActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide_login);
+
         toolbar = findViewById(R.id.app_bar);
         toolbar.setTitleTextAppearance(this, R.style.FontForActionBar);
         setSupportActionBar(toolbar);
@@ -61,6 +63,7 @@ public class LoginGuideActivity extends AppCompatActivity {
             }
         });
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
+
         //Firebase
         mAuth = FirebaseAuth.getInstance();
 
@@ -68,6 +71,8 @@ public class LoginGuideActivity extends AppCompatActivity {
         mLogin = findViewById(R.id.btn_register);
         mEmail = findViewById(R.id.edt_Email);
         mPassword = findViewById(R.id.edt_Password);
+
+        Userref = FirebaseDatabase.getInstance().getReference().child("Users");
 
         mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,53 +87,67 @@ public class LoginGuideActivity extends AppCompatActivity {
      *
      * **/
     private void emailSignIn() {
-        String strEmail,strPassword;
+        String strEmail, strPassword;
         strEmail = mEmail.getText().toString();
         strPassword = mPassword.getText().toString();
 
-        if (strEmail.equals("") || strPassword.equals("")){
+        if (strEmail.equals("") || strPassword.equals("")) {
             Toast.makeText(this, "Please Enter Email and Password", Toast.LENGTH_SHORT).show();
 
-        }
-        else {
-            mAuth.signInWithEmailAndPassword(strEmail,strPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        } else {
+            mAuth.signInWithEmailAndPassword(strEmail, strPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (task.isSuccessful()){
-                        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                        String RegisteredUserID = currentUser.getUid();
-                        mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(RegisteredUserID);
-                        mReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    if (task.isSuccessful()) {
+
+                        String currentUserId = mAuth.getCurrentUser().getUid();
+                        String devicetoken = FirebaseInstanceId.getInstance().getToken();
+
+                        Userref.child(currentUserId).child("device_token").setValue(devicetoken).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                String userType = dataSnapshot.child("role").getValue().toString();
-                                if (userType.equals("tourist")){
-                                    Intent intentGuide = new Intent(LoginGuideActivity.this, MainUserActivity.class);
-                                    intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                    startActivity(intentGuide);
-                                } else if (userType.equals("guide")) {
-                                    String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                                    if (guideStatus.equals("true")){
-                                        Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
-                                        intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                        startActivity(intentGuide);
-                                    }
-                                } else if (userType.equals("guide")) {
-                                    String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                                    if (guideStatus.equals("false")){
-                                        mAuth.signOut();
-                                        Toast.makeText(LoginGuideActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
-                                    }
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                                    String RegisteredUserID = currentUser.getUid();
+                                    mReference = FirebaseDatabase.getInstance().getReference().child("Users").child(RegisteredUserID);
+                                    mReference.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String userType = dataSnapshot.child("role").getValue().toString();
+                                            if (userType.equals("tourist")) {
+                                                Intent intentGuide = new Intent(LoginGuideActivity.this, MainUserActivity.class);
+                                                intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intentGuide);
+                                            } else if (userType.equals("guide")) {
+                                                String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
+                                                if (guideStatus.equals("true")) {
+                                                    Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
+                                                    intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intentGuide);
+                                                }
+                                            } else if (userType.equals("guide")) {
+                                                String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
+                                                if (guideStatus.equals("false")) {
+                                                    mAuth.signOut();
+                                                    Toast.makeText(LoginGuideActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                } else {
+                                    Toast.makeText(LoginGuideActivity.this, "Please enter Correct email \n and Password", Toast.LENGTH_SHORT).show();
+
                                 }
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
                             }
                         });
                     }
-                    else {
-                        Toast.makeText(LoginGuideActivity.this, "Please enter Correct email \n and Password", Toast.LENGTH_SHORT).show();
-                    }
+
                 }
             });
         }

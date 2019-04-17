@@ -11,12 +11,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.MainUserActivity;
 import com.finalproject.it.travelfriend.Model.BookingData;
 import com.finalproject.it.travelfriend.R;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,15 +31,19 @@ import com.google.firebase.storage.UploadTask;
 import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 public class RequestPackageStepTwo extends AppCompatActivity {
     Toolbar toolbar;
     TextView txtBank,txtNumberBank,txtTotalPrice;
-    String strBank,strBankNumber,strTotalMoney,strBookingId,strPackageID;
+    String strBank,strBankNumber,strTotalMoney,strBookingId,strPackageID ;
+    String touristID;
     ImageView imgMoneyTransferSlip;
     private static final int request_Code_IMG_Money_Transfer_Slip = 11;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferencePackage;
+    DatabaseReference mReferenceBooking,mReferencePackage , mReferenceNotificationPayment;
     StorageReference mStorage;
+    FirebaseAuth mAuth;
     Uri IMG_Money_Transfer_Slip_Uri;
     Button btnRequestPackage;
     @Override
@@ -67,6 +74,10 @@ public class RequestPackageStepTwo extends AppCompatActivity {
         mReferencePackage = mDatabase.getReference().child("Packages");
         mStorage = FirebaseStorage.getInstance().getReference();
         strBookingId = getIntent().getExtras().getString("BookingId");
+        mReferenceNotificationPayment = mDatabase.getReference().child("Notification").child("NotificationPayment");
+        mAuth = FirebaseAuth.getInstance();
+        touristID = mAuth.getCurrentUser().getUid();
+
         bindData();
 
         imgMoneyTransferSlip.setOnClickListener(new View.OnClickListener() {
@@ -85,9 +96,31 @@ public class RequestPackageStepTwo extends AppCompatActivity {
                 Intent intentRequestPackageStepTwo = new Intent(RequestPackageStepTwo.this,MainUserActivity.class);
                 select_image();
                 startActivity(intentRequestPackageStepTwo);
+
+                mReferenceBooking.child(strBookingId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String tid = dataSnapshot.child("guideId").getValue().toString();
+
+                        HashMap<String , String > notification = new HashMap<>();
+                        notification.put("from" , touristID);
+                        mReferenceNotificationPayment.child(tid).push()
+                                .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(getApplicationContext() , "send notification !! " , Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
-
     }
 
     @Override

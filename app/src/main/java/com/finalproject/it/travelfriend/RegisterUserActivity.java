@@ -29,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -280,7 +281,10 @@ public class RegisterUserActivity extends AppCompatActivity {
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_user_method.send_new_user_data(strEmail,strName,strPhone,strPassword,strGender,"Default",strSurname,strProvince,strDistrict,"Default");
+
+                            String devicetoken = FirebaseInstanceId.getInstance().getToken();
+
+                            firebase_user_method.send_new_user_data(strEmail,strName,strPhone,strPassword,strGender,"Default",strSurname,strProvince,strDistrict,"Default" , devicetoken);
                             select_image();
                             Toast.makeText(RegisterUserActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();

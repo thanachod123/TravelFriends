@@ -14,6 +14,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class Firebase_user_method {
 
@@ -45,8 +46,12 @@ public class Firebase_user_method {
                 });
     }
 
-    public void send_new_user_data(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district, String citizen_image){
-        UserData userData = new UserData(email,name,phone,password,gender,profile_image,surname,province,district,citizen_image,"tourist");
+    public void send_new_user_data(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district, String citizen_image , String device_token){
+
+        String devicetoken = FirebaseInstanceId.getInstance().getToken();
+
+
+        UserData userData = new UserData(email,name,phone,password,gender,profile_image,surname,province,district,citizen_image,"tourist" , device_token);
         mReference.child("Users").child(userID).setValue(userData);
     }
 

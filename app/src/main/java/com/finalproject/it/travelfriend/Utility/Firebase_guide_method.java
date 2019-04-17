@@ -12,6 +12,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class Firebase_guide_method {
     private static final String TAG = "FirebaseMethods";
@@ -42,9 +43,14 @@ public class Firebase_guide_method {
                 });
     }
 
-    public void send_new_guide_data(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role, String status_allow) {
+    public void send_new_guide_data(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role, String status_allow , String device_tpken) {
 
-        GuideData guideData = new GuideData(email, name, surname, phone, password, gender, profile_image, certificate_image, license_image, citizen_image, province, district, age, role, status_allow);
+
+        String devicetoken = FirebaseInstanceId.getInstance().getToken();
+
+        GuideData guideData = new GuideData(email, name, surname, phone, password, gender, profile_image, certificate_image, license_image, citizen_image, province, district, age, role, status_allow , devicetoken);
         mReference.child("Users").child(guideID).setValue(guideData);
+
+
     }
 }

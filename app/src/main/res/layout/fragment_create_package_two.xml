@@ -118,11 +118,12 @@
 
                 <ImageView
                     android:id="@+id/img_upload"
-                    android:layout_width="150dp"
+                    android:layout_width="0dp"
                     android:layout_height="150dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="10dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:scaleType="centerCrop"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txt_photo"

@@ -4,14 +4,31 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.finalproject.it.travelfriend.Guide.CreatePackage.CreatePackageGuide;
+import com.finalproject.it.travelfriend.Guide.ViewHolderPackageGuide;
+import com.finalproject.it.travelfriend.Model.PackageData;
+import com.finalproject.it.travelfriend.Model.ReviewData;
 import com.finalproject.it.travelfriend.R;
+import com.finalproject.it.travelfriend.User.Category.ViewHolderPackageUser;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,16 +39,24 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailPackage extends AppCompatActivity {
+public class DetailPackage extends AppCompatActivity implements OnMapReadyCallback {
     Button btnRequestPackage;
     Toolbar toolbar;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferencePackage,mReferenceGuide;
-    String strProvince, strPackage_type, strVehicle_type, strDescription, strImage, strPackageName, strNumberTourist, strPrice_per_person, strSchedule, strLanguage;
+    DatabaseReference mReferencePackage,mReferenceGuide, mReferenceReview;
+    String strProvince, strPackage_type, strVehicle_type, strDescription, strImage, strPackageName, strNumberTourist, strPrice_per_person, strSchedule, strLanguage,strLat,strLng,strLocationName;
     TextView txtProvince,txtPackage_type,txtVehicle_type,txtDescription,txtPackageName, txtNumberTourist, txtPricePerPerson, txtSchedule,txtLanguage,txtNameGuide;
     ImageView img_package;
     CircleImageView img_guide_image;
     String packageID,guideID;
+    Double lat;
+    Double lng;
+
+    FirebaseRecyclerOptions<ReviewData> options;
+    FirebaseRecyclerAdapter<ReviewData,ViewHolderPackageUserReview> reviewAdapter;
+    RecyclerView recyclerReview;
+
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +76,10 @@ public class DetailPackage extends AppCompatActivity {
         toolbar.setTitleTextAppearance(DetailPackage.this, R.style.FontForActionBar);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         txtProvince = findViewById(R.id.txt_province);
         txtPackage_type = findViewById(R.id.txt_activity);
         txtVehicle_type = findViewById(R.id.txt_vehicle_type);
@@ -63,13 +92,59 @@ public class DetailPackage extends AppCompatActivity {
         txtPricePerPerson = findViewById(R.id.txt_price_per_person);
         txtSchedule = findViewById(R.id.txt_schedule);
         txtLanguage = findViewById(R.id.txt_language);
+        recyclerReview = findViewById(R.id.recyclerReview);
         btnRequestPackage =findViewById(R.id.btn_request_package);
 
         mDatabase = FirebaseDatabase.getInstance();
-        mReferencePackage = mDatabase.getReference();
-        mReferenceGuide = mDatabase.getReference();
+        mReferencePackage = mDatabase.getReference().child("Packages");
+        mReferenceGuide = mDatabase.getReference().child("Users");
+        mReferenceReview = mDatabase.getReference().child("Reviews");
         packageID = getIntent().getExtras().getString("PackageID");
         getPackageData();
+
+        options = new FirebaseRecyclerOptions.Builder<ReviewData>()
+                .setQuery(mReferenceReview.child(packageID),ReviewData.class).build();
+
+        reviewAdapter = new FirebaseRecyclerAdapter<ReviewData, ViewHolderPackageUserReview>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull final ViewHolderPackageUserReview holder, int position, @NonNull ReviewData model) {
+                String touristId = reviewAdapter.getRef(position).getKey();
+
+                float clientRating = Float.parseFloat(model.getRating());
+                holder.txtComment.setText(model.getComment());
+                holder.ratingBar.setRating(clientRating);
+
+                mReferenceGuide.child(touristId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        String strTouristName = dataSnapshot.child("name").getValue(String.class);
+                        String strTouristSurName = dataSnapshot.child("surname").getValue(String.class);
+                        String strProfileImage = dataSnapshot.child("profile_image").getValue(String.class);
+
+                        holder.txtName.setText(strTouristName+ " " +strTouristSurName);
+                        Picasso.with(DetailPackage.this).load(strProfileImage).placeholder(R.drawable.default_profile).into(holder.circleImageView);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+              ;
+
+            }
+
+            @NonNull
+            @Override
+            public ViewHolderPackageUserReview onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_package_review,viewGroup,false);
+                return new ViewHolderPackageUserReview(view);
+            }
+        };
+        recyclerReview.setLayoutManager(new LinearLayoutManager(DetailPackage.this));
+        reviewAdapter.startListening();
+        recyclerReview.setAdapter(reviewAdapter);
+        updatePackageAdapter();
 
         btnRequestPackage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,11 +154,25 @@ public class DetailPackage extends AppCompatActivity {
                 startActivity(intentRequestPackage);
             }
         });
+    }
 
+    private void updatePackageAdapter() {
+        mReferenceReview.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (reviewAdapter != null)
+                    reviewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void getPackageData() {
-        mReferencePackage.child("Packages").child(packageID)
+        mReferencePackage.child(packageID)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -98,6 +187,7 @@ public class DetailPackage extends AppCompatActivity {
                         strSchedule = dataSnapshot.child("schedule").getValue(String.class);
                         strLanguage = dataSnapshot.child("language").getValue(String.class);
                         guideID = dataSnapshot.child("guideId").getValue(String.class);
+
                         toolbar.setTitle(strPackageName);
                         txtPackageName.setText(strPackageName);
                         txtDescription.setText(strDescription);
@@ -113,7 +203,7 @@ public class DetailPackage extends AppCompatActivity {
                             strImage = "default";
                         }
                         Picasso.with(DetailPackage.this).load(strImage).placeholder(R.drawable.package_image).into(img_package);
-                        mReferenceGuide.child("Users").child(guideID)
+                        mReferenceGuide.child(guideID)
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -141,5 +231,51 @@ public class DetailPackage extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+        mReferencePackage.child(packageID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                strLat = dataSnapshot.child("lat").getValue(String.class);
+                strLng = dataSnapshot.child("lng").getValue(String.class);
+                strLocationName = dataSnapshot.child("location_name").getValue(String.class);
+
+                lat = Double.parseDouble(strLat);
+                lng = Double.parseDouble(strLng);
+
+                mMap = googleMap;
+                LatLng latLng = new LatLng(lat,lng);
+                mMap.addMarker(new MarkerOptions().position(latLng).title(strLocationName));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15.0f));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if(reviewAdapter != null)
+            reviewAdapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        if (reviewAdapter != null)
+            reviewAdapter.stopListening();
+        super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(reviewAdapter != null)
+            reviewAdapter.startListening();
     }
 }

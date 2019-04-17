@@ -140,5 +140,6 @@
         <item>อังกฤษ</item>
         <item>จีน</item>
     </string-array>
+    <string name="title_activity_create_package_maps">Map</string>
 
 </resources>

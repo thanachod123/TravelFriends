@@ -45,6 +45,21 @@
 
 
                 <TextView
+                    android:id="@+id/txt_map"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="22dp"
+                    android:fontFamily="@font/fclamoon"
+                    android:text="ปักหมุดสถานที่ท่องเที่ยว"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/edt_schedule" />
+
+                <TextView
                     android:id="@+id/txt_schedule_description"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -62,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="36dp"
                     android:background="@drawable/bt_border3"
                     android:fontFamily="@font/fclamoon"
                     android:text="บันทึกและไปต่อ"
@@ -70,13 +85,47 @@
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/btn_back"
-                    app:layout_constraintTop_toBottomOf="@+id/edt_schedule" />
+                    app:layout_constraintTop_toBottomOf="@+id/txt_place" />
+
+                <TextView
+                    android:id="@+id/txt_place"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/edittext_circle_bg"
+                    android:fontFamily="@font/fclamoon"
+                    android:hint="กรุณาปักหมุดสถานที่ท่องเที่ยว"
+                    android:padding="8dp"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="3dp"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_pin_map"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_map" />
+
+                <ImageView
+                    android:id="@+id/btn_pin_map"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/location"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/txt_place"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_map" />
 
                 <Button
                     android:id="@+id/btn_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="36dp"
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/bt_border"
                     android:fontFamily="@font/fclamoon"
@@ -86,7 +135,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/btn_save_next"
                     app:layout_constraintHorizontal_chainStyle="packed"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/edt_schedule" />
+                    app:layout_constraintTop_toBottomOf="@+id/txt_place" />
 
                 <EditText
                     android:id="@+id/edt_schedule"
@@ -101,7 +150,7 @@
                     android:gravity="top|left"
                     android:hint="@string/example_schedule"
                     android:inputType="textMultiLine"
-                    android:lines="15"
+                    android:lines="10"
                     android:padding="10dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

@@ -1,12 +1,12 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class GuideData {
-    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age, role,status_allow;
+    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age, role,status_allow , device_token;
 
     public GuideData() {
     }
 
-    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role,String status_allow) {
+    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role,String status_allow , String device_token)  {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -22,7 +22,8 @@ public class GuideData {
         this.age = age;
         this.role = role;
         this.status_allow = status_allow;
-        }
+        this.device_token = device_token;
+    }
 
     public String getEmail() {
         return email;
@@ -144,6 +145,14 @@ public class GuideData {
         this.status_allow = status_allow;
     }
 
+    public String getDevice_token() {
+        return device_token;
+    }
+
+    public void setDevice_token(String device_token) {
+        this.device_token = device_token;
+    }
+
     @Override
     public String toString() {
         return "GuideData{" +
@@ -162,6 +171,7 @@ public class GuideData {
                 ", age='" + age + '\'' +
                 ", role='" + role + '\'' +
                 ", status_allow='" + status_allow + '\'' +
+                ", device_token='" + device_token + '\'' +
                 '}';
     }
 }

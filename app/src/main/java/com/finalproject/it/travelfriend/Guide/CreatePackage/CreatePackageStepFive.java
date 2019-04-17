@@ -33,7 +33,7 @@ public class CreatePackageStepFive extends Fragment {
     ImageView img_upload;
     TextView txt_name_trip,txt_summary_trip,txt_province,txt_activities,txt_language,txt_vehicle,txt_schedule,txt_max_guests,txt_price,txt_bank,txt_bank_number;
     String guideID,packageID;
-    String strProvince, strPackage_type, strVehicle_type, strBank, strBank_number, strDescription, strImage, strName, strNumberTourist, strPrice_per_person, strSchedule, strLanguage;
+    String strProvince, strPackage_type, strVehicle_type, strBank, strBank_number, strDescription, strImage, strName, strNumberTourist, strPrice_per_person, strSchedule, strLanguage,strLat,strLng,strLocationName;
 
 
     @Nullable
@@ -44,7 +44,7 @@ public class CreatePackageStepFive extends Fragment {
         btnSaveNext = view.findViewById(R.id.btn_save_next);
         btnBack = view.findViewById(R.id.btn_back);
         viewPager = getActivity().findViewById(R.id.view_pager);
-        img_upload = (ImageView)view.findViewById(R.id.imageView);
+        img_upload = view.findViewById(R.id.imageView);
         txt_name_trip = view.findViewById(R.id.txt_name_trip);
         txt_summary_trip = view.findViewById(R.id.txt_summary_trip);
         txt_province = view.findViewById(R.id.txt_province);
@@ -67,7 +67,7 @@ public class CreatePackageStepFive extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MainGuideActivity.class);
-                PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"รอการตรวจสอบ","รอการตรวจสอบ_"+strPackage_type);
+                PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"รอการตรวจสอบ","รอการตรวจสอบ_"+strPackage_type,strLat,strLng,strLocationName,"0.0");
                 mReference.child("Packages").child(packageID).setValue(packageData);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -101,6 +101,9 @@ public class CreatePackageStepFive extends Fragment {
                         strPrice_per_person = dataSnapshot.child("price_per_person").getValue(String.class);
                         strSchedule = dataSnapshot.child("schedule").getValue(String.class);
                         strLanguage = dataSnapshot.child("language").getValue(String.class);
+                        strLat = dataSnapshot.child("lat").getValue(String.class);
+                        strLng = dataSnapshot.child("lng").getValue(String.class);
+                        strLocationName = dataSnapshot.child("location_name").getValue(String.class);
 
                         txt_name_trip.setText(strName);
                         txt_summary_trip.setText(strDescription);

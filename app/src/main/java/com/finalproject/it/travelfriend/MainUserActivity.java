@@ -7,14 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.finalproject.it.travelfriend.Guide.BookingGuideFragment;
-import com.finalproject.it.travelfriend.Guide.NotificationGuideFragment;
-import com.finalproject.it.travelfriend.Guide.PackageGuideFragment;
-import com.finalproject.it.travelfriend.Guide.ProfileGuideFragment;
 import com.finalproject.it.travelfriend.User.BookingUserFragment;
 import com.finalproject.it.travelfriend.User.HomeUserFragment;
 import com.finalproject.it.travelfriend.User.ProfileUserFragment;
-import com.finalproject.it.travelfriend.User.SearchUserFragment;
+import com.finalproject.it.travelfriend.User.NotificationUserFragment;
 import com.jaeger.library.StatusBarUtil;
 
 public class MainUserActivity extends AppCompatActivity {
@@ -45,12 +41,13 @@ public class MainUserActivity extends AppCompatActivity {
                             selectedFragment = new BookingUserFragment();
                             break;
                         case R.id.navigation_search_user:
-                            selectedFragment = new SearchUserFragment();
+                            selectedFragment = new NotificationUserFragment();
                             break;
                         case R.id.navigation_profile_user:
                             selectedFragment = new ProfileUserFragment();
                             break;
                     }
+
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             selectedFragment).commit();
                     return true;

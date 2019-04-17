@@ -93,7 +93,7 @@ public class PackageGuideFragment extends Fragment {
                 Intent intentCreatePackage = new Intent(getActivity(),CreatePackageGuide.class);
                 String packageId = mReference.push().getKey();
                 intentCreatePackage.putExtra("PackageID",packageId);
-                PackageData packageData = new PackageData(guideID,"เพิ่มชื่อแพ็คเกจของคุณที่นี่","เพิ่มรายละเอียดกแพ็คเกจของคุณ","default","","","","","","","","","","ยังไม่สมบูรณ์","");
+                PackageData packageData = new PackageData(guideID,"เพิ่มชื่อแพ็คเกจของคุณที่นี่","เพิ่มรายละเอียดกแพ็คเกจของคุณ","default","","","","","","","","","","ยังไม่สมบูรณ์","","","","","0.0");
                 mReference.child(packageId).setValue(packageData);
                 startActivity(intentCreatePackage);
             }

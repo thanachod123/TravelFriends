@@ -37,7 +37,7 @@ public class UpcomingPackageUserFragment extends Fragment {
     RecyclerView recyclerUpcomingPackageUser;
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferenceTourist,mReferencePackage;
+    DatabaseReference mReferenceBooking,mReferenceTourist,mReferencePackage,mReferenceReview;
     FirebaseRecyclerOptions<BookingData> options;
     FirebaseRecyclerAdapter<BookingData,ViewHolderBookingUser> bookingAdapter;
     String touristID,guideId,packageId,guideName,guideSurname,guideImage,packageName,packageDescription,rating;
@@ -62,6 +62,7 @@ public class UpcomingPackageUserFragment extends Fragment {
         mReferenceBooking = mDatabase.getReference().child("Booking");
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceTourist = mDatabase.getReference().child("Users");
+        mReferenceReview = mDatabase.getReference().child("Reviews");
         touristID = mAuth.getCurrentUser().getUid();
 
         options = new FirebaseRecyclerOptions.Builder<BookingData>()
@@ -188,8 +189,8 @@ public class UpcomingPackageUserFragment extends Fragment {
             public void onClick(View view) {
                 String strComment = edtComment.getText().toString().trim();
                 rating = String.valueOf(ratingBar.getRating());
-                mReferencePackage.child(packageId).child("client_rating_comment").child(touristID).child("rating").setValue(rating);
-                mReferencePackage.child(packageId).child("client_rating_comment").child(touristID).child("comment").setValue(strComment);
+                mReferenceReview.child(packageId).child(touristID).child("rating").setValue(rating);
+                mReferenceReview.child(packageId).child(touristID).child("comment").setValue(strComment);
                 mReferenceBooking.child(bookingId).child("status_touristId").setValue("จบลงไปแล้ว_"+touristID);
                 setAverageRating(packageId);
                 mDialog2.dismiss();
@@ -202,7 +203,7 @@ public class UpcomingPackageUserFragment extends Fragment {
 
     private void setAverageRating(final String packageId) {
         try {
-            mReferencePackage.child(packageId).child("client_rating_comment").addValueEventListener(new ValueEventListener() {
+            mReferenceReview.child(packageId).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     double total = 0.0;
@@ -215,7 +216,9 @@ public class UpcomingPackageUserFragment extends Fragment {
                         count = count + 1;
                         average = total / count;
                     }
-                    mReferencePackage.child(packageId).child("average_rating").setValue(average);
+
+                    String strAverage = String.valueOf(average);
+                    mReferencePackage.child(packageId).child("average_rating").setValue(strAverage);
                 }
 
 

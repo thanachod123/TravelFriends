@@ -4,6 +4,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.finalproject.it.travelfriend.R;
@@ -11,15 +12,16 @@ import com.finalproject.it.travelfriend.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewHolderPackageUser extends RecyclerView.ViewHolder {
-    TextView txtNamePackage;
-    TextView txtNameGuide;
-    TextView txtPrice;
-    TextView txtProvincePackage;
-    TextView txtVehicleType;
-    TextView txtActivity;
-    CircleImageView imgGuide;
-    ImageView imgPackage;
-    ImageView img_vehicle_type;
+    public TextView txtNamePackage;
+    public TextView txtNameGuide;
+    public TextView txtPrice;
+    public TextView txtProvincePackage;
+    public TextView txtVehicleType;
+    public TextView txtActivity;
+    public CircleImageView imgGuide;
+    public ImageView imgPackage;
+    public ImageView img_vehicle_type;
+    public RatingBar ratingBar;
     CardView cardView;
 
     public ViewHolderPackageUser(View itemView){
@@ -34,6 +36,7 @@ public class ViewHolderPackageUser extends RecyclerView.ViewHolder {
         imgPackage = itemView.findViewById(R.id.img_package);
         imgGuide = itemView.findViewById(R.id.profile_image_guide);
         cardView = itemView.findViewById(R.id.cardView);
+        ratingBar = itemView.findViewById(R.id.ratingBar);
 
 
 

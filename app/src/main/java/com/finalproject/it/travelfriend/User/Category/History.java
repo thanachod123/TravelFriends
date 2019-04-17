@@ -76,6 +76,10 @@ public class History extends AppCompatActivity {
                 holder.txtActivity.setText(model.getPackage_type());
                 holder.txtPrice.setText(model.getPrice_per_person()+" THB");
                 holder.txtVehicleType.setText(model.getVehicle_type());
+
+                float averageRating = Float.parseFloat(model.getAverage_rating());
+                holder.ratingBar.setRating(averageRating);
+
                 if (model.getVehicle_type().equals("Car")){
                     Picasso.with(History.this).load(R.drawable.car)
                             .into(holder.img_vehicle_type);

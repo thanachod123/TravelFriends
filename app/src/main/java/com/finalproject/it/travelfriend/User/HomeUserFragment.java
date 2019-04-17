@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,9 @@ import com.finalproject.it.travelfriend.User.Category.Nature;
 
 public class HomeUserFragment extends Fragment {
     CardView cardViewAdventure,cardViewCulture,cardViewArt,cardViewNature,cardViewHistory;
+
+    FloatingActionButton floatingSearch;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,6 +34,16 @@ public class HomeUserFragment extends Fragment {
         cardViewArt = view.findViewById(R.id.cardviewArt);
         cardViewNature = view.findViewById(R.id.cardviewNature);
         cardViewHistory = view.findViewById(R.id.cardviewHistory);
+        floatingSearch = view.findViewById(R.id.SearchButton);
+        floatingSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                startActivity(new Intent(getActivity(), SearchActivity.class));
+
+            }
+
+        });
 
         cardViewAdventure.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -31,6 +31,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -353,13 +354,15 @@ public class RegisterGuideActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser guide = mAuth.getCurrentUser();
+                final String devicetoken = FirebaseInstanceId.getInstance().getToken();
+
                 if (guide != null){
                     guideId = mAuth.getCurrentUser().getUid();
                     Log.d(TAG,"onAuthStateChaged: guideId " +guideId);
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge,"guide","false");
+                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge,"guide","false" , devicetoken);
                             select_image();
                             Toast.makeText(RegisterGuideActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();

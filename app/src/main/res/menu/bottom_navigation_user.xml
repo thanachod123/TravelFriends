@@ -16,8 +16,8 @@
 
     <item
         android:id="@+id/navigation_search_user"
-        android:icon="@drawable/ic_search_24dp"
-        android:title="ค้นหา"
+        android:icon="@drawable/ic_notifications_24dp"
+        android:title="แจ้งเตือน"
         app:showAsAction="withText" />
 
     <item

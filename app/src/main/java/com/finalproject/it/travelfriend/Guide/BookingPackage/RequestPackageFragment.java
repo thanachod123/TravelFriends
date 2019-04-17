@@ -15,12 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Guide.WorkProceduresGuide.CheckPayment;
 import com.finalproject.it.travelfriend.Model.BookingData;
+import com.finalproject.it.travelfriend.Model.MessageModel;
 import com.finalproject.it.travelfriend.R;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,15 +33,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+
 public class RequestPackageFragment extends Fragment {
     RecyclerView recyclerRequestPackageGuide;
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferenceTourist,mReferencePackage;
+    DatabaseReference mReferenceBooking, mReferenceTourist, mReferencePackage, mReferenceNotifition , mReferenceNotiCancel , mReferencemessage;
     FirebaseRecyclerOptions<BookingData> options;
-    FirebaseRecyclerAdapter<BookingData,ViewHolderBookingGuide> bookingAdapter;
-    String guideID;
-    Dialog mDialog1,mDialog2,mDialog3;
+    FirebaseRecyclerAdapter<BookingData, ViewHolderBookingGuide> bookingAdapter;
+    String guideID , strMessage;
+    Dialog mDialog1, mDialog2, mDialog3;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,7 +55,7 @@ public class RequestPackageFragment extends Fragment {
 
         mDialog1 = new Dialog(getContext());
         mDialog1.setContentView(R.layout.request_package_guide_dialog_one);
-        mDialog1.getWindow().setLayout(900,500);
+        mDialog1.getWindow().setLayout(900, 500);
         mDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
 //        mDialog2 = new Dialog(getContext());
@@ -64,40 +73,44 @@ public class RequestPackageFragment extends Fragment {
         mReferenceBooking = mDatabase.getReference().child("Booking");
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceTourist = mDatabase.getReference().child("Users");
+        mReferencemessage = mDatabase.getReference().child("MessagesUser");
+        mReferenceNotifition = mDatabase.getReference().child("Notification").child("NotificationAccept");
+        mReferenceNotiCancel = mDatabase.getReference().child("Notification").child("NotificationCancel");
         guideID = mAuth.getCurrentUser().getUid();
+        strMessage = mReferencemessage.push().getKey();
 
         options = new FirebaseRecyclerOptions.Builder<BookingData>()
-                .setQuery(mReferenceBooking.orderByChild("status_guideId").equalTo("รอการตอบรับ_"+guideID),BookingData.class).build();
+                .setQuery(mReferenceBooking.orderByChild("status_guideId").equalTo("รอการตอบรับ_" + guideID), BookingData.class).build();
         bookingAdapter = new FirebaseRecyclerAdapter<BookingData, ViewHolderBookingGuide>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderBookingGuide holder, final int position, @NonNull BookingData model) {
                 holder.txtDay.setText(model.getBooking_date());
-                holder.txtNumTourist.setText(model.getBooking_number_tourist()+" คน");
+                holder.txtNumTourist.setText(model.getBooking_number_tourist() + " คน");
                 holder.txtBookingStatus.setText("รอการตอบรับ");
 
                 final String touristId = model.getTouristId();
                 final String packageId = model.getPackageId();
                 final String requestStatus = model.getRequest_status();
 
-                if ("not_purchase_booking".equalsIgnoreCase(requestStatus)){
+                if ("not_purchase_booking".equalsIgnoreCase(requestStatus)) {
                     holder.txtBookingStatus.setText("รอการชำระเงิน");
-                } else if ("not_accept_booking".equalsIgnoreCase(requestStatus)){
+                } else if ("not_accept_booking".equalsIgnoreCase(requestStatus)) {
                     holder.txtBookingStatus.setText("รอการตอบรับ");
-                } else if ("wait_check_payment".equalsIgnoreCase(requestStatus)){
+                } else if ("wait_check_payment".equalsIgnoreCase(requestStatus)) {
                     holder.txtBookingStatus.setText("รอการตรวจสอบการชำระเงิน");
                 }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if ("not_accept_booking".equalsIgnoreCase(requestStatus)){
+                        if ("not_accept_booking".equalsIgnoreCase(requestStatus)) {
                             String bookingId = bookingAdapter.getRef(position).getKey();
                             showDialog1(bookingId);
 
                         } else if ("wait_check_payment".equalsIgnoreCase(requestStatus)) {
                             String bookingId = bookingAdapter.getRef(position).getKey();
-                            Intent intent = new Intent(getActivity(),CheckPayment.class);
-                            intent.putExtra("BookingId",bookingId);
+                            Intent intent = new Intent(getActivity(), CheckPayment.class);
+                            intent.putExtra("BookingId", bookingId);
                             startActivity(intent);
                         }
                     }
@@ -105,13 +118,13 @@ public class RequestPackageFragment extends Fragment {
                 mReferenceTourist.child(touristId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String touristName,touristSurname,touristImage;
+                        String touristName, touristSurname, touristImage;
                         touristName = dataSnapshot.child("name").getValue().toString();
                         touristSurname = dataSnapshot.child("surname").getValue().toString();
                         touristImage = dataSnapshot.child("profile_image").getValue().toString();
 
                         holder.txtTouristName.setText(touristName + " " + touristSurname);
-                        if (touristImage.isEmpty()){
+                        if (touristImage.isEmpty()) {
                             touristImage = "Default";
                         }
                         Picasso.with(getActivity()).load(touristImage).placeholder(R.drawable.default_profile).into(holder.imgProfileTourist);
@@ -126,7 +139,7 @@ public class RequestPackageFragment extends Fragment {
                 mReferencePackage.child(packageId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String packageName,packageDescription;
+                        String packageName, packageDescription;
                         packageName = dataSnapshot.child("name").getValue().toString();
                         packageDescription = dataSnapshot.child("description").getValue().toString();
 
@@ -146,7 +159,7 @@ public class RequestPackageFragment extends Fragment {
             @NonNull
             @Override
             public ViewHolderBookingGuide onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_booking_package_guide,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_booking_package_guide, parent, false);
                 return new ViewHolderBookingGuide(view);
             }
         };
@@ -168,6 +181,19 @@ public class RequestPackageFragment extends Fragment {
             public void onClick(View view) {
                 mReferenceBooking.child(bookingId).removeValue();
                 mDialog1.dismiss();
+
+//                        HashMap<String, String> notification = new HashMap<>();
+//                        notification.put("from : ", guideID);
+//
+//                        mReferenceNotiCancel.child().push()
+//                                .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                Toast.makeText(getActivity() , "send notification !! " , Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//
+
             }
         });
         btnExit.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +207,44 @@ public class RequestPackageFragment extends Fragment {
             public void onClick(View view) {
                 mReferenceBooking.child(bookingId).child("request_status").setValue("not_purchase_booking");
                 mDialog1.dismiss();
+
+                mReferenceBooking.child(bookingId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        String packageID = dataSnapshot.child("packageId").getValue().toString();
+                        String touristId = dataSnapshot.child("touristId").getValue().toString();
+
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = new Date();
+                        String strDate = dateFormat.format(date);
+
+                      final  String tid = dataSnapshot.child("touristId").getValue().toString();
+                        HashMap<String, String> notification = new HashMap<>();
+                        notification.put("from : ", guideID);
+
+
+                        final MessageModel message = new MessageModel(packageID, guideID, bookingId, touristId, strDate);
+                        mReferencemessage.child(strMessage).setValue(message);
+
+                        mReferenceNotifition.child(tid).push()
+                                .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getActivity() , "send notification !! " , Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
             }
         });
 
@@ -190,7 +254,7 @@ public class RequestPackageFragment extends Fragment {
         mReferenceBooking.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (bookingAdapter!=null)
+                if (bookingAdapter != null)
                     bookingAdapter.notifyDataSetChanged();
             }
 
@@ -204,7 +268,7 @@ public class RequestPackageFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(bookingAdapter != null)
+        if (bookingAdapter != null)
             bookingAdapter.startListening();
     }
 
@@ -218,7 +282,7 @@ public class RequestPackageFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if(bookingAdapter != null)
+        if (bookingAdapter != null)
             bookingAdapter.startListening();
     }
 }

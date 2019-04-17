@@ -1,12 +1,12 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class PackageData {
-    String guideId,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status,status_type;
+    String guideId,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status,status_type,lat,lng,location_name,average_rating;
 
     public PackageData(){
     }
 
-    public PackageData(String guideId, String name, String description, String image, String province, String package_type, String vehicle_type, String schedule, String number_tourist, String price_per_person, String bank, String bank_number, String language, String package_status, String status_type) {
+    public PackageData(String guideId, String name, String description, String image, String province, String package_type, String vehicle_type, String schedule, String number_tourist, String price_per_person, String bank, String bank_number, String language, String package_status, String status_type, String lat, String lng, String location_name, String average_rating) {
         this.guideId = guideId;
         this.name = name;
         this.description = description;
@@ -22,6 +22,10 @@ public class PackageData {
         this.language = language;
         this.package_status = package_status;
         this.status_type = status_type;
+        this.lat = lat;
+        this.lng = lng;
+        this.location_name = location_name;
+        this.average_rating = average_rating;
     }
 
     public String getGuideId() {
@@ -144,6 +148,38 @@ public class PackageData {
         this.status_type = status_type;
     }
 
+    public String getLat() {
+        return lat;
+    }
+
+    public void setLat(String lat) {
+        this.lat = lat;
+    }
+
+    public String getLng() {
+        return lng;
+    }
+
+    public void setLng(String lng) {
+        this.lng = lng;
+    }
+
+    public String getLocation_name() {
+        return location_name;
+    }
+
+    public void setLocation_name(String location_name) {
+        this.location_name = location_name;
+    }
+
+    public String getAverage_rating() {
+        return average_rating;
+    }
+
+    public void setAverage_rating(String average_rating) {
+        this.average_rating = average_rating;
+    }
+
     @Override
     public String toString() {
         return "PackageData{" +
@@ -162,6 +198,10 @@ public class PackageData {
                 ", language='" + language + '\'' +
                 ", package_status='" + package_status + '\'' +
                 ", status_type='" + status_type + '\'' +
+                ", lat='" + lat + '\'' +
+                ", lng='" + lng + '\'' +
+                ", location_name='" + location_name + '\'' +
+                ", average_rating='" + average_rating + '\'' +
                 '}';
     }
 }
