@@ -37,10 +37,5 @@ public class ViewHolderPackageUser extends RecyclerView.ViewHolder {
         imgGuide = itemView.findViewById(R.id.profile_image_guide);
         cardView = itemView.findViewById(R.id.cardView);
         ratingBar = itemView.findViewById(R.id.ratingBar);
-
-
-
-
-
     }
 }

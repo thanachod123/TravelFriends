@@ -367,7 +367,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view9" />
@@ -385,50 +385,5 @@
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:id="@+id/layout_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:background="#dedede"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_call"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/bt_border"
-            android:fontFamily="@font/fclamoon"
-            android:text="โทรหาไกด์"
-            android:textColor="@color/colorAccent"
-            android:textSize="24sp" />
-
-        <Button
-            android:id="@+id/btn_request_package"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:background="@drawable/bt_border3"
-            android:fontFamily="@font/fclamoon"
-            android:text="สมัครแพ็คเกจ"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-    </LinearLayout>
-
-    <!--/bottom-->
-
-    <!--note -->
-    <!--/note-->
 
 </RelativeLayout>

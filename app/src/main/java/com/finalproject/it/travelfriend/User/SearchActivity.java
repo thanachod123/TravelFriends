@@ -59,7 +59,7 @@ public class SearchActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        StatusBarUtil.setTransparent(SearchActivity.this);
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.yellow));
 
 
 

@@ -12,9 +12,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ViewHolderPackageUserReview extends RecyclerView.ViewHolder {
 
-    CircleImageView circleImageView;
-    TextView txtName,txtComment;
-    RatingBar ratingBar;
+    public CircleImageView circleImageView;
+    public TextView txtName;
+    public TextView txtComment;
+    public RatingBar ratingBar;
 
     public ViewHolderPackageUserReview(@NonNull View itemView) {
         super(itemView);

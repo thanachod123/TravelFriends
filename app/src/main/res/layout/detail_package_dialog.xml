@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner"
     android:paddingBottom="24dp">
 
     <TextView
@@ -12,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/fclamoon"
-        android:text="คุณต้องการแก้ไขหรือลบแพ็คเกจนี้ ?"
+        android:text="คุณต้องการดูหรือแก้ไขแพ็คเกจนี้ ?"
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,9 +26,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:background="@drawable/bt_border4"
+        android:background="@drawable/bt_border3"
         android:fontFamily="@font/fclamoon"
-        android:text="ลบ"
+        android:text="ดูรายละเอียด"
         android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

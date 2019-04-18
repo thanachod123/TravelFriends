@@ -1,32 +1,22 @@
-package com.finalproject.it.travelfriend.User.RegisterPackage;
+package com.finalproject.it.travelfriend.Guide;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.finalproject.it.travelfriend.Guide.CreatePackage.CreatePackageGuide;
-import com.finalproject.it.travelfriend.Guide.ViewHolderPackageGuide;
-import com.finalproject.it.travelfriend.Guide.WorkProceduresGuide.DetailBookingGuide;
-import com.finalproject.it.travelfriend.Model.PackageData;
 import com.finalproject.it.travelfriend.Model.ReviewData;
 import com.finalproject.it.travelfriend.R;
-import com.finalproject.it.travelfriend.User.Category.ViewHolderPackageUser;
+import com.finalproject.it.travelfriend.User.RegisterPackage.ViewHolderPackageUserReview;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,11 +35,8 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailPackage extends AppCompatActivity implements OnMapReadyCallback {
+public class DetailPackageGuide extends AppCompatActivity implements OnMapReadyCallback {
 
-    private static final int REQUEST_CALL = 1;
-
-    Button btnRequestPackage,btnCall;
     Toolbar toolbar;
     FirebaseDatabase mDatabase;
     DatabaseReference mReferencePackage,mReferenceGuide, mReferenceReview;
@@ -61,8 +48,8 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
     String strPhone;
     Double lat;
     Double lng;
-    RatingBar ratingBar;
 
+    RatingBar ratingBar;
     FirebaseRecyclerOptions<ReviewData> options;
     FirebaseRecyclerAdapter<ReviewData,ViewHolderPackageUserReview> reviewAdapter;
     RecyclerView recyclerReview;
@@ -72,7 +59,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_package);
+        setContentView(R.layout.activity_detail_package_guide);
         toolbar = findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -84,7 +71,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                 onBackPressed();
             }
         });
-        toolbar.setTitleTextAppearance(DetailPackage.this, R.style.FontForActionBar);
+        toolbar.setTitleTextAppearance(DetailPackageGuide.this, R.style.FontForActionBar);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -103,10 +90,8 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
         txtPricePerPerson = findViewById(R.id.txt_price_per_person);
         txtSchedule = findViewById(R.id.txt_schedule);
         txtLanguage = findViewById(R.id.txt_language);
-        recyclerReview = findViewById(R.id.recyclerReview);
         ratingBar = findViewById(R.id.rating_bar);
-        btnRequestPackage =findViewById(R.id.btn_request_package);
-        btnCall = findViewById(R.id.btn_call);
+        recyclerReview = findViewById(R.id.recyclerReview);
 
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
@@ -135,8 +120,9 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                         String strProfileImage = dataSnapshot.child("profile_image").getValue(String.class);
                         strPhone = dataSnapshot.child("phone").getValue(String.class);
 
+
                         holder.txtName.setText(strTouristName+ " " +strTouristSurName);
-                        Picasso.with(DetailPackage.this).load(strProfileImage).placeholder(R.drawable.default_profile).into(holder.circleImageView);
+                        Picasso.with(DetailPackageGuide.this).load(strProfileImage).placeholder(R.drawable.default_profile).into(holder.circleImageView);
                     }
 
                     @Override
@@ -144,7 +130,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
 
                     }
                 });
-              ;
+                ;
 
             }
 
@@ -155,32 +141,11 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                 return new ViewHolderPackageUserReview(view);
             }
         };
-        recyclerReview.setLayoutManager(new LinearLayoutManager(DetailPackage.this));
+        recyclerReview.setLayoutManager(new LinearLayoutManager(DetailPackageGuide.this));
         reviewAdapter.startListening();
         recyclerReview.setAdapter(reviewAdapter);
         updatePackageAdapter();
 
-        btnRequestPackage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentRequestPackage = new Intent(DetailPackage.this,RequestPackageStepOne.class);
-                intentRequestPackage.putExtra("PackageID",packageID);
-                startActivity(intentRequestPackage);
-            }
-        });
-
-        btnCall.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent callGuide = new Intent(Intent.ACTION_CALL);
-                callGuide.setData(Uri.parse("tel:" + strPhone));
-                if (ActivityCompat.checkSelfPermission(DetailPackage.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(DetailPackage.this,new String[] {Manifest.permission.CALL_PHONE}, REQUEST_CALL);
-                    return;
-                }
-                startActivity(callGuide);
-            }
-        });
     }
 
     private void updatePackageAdapter() {
@@ -218,6 +183,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
 
                         float averageRating = Float.parseFloat(strAverageRating);
                         ratingBar.setRating(averageRating);
+
                         toolbar.setTitle(strPackageName);
                         txtPackageName.setText(strPackageName);
                         txtDescription.setText(strDescription);
@@ -232,7 +198,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                         if ("".equalsIgnoreCase(strImage)) {
                             strImage = "default";
                         }
-                        Picasso.with(DetailPackage.this).load(strImage).placeholder(R.drawable.package_image).into(img_package);
+                        Picasso.with(DetailPackageGuide.this).load(strImage).placeholder(R.drawable.package_image).into(img_package);
                         mReferenceGuide.child(guideID)
                                 .addValueEventListener(new ValueEventListener() {
                                     @Override
@@ -246,7 +212,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                                         if ("".equalsIgnoreCase(strProfile_image)) {
                                             strProfile_image = "default";
                                         }
-                                        Picasso.with(DetailPackage.this).load(strProfile_image).placeholder(R.drawable.package_image).into(img_guide_image);
+                                        Picasso.with(DetailPackageGuide.this).load(strProfile_image).placeholder(R.drawable.package_image).into(img_guide_image);
                                     }
 
                                     @Override

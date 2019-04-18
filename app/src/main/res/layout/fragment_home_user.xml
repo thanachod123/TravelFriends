@@ -6,26 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".User.HomeUserFragment">
 
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></include>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/SearchButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="500dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:clickable="true"
         android:src="@drawable/ic_search_24dp"
         app:backgroundTint="@color/background"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.888"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/scrollView2" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar">
 
 
         <android.support.constraint.ConstraintLayout
@@ -34,48 +43,44 @@
 
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/textView8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/fclamoon"
+                android:text="แพ็คเกจนำเที่ยวแนะนำ"
+                android:textColor="@color/colorAccent"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mainGrid" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:fontFamily="@font/fclamoon"
                 android:text="ประเภทการท่องเที่ยว"
                 android:textColor="@color/colorAccent"
-                android:textSize="32dp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:fontFamily="@font/fclamoon"
-                android:text="เลือกประเภทการท่องเที่ยวเพื่อทำการค้นหาแพ็คเกจนำเที่ยว และผู้นำเที่ยว"
-                android:textColor="@color/colorAccent"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
             <GridLayout
                 android:id="@+id/mainGrid"
                 android:layout_width="match_parent"
-                android:layout_height="355dp"
-                android:layout_marginTop="8dp"
+                android:layout_height="400dp"
+                android:layout_marginTop="16dp"
                 android:layout_weight="8"
                 android:alignmentMode="alignMargins"
                 android:columnCount="3"
-                android:columnOrderPreserved="false"
-                android:padding="14dp"
 
+                android:columnOrderPreserved="false"
                 android:rowCount="3"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
                 tools:layout_editor_absoluteX="0dp">
 
                 <!--Row 1 -->
@@ -88,11 +93,10 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp">
+                    app:cardCornerRadius="8dp">
 
                     <LinearLayout
                         android:id="@+id/CvAdventure"
@@ -103,8 +107,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
                             android:layout_gravity="center_horizontal"
                             app:srcCompat="@drawable/adventure" />
 
@@ -130,9 +134,9 @@
                     android:layout_height="20dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
@@ -147,8 +151,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
                             android:layout_gravity="center_horizontal"
                             app:srcCompat="@drawable/sunumbrella" />
 
@@ -172,9 +176,9 @@
                     android:layout_height="30dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
-                    android:layout_marginLeft="16dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
@@ -188,8 +192,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="90dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
                             android:layout_gravity="center_horizontal"
                             android:src="@drawable/art" />
 
@@ -216,8 +220,9 @@
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
@@ -232,13 +237,13 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
                             android:layout_gravity="center_horizontal"
                             android:src="@drawable/wat_phra_kaew" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/fclamoon"
                             android:text="ประวัติศาสตร์"
@@ -259,9 +264,10 @@
                     android:layout_height="0dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
                     app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
@@ -275,8 +281,8 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="150dp"
                             android:layout_gravity="center_horizontal"
                             android:src="@drawable/thai" />
 
@@ -295,6 +301,20 @@
                 </android.support.v7.widget.CardView>
 
             </GridLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerViewRecommended"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:clipToPadding="false"
+                android:orientation="horizontal"
+                android:overScrollMode="never"
+                android:paddingStart="16dp"
+                android:paddingRight="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
 
         </android.support.constraint.ConstraintLayout>

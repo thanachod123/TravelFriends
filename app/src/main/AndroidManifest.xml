@@ -35,7 +35,8 @@
             android:name=".RegisterUserActivity"
             android:label="สมัครเป็นนักท่องเที่ยว"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity android:name=".LoginUserActivity"
+        <activity
+            android:name=".LoginUserActivity"
             android:label="เข้าสู่ระบบนักท่องเที่ยว"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
@@ -140,7 +141,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".Guide.CreatePackage.CreatePackageMapsActivity"></activity>
+        <activity android:name=".Guide.CreatePackage.CreatePackageMapsActivity" />
+        <activity android:name=".Guide.DetailPackageGuide"></activity>
     </application>
 
 </manifest>

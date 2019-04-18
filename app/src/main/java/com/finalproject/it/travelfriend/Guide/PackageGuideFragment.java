@@ -1,7 +1,10 @@
 package com.finalproject.it.travelfriend.Guide;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Guide.CreatePackage.CreatePackageGuide;
 import com.finalproject.it.travelfriend.Model.PackageData;
@@ -37,6 +42,7 @@ public class PackageGuideFragment extends Fragment {
     FirebaseRecyclerOptions<PackageData> options;
     FirebaseRecyclerAdapter<PackageData,ViewHolderPackageGuide> packageAdapter;
     String guideID;
+    Dialog mDialog;
 
     @Nullable
     @Override
@@ -46,6 +52,11 @@ public class PackageGuideFragment extends Fragment {
         tv_package2 = view.findViewById(R.id.tv_package2);
         btn_CreatePackage = view.findViewById(R.id.btn_CreatePackage);
         recyclerViewPackage = view.findViewById(R.id.recyclerViewPackage);
+
+        mDialog = new Dialog(getContext());
+        mDialog.setContentView(R.layout.detail_package_dialog);
+        mDialog.getWindow().setLayout(900,500);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
@@ -63,13 +74,42 @@ public class PackageGuideFragment extends Fragment {
                 holder.txtProvincePackage.setText(model.getProvince());
                 holder.txtStatusPackage.setText(model.getPackage_status());
                 Picasso.with(getActivity()).load(model.getImage()).placeholder(R.drawable.package_image).into(holder.imgPackage);
+
+                final String packageStatus = model.getPackage_status();
+
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intentEditPackage = new Intent(getActivity(),CreatePackageGuide.class);
-                        String packageId = packageAdapter.getRef(position).getKey();
-                        intentEditPackage.putExtra("PackageID",packageId);
-                        startActivity(intentEditPackage);
+                        Button btnDetail = mDialog.findViewById(R.id.btn_detail);
+                        Button btnEdit = mDialog.findViewById(R.id.btn_edit);
+                        mDialog.show();
+
+                        btnDetail.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if (packageStatus.equalsIgnoreCase("ยังไม่สมบูรณ์")){
+                                    Toast.makeText(getActivity(), "กรุณาเพิ่มข้อมูลให้เสร็จสมบูรณ์", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    Intent intentDetailPackage = new Intent(getActivity(), DetailPackageGuide.class);
+                                    String packageId = packageAdapter.getRef(position).getKey();
+                                    intentDetailPackage.putExtra("PackageID", packageId);
+                                    startActivity(intentDetailPackage);
+                                    mDialog.dismiss();
+                                }
+                            }
+                        });
+                        btnEdit.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                    Intent intentEditPackage = new Intent(getActivity(),CreatePackageGuide.class);
+                                    String packageId = packageAdapter.getRef(position).getKey();
+                                    intentEditPackage.putExtra("PackageID",packageId);
+                                    startActivity(intentEditPackage);
+                                    mDialog.dismiss();
+
+                            }
+                        });
                     }
                 });
             }

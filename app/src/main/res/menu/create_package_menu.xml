@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/btn_delete"
+        android:id="@+id/btn_detail"
         android:icon="@drawable/ic_delete_24dp"
         android:title="delete"
         app:showAsAction="ifRoom" />
