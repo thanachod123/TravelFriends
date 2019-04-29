@@ -236,7 +236,7 @@ public class NotificationUserFragment extends Fragment {
             firebaseRecyclerAdapter.stopListening();
         super.onStop();
     }
-
+//
     @Override
     public void onResume() {
         super.onResume();
