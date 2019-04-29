@@ -1,8 +1,11 @@
 package com.finalproject.it.travelfriend.User.RegisterPackage;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -19,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Guide.CreatePackage.CreatePackageGuide;
 import com.finalproject.it.travelfriend.Guide.ViewHolderPackageGuide;
@@ -49,22 +53,23 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
 
     private static final int REQUEST_CALL = 1;
 
-    Button btnRequestPackage,btnCall;
+    Button btnRequestPackage, btnCall;
     Toolbar toolbar;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferencePackage,mReferenceGuide, mReferenceReview;
-    String strProvince, strPackage_type, strVehicle_type, strDescription, strImage, strPackageName, strNumberTourist, strPrice_per_person, strSchedule, strLanguage,strLat,strLng,strLocationName,strAverageRating;
-    TextView txtProvince,txtPackage_type,txtVehicle_type,txtDescription,txtPackageName, txtNumberTourist, txtPricePerPerson, txtSchedule,txtLanguage,txtNameGuide;
+    DatabaseReference mReferencePackage, mReferenceGuide, mReferenceReview;
+    String strProvince, strPackage_type, strVehicle_type, strDescription, strImage, strPackageName, strNumberTourist, strPrice_per_person, strSchedule, strLanguage, strLat, strLng, strLocationName, strAverageRating;
+    TextView txtProvince, txtPackage_type, txtVehicle_type, txtDescription, txtPackageName, txtNumberTourist, txtPricePerPerson, txtSchedule, txtLanguage, txtNameGuide;
     ImageView img_package;
     CircleImageView img_guide_image;
-    String packageID,guideID;
+    String packageID, guideID;
     String strPhone;
     Double lat;
     Double lng;
     RatingBar ratingBar;
+    Dialog mDialog;
 
     FirebaseRecyclerOptions<ReviewData> options;
-    FirebaseRecyclerAdapter<ReviewData,ViewHolderPackageUserReview> reviewAdapter;
+    FirebaseRecyclerAdapter<ReviewData, ViewHolderPackageUserReview> reviewAdapter;
     RecyclerView recyclerReview;
 
     private GoogleMap mMap;
@@ -105,8 +110,12 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
         txtLanguage = findViewById(R.id.txt_language);
         recyclerReview = findViewById(R.id.recyclerReview);
         ratingBar = findViewById(R.id.rating_bar);
-        btnRequestPackage =findViewById(R.id.btn_request_package);
+        btnRequestPackage = findViewById(R.id.btn_request_package);
         btnCall = findViewById(R.id.btn_call);
+        mDialog = new Dialog(this);
+        mDialog.setContentView(R.layout.detail_package_guide_history_dialog);
+        mDialog.getWindow().setLayout(900, 500);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
@@ -115,8 +124,9 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
         packageID = getIntent().getExtras().getString("PackageID");
         getPackageData();
 
+
         options = new FirebaseRecyclerOptions.Builder<ReviewData>()
-                .setQuery(mReferenceReview.child(packageID),ReviewData.class).build();
+                .setQuery(mReferenceReview.child(packageID), ReviewData.class).build();
 
         reviewAdapter = new FirebaseRecyclerAdapter<ReviewData, ViewHolderPackageUserReview>(options) {
             @Override
@@ -135,7 +145,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                         String strProfileImage = dataSnapshot.child("profile_image").getValue(String.class);
                         strPhone = dataSnapshot.child("phone").getValue(String.class);
 
-                        holder.txtName.setText(strTouristName+ " " +strTouristSurName);
+                        holder.txtName.setText(strTouristName + " " + strTouristSurName);
                         Picasso.with(DetailPackage.this).load(strProfileImage).placeholder(R.drawable.default_profile).into(holder.circleImageView);
                     }
 
@@ -144,14 +154,14 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
 
                     }
                 });
-              ;
+
 
             }
 
             @NonNull
             @Override
             public ViewHolderPackageUserReview onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_package_review,viewGroup,false);
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_package_review, viewGroup, false);
                 return new ViewHolderPackageUserReview(view);
             }
         };
@@ -163,8 +173,8 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
         btnRequestPackage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentRequestPackage = new Intent(DetailPackage.this,RequestPackageStepOne.class);
-                intentRequestPackage.putExtra("PackageID",packageID);
+                Intent intentRequestPackage = new Intent(DetailPackage.this, RequestPackageStepOne.class);
+                intentRequestPackage.putExtra("PackageID", packageID);
                 startActivity(intentRequestPackage);
             }
         });
@@ -175,7 +185,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                 Intent callGuide = new Intent(Intent.ACTION_CALL);
                 callGuide.setData(Uri.parse("tel:" + strPhone));
                 if (ActivityCompat.checkSelfPermission(DetailPackage.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(DetailPackage.this,new String[] {Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+                    ActivityCompat.requestPermissions(DetailPackage.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
                     return;
                 }
                 startActivity(callGuide);
@@ -227,7 +237,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                         txtVehicle_type.setText(strVehicle_type);
                         txtSchedule.setText(strSchedule);
                         txtNumberTourist.setText(strNumberTourist);
-                        txtPricePerPerson.setText(strPrice_per_person+ " THB");
+                        txtPricePerPerson.setText(strPrice_per_person + " THB");
 
                         if ("".equalsIgnoreCase(strImage)) {
                             strImage = "default";
@@ -242,11 +252,18 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                                         strName = dataSnapshot.child("name").getValue(String.class);
                                         strSurname = dataSnapshot.child("surname").getValue(String.class);
 
-                                        txtNameGuide.setText(strName+" "+strSurname);
+                                        txtNameGuide.setText(strName + " " + strSurname);
                                         if ("".equalsIgnoreCase(strProfile_image)) {
                                             strProfile_image = "default";
                                         }
                                         Picasso.with(DetailPackage.this).load(strProfile_image).placeholder(R.drawable.package_image).into(img_guide_image);
+                                        img_guide_image.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+
+                                                setupDialog();
+                                            }
+                                        });
                                     }
 
                                     @Override
@@ -276,7 +293,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
                 lng = Double.parseDouble(strLng);
 
                 mMap = googleMap;
-                LatLng latLng = new LatLng(lat,lng);
+                LatLng latLng = new LatLng(lat, lng);
                 mMap.addMarker(new MarkerOptions().position(latLng).title(strLocationName));
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15.0f));
             }
@@ -288,10 +305,39 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
         });
     }
 
+    private void setupDialog() {
+
+        Button btnAccepted = mDialog.findViewById(R.id.btn_accepted);
+        ImageView btnExit = mDialog.findViewById(R.id.btn_exitShow);
+
+        mDialog.show();
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+        btnAccepted.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext() , ShowHistoryGuide.class);
+                intent.putExtra("GuideId", guideID);
+
+                startActivity(intent);
+                mDialog.dismiss();
+            }
+        });
+
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
-        if(reviewAdapter != null)
+        if (reviewAdapter != null)
             reviewAdapter.startListening();
     }
 
@@ -305,7 +351,7 @@ public class DetailPackage extends AppCompatActivity implements OnMapReadyCallba
     @Override
     public void onResume() {
         super.onResume();
-        if(reviewAdapter != null)
+        if (reviewAdapter != null)
             reviewAdapter.startListening();
     }
 }

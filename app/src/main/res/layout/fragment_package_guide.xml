@@ -6,6 +6,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:visibility="gone"
+        android:indeterminateTint="@color/yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewPackage"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerViewPackage"
+        app:layout_constraintStart_toStartOf="@+id/recyclerViewPackage"
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewPackage" />
+
+
+    <ImageView
+        android:id="@+id/bgbooking"
+        android:layout_width="match_parent"
+        android:layout_height="304dp"
+        android:visibility="gone"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/googlelogin"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerViewPackage"
+        app:layout_constraintTop_toTopOf="@+id/recyclerViewPackage" />
+
     <ImageView
         android:id="@+id/image_bg"
         android:layout_width="0dp"

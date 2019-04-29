@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -43,19 +44,21 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class EditProfileUser extends AppCompatActivity {
 
     private static final int request_Code_ProfileIMG = 5;
-    Uri Profile_imageUri;
-    String name,surname,phone,province,district,age,gender;
+    private static final int request_Code_CitizenIMG = 8;
+    Uri Profile_imageUri, citizen_imageUri;
+    String name, surname, phone, province, district, age, gender;
     CircleImageView iv_profile_image;
-    TextInputEditText mName,mSurname,mPhone,mProvince,mDistrict;
+    TextInputEditText mName, mSurname, mPhone, mProvince, mDistrict;
     Button mUpdate;
     RadioGroup mGender;
-    RadioButton mGenderMale,mGenderFemale,mGenderOption;
+    RadioButton mGenderMale, mGenderFemale, mGenderOption;
     FirebaseDatabase mDatabase;
     DatabaseReference mReference;
     FirebaseAuth mAuth;
     StorageReference mStorage;
     String userId;
     Toolbar toolbar;
+    ImageView citizen_img, mUploadCitizen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +89,8 @@ public class EditProfileUser extends AppCompatActivity {
         mGenderMale = findViewById(R.id.rb_male);
         mGenderFemale = findViewById(R.id.rb_female);
         mUpdate = findViewById(R.id.btn_save_change);
-
+        citizen_img = findViewById(R.id.citizen_img);
+        mUploadCitizen = findViewById(R.id.mUploadCitizen);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference();
@@ -96,7 +100,7 @@ public class EditProfileUser extends AppCompatActivity {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 mGenderOption = mGender.findViewById(i);
-                switch (i){
+                switch (i) {
                     case R.id.rb_male:
                         gender = mGenderOption.getText().toString();
                         break;
@@ -115,7 +119,17 @@ public class EditProfileUser extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_ProfileIMG);
+                startActivityForResult(intent, request_Code_ProfileIMG);
+            }
+        });
+
+        mUploadCitizen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
+                intent.setType("image/*");
+                startActivityForResult(intent, request_Code_CitizenIMG);
             }
         });
 
@@ -132,7 +146,7 @@ public class EditProfileUser extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String name,surname,phone,province,district,gender,profile_image;
+                        String name, surname, phone, province, district, gender, profile_image;
 
                         userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         name = dataSnapshot.child("name").getValue().toString();
@@ -148,12 +162,12 @@ public class EditProfileUser extends AppCompatActivity {
                         mProvince.setText(province);
                         mDistrict.setText(district);
 
-                        if (gender.equalsIgnoreCase("ชาย")){
+                        if (gender.equalsIgnoreCase("ชาย")) {
                             mGenderMale.setChecked(true);
-                        }else if (gender.equalsIgnoreCase("หญิง")){
+                        } else if (gender.equalsIgnoreCase("หญิง")) {
                             mGenderFemale.setChecked(true);
                         }
-                        if ("".equalsIgnoreCase(profile_image)){
+                        if ("".equalsIgnoreCase(profile_image)) {
                             profile_image = "default";
                         }
                         Picasso.with(EditProfileUser.this).load(profile_image).placeholder(R.drawable.default_profile).into(iv_profile_image);
@@ -173,35 +187,47 @@ public class EditProfileUser extends AppCompatActivity {
         province = mProvince.getText().toString();
         district = mDistrict.getText().toString();
 
-        if (name.trim().isEmpty()){
+        if (name.trim().isEmpty()) {
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
             mName.requestFocus();
             return false;
         }
-        if (surname.trim().isEmpty()){
+        if (surname.trim().isEmpty()) {
             Toast.makeText(this, "Please input SurName", Toast.LENGTH_SHORT).show();
             mSurname.requestFocus();
             return false;
         }
 
-        if (phone.trim().isEmpty()){
+        if (phone.trim().isEmpty()) {
             Toast.makeText(this, "Please input Phone", Toast.LENGTH_SHORT).show();
             mPhone.requestFocus();
             return false;
         }
 
-        if (province.trim().isEmpty()){
+        if (phone.length() < 10 || phone.length() > 10) {
+            Toast.makeText(this, "Please Enter valid phone number", Toast.LENGTH_SHORT).show();
+            mPhone.requestFocus();
+            return false;
+        }
+
+        if (phone.matches("[a-zA-Z]+")) {
+            Toast.makeText(this, "Please Enter valid phone number 0-9", Toast.LENGTH_SHORT).show();
+            mPhone.requestFocus();
+            return false;
+        }
+
+        if (province.trim().isEmpty()) {
             Toast.makeText(this, "Please input Province", Toast.LENGTH_SHORT).show();
             mProvince.requestFocus();
             return false;
         }
-        if (district.trim().isEmpty()){
+        if (district.trim().isEmpty()) {
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
             mDistrict.requestFocus();
             return false;
         }
-        if (mGender.getCheckedRadioButtonId()== -1){
-            Toast.makeText(this,"Please input Gender",Toast.LENGTH_SHORT).show();
+        if (mGender.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Please input Gender", Toast.LENGTH_SHORT).show();
             mGender.requestFocus();
             return false;
         }
@@ -214,7 +240,12 @@ public class EditProfileUser extends AppCompatActivity {
                 mReference.child(getString(R.string.users)).child(userId).child("province").setValue(province);
                 mReference.child(getString(R.string.users)).child(userId).child("district").setValue(district);
                 mReference.child(getString(R.string.users)).child(userId).child("gender").setValue(gender);
+
+                Toast.makeText(getApplicationContext(), "Edit profile success", Toast.LENGTH_SHORT).show();
+
+                finish();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -231,7 +262,7 @@ public class EditProfileUser extends AppCompatActivity {
             Uri imagePath = data.getData();
             CropImage.activity(imagePath)
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
+                    .setAspectRatio(1, 1)
                     .start(EditProfileUser.this);
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -246,15 +277,42 @@ public class EditProfileUser extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!urlTask.isSuccessful());
+                        while (!urlTask.isSuccessful()) ;
                         Uri downloadUrlProfile = urlTask.getResult();
                         final String strProfileImage = String.valueOf(downloadUrlProfile);
                         mReference.child(getString(R.string.users)).child(userId).child("profile_image").setValue(strProfileImage);
                     }
                 });
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+
+
             }
+        }
+
+        if (requestCode == request_Code_CitizenIMG && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            citizen_imageUri = data.getData();
+            Picasso.with(this).load(citizen_imageUri).into(citizen_img);
+
+            StorageReference imageCitizenPath = mStorage.child("Users")
+                    .child(citizen_imageUri.getLastPathSegment());
+            imageCitizenPath.putFile(citizen_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!urlTask.isSuccessful()) ;
+                    Uri downloadUrlCitizen = urlTask.getResult();
+                    final String strCitizenImage = String.valueOf(downloadUrlCitizen);
+                    mReference.child(getString(R.string.users)).child(userId)
+                            .child("citizen_image").setValue(strCitizenImage);
+
+                  }
+            });
+
+        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+
+
         }
     }
 

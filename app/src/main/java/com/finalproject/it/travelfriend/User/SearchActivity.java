@@ -51,7 +51,6 @@ public class SearchActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.app_bar);
         toolbar.setTitleTextAppearance(this, R.style.FontForActionBar);
         toolbar.setTitle("ค้นหา");
-
         toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back_app_bar));
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +115,9 @@ public class SearchActivity extends AppCompatActivity {
 
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
-                .setQuery(mReferencePackage.orderByChild("province").startAt(searchText).endAt(searchText + "\uf8ff"), PackageData.class).build();
+                .setQuery(mReferencePackage.orderByChild("province")
+                        .startAt(searchText)
+                        .endAt(searchText + "\uf8ff"), PackageData.class).build();
 
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override

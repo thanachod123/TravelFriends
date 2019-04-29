@@ -3,6 +3,8 @@ package com.finalproject.it.travelfriend.Guide.CreatePackage;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -27,7 +29,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -36,10 +40,12 @@ import com.google.android.libraries.places.widget.listener.PlaceSelectionListene
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public class CreatePackageMapsActivity extends FragmentActivity implements OnMapReadyCallback
-        ,GoogleApiClient.ConnectionCallbacks,
+        , GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
 
@@ -59,6 +65,7 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
     private LocationRequest mLocationRequest;
     private GoogleApiClient mGoogleApiClient;
     private Location mLocation;
+    private Marker myMarker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +74,10 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
         btnSetLocation = findViewById(R.id.btn_set_location);
         btnSetLocation.setVisibility(View.GONE);
 
+
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference();
+
 
         if (!Places.isInitialized()) {
             Places.initialize(getApplicationContext(), "AIzaSyAgCFGh2UJwAqMLdq4eAomJSu5Rz_n4pZQ");
@@ -77,16 +86,16 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
         final SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        View toolbar = ((View)mapFragment.getView().findViewById(Integer.parseInt("1")).
+        View toolbar = ((View) mapFragment.getView().findViewById(Integer.parseInt("1")).
                 getParent()).findViewById(Integer.parseInt("4"));
-        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams)toolbar.getLayoutParams();
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP,0);
-        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
-        rlp.setMargins(0,0,30,200);
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) toolbar.getLayoutParams();
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        rlp.setMargins(0, 0, 30, 200);
         setUpLocation();
 
-        AutocompleteSupportFragment placeAutocompleteFragment = (AutocompleteSupportFragment)getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        placeAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID,Place.Field.NAME,Place.Field.ADDRESS,Place.Field.LAT_LNG));
+        AutocompleteSupportFragment placeAutocompleteFragment = (AutocompleteSupportFragment) getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        placeAutocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG));
         placeAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(@NonNull final Place place) {
@@ -94,9 +103,14 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
                 final String strLat = String.valueOf(latLng.latitude);
                 final String strLng = String.valueOf(latLng.longitude);
 
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                 mMap.addMarker(new MarkerOptions().position(place.getLatLng()));
                 btnSetLocation.setVisibility(View.VISIBLE);
+
+
+                myMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
                 btnSetLocation.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -104,7 +118,7 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
                         packageId = getIntent().getStringExtra("PackageId");
                         mReference.child("Packages").child(packageId).child("lat").setValue(strLat);
                         mReference.child("Packages").child(packageId).child("lng").setValue(strLng);
-                        mReference.child("Packages").child(packageId).child("location_name").setValue(place.getName());
+                        mReference.child("Packages").child(packageId).child("location_name").setValue(place.getAddress());
                         finish();
                     }
                 });
@@ -116,19 +130,20 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
 
             }
         });
+
+
     }
+
 
     private void setUpLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION
             }, PERMISSION_REQUEST_CODE);
         } else {
-            if (checkPlayServices())
-            {
+            if (checkPlayServices()) {
                 buildGoogleApiClient();
                 createLocationRequest();
                 displayLocation();
@@ -137,18 +152,19 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
     }
 
     private void displayLocation() {
+
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLocation != null)
-        {
+        if (mLocation != null) {
             final double latitude = mLocation.getLatitude();
             final double longtitude = mLocation.getLongitude();
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longtitude), 15.0f));
+
         }
     }
 
@@ -171,12 +187,10 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS)
-        {
+        if (resultCode != ConnectionResult.SUCCESS) {
             if (GooglePlayServicesUtil.isUserRecoverableError(resultCode))
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this, PLAY_SERVICE_REQUEST).show();
-            else
-            {
+            else {
                 Toast.makeText(this, "This device is not supported", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -188,17 +202,54 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(final LatLng latLng) {
+
+                final String lat = String.valueOf(latLng.latitude);
+                final String lng = String.valueOf(latLng.latitude);
+
+                mMap.clear();
+                btnSetLocation.setVisibility(View.VISIBLE);
+                myMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+
+                btnSetLocation.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Geocoder gc = new Geocoder(CreatePackageMapsActivity.this);
+
+                        List<Address> list = null;
+                        try {
+                            list = gc.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        String Address  = list.get(0).getAddressLine(0);
+
+                        packageId = getIntent().getStringExtra("PackageId");
+                        mReference.child("Packages").child(packageId).child("lat").setValue(lat);
+                        mReference.child("Packages").child(packageId).child("lng").setValue(lng);
+                        mReference.child("Packages").child(packageId).child("location_name").setValue(Address);
+                        finish();
+
+                    }
+                });
+            }
+
+
+        });
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode)
-        {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    if (checkPlayServices())
-                    {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (checkPlayServices()) {
                         buildGoogleApiClient();
                         createLocationRequest();
                         displayLocation();
@@ -227,4 +278,6 @@ public class CreatePackageMapsActivity extends FragmentActivity implements OnMap
         mLocation = location;
         displayLocation();
     }
+
+
 }

@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.telephony.PhoneNumberUtils;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -45,12 +46,12 @@ public class EditProfileGuide extends AppCompatActivity {
 
     private static final int request_Code_ProfileIMG = 5;
     Uri Profile_imageUri;
-    String name,surname,phone,province,district,age,gender;
+    String name, surname, phone, province, district, age, gender;
     CircleImageView iv_profile_image;
-    TextInputEditText mName,mSurname,mPhone,mProvince,mDistrict;
+    TextInputEditText mName, mSurname, mPhone, mProvince, mDistrict;
     Button mUpdate;
     RadioGroup mGender;
-    RadioButton mGenderMale,mGenderFemale,mGenderOption;
+    RadioButton mGenderMale, mGenderFemale, mGenderOption;
     FirebaseDatabase mDatabase;
     DatabaseReference mReference;
     FirebaseAuth mAuth;
@@ -95,19 +96,19 @@ public class EditProfileGuide extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance().getReference();
 
         List age = new ArrayList<Integer>();
-        for (int i = 20; i <= 60; i++){
+        for (int i = 20; i <= 60; i++) {
             age.add(Integer.toString(i));
         }
         ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(
-                this, android.R.layout.simple_spinner_dropdown_item,age);
-        spinnerArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+                this, android.R.layout.simple_spinner_dropdown_item, age);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAge.setAdapter(spinnerArrayAdapter);
 
         mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 mGenderOption = mGender.findViewById(i);
-                switch (i){
+                switch (i) {
                     case R.id.rb_male:
                         gender = mGenderOption.getText().toString();
                         break;
@@ -127,7 +128,7 @@ public class EditProfileGuide extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_ProfileIMG);
+                startActivityForResult(intent, request_Code_ProfileIMG);
             }
         });
 
@@ -140,7 +141,7 @@ public class EditProfileGuide extends AppCompatActivity {
     }
 
     private void setFont() {
-        Typeface myCustomFont = Typeface.createFromAsset(getAssets(),"fonts/FC Lamoon Bold ver 1.00.ttf");
+        Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "fonts/FC Lamoon Bold ver 1.00.ttf");
         mName.setTypeface(myCustomFont);
         mSurname.setTypeface(myCustomFont);
         mPhone.setTypeface(myCustomFont);
@@ -155,7 +156,7 @@ public class EditProfileGuide extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String name,surname,phone,province,district,age,gender,profile_image;
+                        String name, surname, phone, province, district, age, gender, profile_image;
 
                         guideId = FirebaseAuth.getInstance().getCurrentUser().getUid();
                         name = dataSnapshot.child("name").getValue().toString();
@@ -172,13 +173,13 @@ public class EditProfileGuide extends AppCompatActivity {
                         mProvince.setText(province);
                         mDistrict.setText(district);
 
-                        if (gender.equalsIgnoreCase("ชาย")){
+                        if (gender.equalsIgnoreCase("ชาย")) {
                             mGenderMale.setChecked(true);
-                        }else if (gender.equalsIgnoreCase("หญิง")){
+                        } else if (gender.equalsIgnoreCase("หญิง")) {
                             mGenderFemale.setChecked(true);
                         }
                         int age1 = Integer.parseInt(age);
-                        int age2 = age1-20;
+                        int age2 = age1 - 20;
                         spinnerAge.setSelection(age2);
 
                         Picasso.with(EditProfileGuide.this).load(profile_image).placeholder(R.drawable.default_profile).into(iv_profile_image);
@@ -199,35 +200,48 @@ public class EditProfileGuide extends AppCompatActivity {
         district = mDistrict.getText().toString();
         age = spinnerAge.getSelectedItem().toString();
 
-        if (name.trim().isEmpty()){
+        if (name.trim().isEmpty()) {
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
             mName.requestFocus();
             return false;
         }
-        if (surname.trim().isEmpty()){
+        if (surname.trim().isEmpty()) {
             Toast.makeText(this, "Please input SurName", Toast.LENGTH_SHORT).show();
             mSurname.requestFocus();
             return false;
         }
 
-        if (phone.trim().isEmpty()){
+        if (phone.trim().isEmpty()) {
             Toast.makeText(this, "Please input Phone", Toast.LENGTH_SHORT).show();
             mPhone.requestFocus();
             return false;
         }
 
-        if (province.trim().isEmpty()){
+
+        if (phone.length() < 10 || phone.length() > 10) {
+            Toast.makeText(this, "Please Enter valid phone number", Toast.LENGTH_SHORT).show();
+            mPhone.requestFocus();
+            return false;
+        }
+
+       if (phone.matches("[a-zA-Z]+")){
+           Toast.makeText(this, "Please Enter valid phone number 0-9", Toast.LENGTH_SHORT).show();
+           mPhone.requestFocus();
+           return false;
+       }
+
+        if (province.trim().isEmpty()) {
             Toast.makeText(this, "Please input Province", Toast.LENGTH_SHORT).show();
             mProvince.requestFocus();
             return false;
         }
-        if (district.trim().isEmpty()){
+        if (district.trim().isEmpty()) {
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
             mDistrict.requestFocus();
             return false;
         }
-        if (mGender.getCheckedRadioButtonId()== -1){
-            Toast.makeText(this,"Please input Gender",Toast.LENGTH_SHORT).show();
+        if (mGender.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Please input Gender", Toast.LENGTH_SHORT).show();
             mGender.requestFocus();
             return false;
         }
@@ -242,6 +256,9 @@ public class EditProfileGuide extends AppCompatActivity {
                 mReference.child(getString(R.string.users)).child(guideId).child("age").setValue(age);
                 mReference.child(getString(R.string.users)).child(guideId).child("gender").setValue(gender);
 
+
+                Toast.makeText(getApplicationContext(), "Edit profile success", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override
@@ -261,7 +278,7 @@ public class EditProfileGuide extends AppCompatActivity {
             Uri imagePath = data.getData();
             CropImage.activity(imagePath)
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
+                    .setAspectRatio(1, 1)
                     .start(EditProfileGuide.this);
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -276,7 +293,7 @@ public class EditProfileGuide extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!urlTask.isSuccessful());
+                        while (!urlTask.isSuccessful()) ;
                         Uri downloadUrlProfile = urlTask.getResult();
                         final String strProfileImage = String.valueOf(downloadUrlProfile);
                         mReference.child(getString(R.string.users)).child(guideId).child("profile_image").setValue(strProfileImage);

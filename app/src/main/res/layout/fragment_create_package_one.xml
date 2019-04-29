@@ -61,7 +61,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="36dp"
                     android:fontFamily="@font/fclamoon"
-                    android:text="ประเภทกิจกรรม (เลือกได้มากกว่า 1 ประเภท)"
+                    android:text="ประเภทกิจกรรม "
                     android:textColor="@color/colorAccent"
                     android:textSize="24sp"
                     app:layout_constraintStart_toStartOf="parent"

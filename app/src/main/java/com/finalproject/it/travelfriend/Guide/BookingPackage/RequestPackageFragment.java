@@ -42,22 +42,23 @@ public class RequestPackageFragment extends Fragment {
     RecyclerView recyclerRequestPackageGuide;
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking, mReferenceTourist, mReferencePackage, mReferenceNotifition , mReferenceNotiCancel , mReferencemessage;
+    DatabaseReference mReferenceBooking, mReferenceTourist, mReferencePackage, mReferenceNotifition, mReferenceNotiCancel, mReferencemessage;
     FirebaseRecyclerOptions<BookingData> options;
     FirebaseRecyclerAdapter<BookingData, ViewHolderBookingGuide> bookingAdapter;
-    String guideID , strMessage;
+    String guideID, strMessage;
     Dialog mDialog1, mDialog2, mDialog3;
+    ImageView bg;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_request_package, container, false);
         recyclerRequestPackageGuide = view.findViewById(R.id.recyclerRequestPackage);
-
+        bg = view.findViewById(R.id.bgrequest);
         mDialog1 = new Dialog(getContext());
         mDialog1.setContentView(R.layout.request_package_guide_dialog_one);
         mDialog1.getWindow().setLayout(900, 500);
         mDialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+        bg.setVisibility(View.VISIBLE);
 //        mDialog2 = new Dialog(getContext());
 //        mDialog2.setContentView(R.layout.request_package_user_dialog_two);
 //        mDialog2.getWindow().setLayout(900,500);
@@ -74,7 +75,7 @@ public class RequestPackageFragment extends Fragment {
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceTourist = mDatabase.getReference().child("Users");
         mReferencemessage = mDatabase.getReference().child("MessagesUser");
-        mReferenceNotifition = mDatabase.getReference().child("Notification").child("NotificationAccept");
+        mReferenceNotifition = mDatabase.getReference().child("Notification").child("NotificationAccepts");
         mReferenceNotiCancel = mDatabase.getReference().child("Notification").child("NotificationCancel");
         guideID = mAuth.getCurrentUser().getUid();
         strMessage = mReferencemessage.push().getKey();
@@ -87,7 +88,7 @@ public class RequestPackageFragment extends Fragment {
                 holder.txtDay.setText(model.getBooking_date());
                 holder.txtNumTourist.setText(model.getBooking_number_tourist() + " คน");
                 holder.txtBookingStatus.setText("รอการตอบรับ");
-
+                bg.setVisibility(View.GONE);
                 final String touristId = model.getTouristId();
                 final String packageId = model.getPackageId();
                 final String requestStatus = model.getRequest_status();
@@ -214,24 +215,25 @@ public class RequestPackageFragment extends Fragment {
 
                         String packageID = dataSnapshot.child("packageId").getValue().toString();
                         String touristId = dataSnapshot.child("touristId").getValue().toString();
+                        String type = "ยืนยันคำขอแล้ว";
 
                         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Date date = new Date();
                         String strDate = dateFormat.format(date);
 
-                      final  String tid = dataSnapshot.child("touristId").getValue().toString();
+                        final String tid = dataSnapshot.child("touristId").getValue().toString();
                         HashMap<String, String> notification = new HashMap<>();
                         notification.put("from : ", guideID);
 
 
-                        final MessageModel message = new MessageModel(packageID, guideID, bookingId, touristId, strDate);
+                        final MessageModel message = new MessageModel(packageID, guideID, bookingId, touristId, strDate, type);
                         mReferencemessage.child(strMessage).setValue(message);
 
                         mReferenceNotifition.child(tid).push()
                                 .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(getActivity() , "send notification !! " , Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "send notification !! ", Toast.LENGTH_SHORT).show();
                             }
                         });
 

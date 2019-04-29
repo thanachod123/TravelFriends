@@ -1,4 +1,5 @@
 package com.finalproject.it.travelfriend;
+
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -39,6 +40,7 @@ import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,12 +50,12 @@ public class RegisterGuideActivity extends AppCompatActivity {
     private static final String TAG = "RegisterGuideActivity";
 
     CircleImageView profile_image;
-    TextInputEditText mName,mEmail,mPhone,mPassword,mSurname,mProvince,mDistrict;
-    ImageView mUploadCertificate,mUploadLicense,mUploadCitizen,mCertificate,mLicense,mCitizen;
+    TextInputEditText mName, mEmail, mPhone, mPassword, mSurname, mProvince, mDistrict;
+    ImageView mUploadCertificate, mUploadLicense, mUploadCitizen, mCertificate, mLicense, mCitizen;
     Button mRegister;
     RadioGroup mGender;
     RadioButton mGenderOption;
-    TextView tv_gender,tv_certificate,tv_license,tv_citizen;
+    TextView tv_gender, tv_certificate, tv_license, tv_citizen;
     Spinner spinnerAge;
     Toolbar toolbar;
 
@@ -66,12 +68,12 @@ public class RegisterGuideActivity extends AppCompatActivity {
     StorageReference mStorage;
 
     //Variables
-    String strEmail,strName,strPhone,strGender,strPassword,strSurname,strProvince,strDistrict,strAge;
+    String strEmail, strName, strPhone, strGender, strPassword, strSurname, strProvince, strDistrict, strAge;
     private static final int request_Code_ProfileIMG = 5;
     private static final int request_Code_CertificateIMG = 6;
     private static final int request_Code_LicenseIMG = 7;
     private static final int request_Code_CitizenIMG = 8;
-    Uri Profile_imageUri,Certificate_imageUri,License_imageUri,Citizen_imageUri;
+    Uri Profile_imageUri, Certificate_imageUri, License_imageUri, Citizen_imageUri;
     String guideId;
 
     @Override
@@ -115,19 +117,19 @@ public class RegisterGuideActivity extends AppCompatActivity {
         spinnerAge = findViewById(R.id.spinner_age);
 
         List age = new ArrayList<Integer>();
-        for (int i = 20; i <= 60; i++){
+        for (int i = 20; i <= 60; i++) {
             age.add(Integer.toString(i));
         }
         ArrayAdapter<Integer> spinnerArrayAdapter = new ArrayAdapter<Integer>(
-                this, android.R.layout.simple_spinner_dropdown_item,age);
-        spinnerArrayAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+                this, android.R.layout.simple_spinner_dropdown_item, age);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerAge.setAdapter(spinnerArrayAdapter);
 
         mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 mGenderOption = mGender.findViewById(i);
-                switch (i){
+                switch (i) {
                     case R.id.rb_male:
                         strGender = mGenderOption.getText().toString();
                         break;
@@ -151,7 +153,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_ProfileIMG);
+                startActivityForResult(intent, request_Code_ProfileIMG);
             }
         });
 
@@ -161,7 +163,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_CertificateIMG);
+                startActivityForResult(intent, request_Code_CertificateIMG);
             }
         });
 
@@ -171,7 +173,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_LicenseIMG);
+                startActivityForResult(intent, request_Code_LicenseIMG);
             }
         });
 
@@ -181,7 +183,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_CitizenIMG);
+                startActivityForResult(intent, request_Code_CitizenIMG);
             }
         });
 
@@ -196,7 +198,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
             Uri imagePath = data.getData();
             CropImage.activity(imagePath)
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
+                    .setAspectRatio(1, 1)
                     .start(RegisterGuideActivity.this);
         }
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
@@ -212,44 +214,46 @@ public class RegisterGuideActivity extends AppCompatActivity {
             }
         }
         if (requestCode == request_Code_CertificateIMG && resultCode == RESULT_OK
-                && data != null &&data.getData() != null){
+                && data != null && data.getData() != null) {
             Certificate_imageUri = data.getData();
             Picasso.with(this).load(Certificate_imageUri).into(mCertificate);
         }
         if (requestCode == request_Code_LicenseIMG && resultCode == RESULT_OK
-                && data != null &&data.getData() != null){
+                && data != null && data.getData() != null) {
             License_imageUri = data.getData();
             Picasso.with(this).load(License_imageUri).into(mLicense);
         }
         if (requestCode == request_Code_CitizenIMG && resultCode == RESULT_OK
-                && data != null &&data.getData() != null){
+                && data != null && data.getData() != null) {
             Citizen_imageUri = data.getData();
             Picasso.with(this).load(Citizen_imageUri).into(mCitizen);
         }
     }
 
-    private void select_image(){
-        if (Profile_imageUri != null){
+    private void select_image() {
+        if (Profile_imageUri != null) {
             StorageReference imageProfilePath = mStorage.child(getString(R.string.users)).child(guideId).child(Profile_imageUri.getLastPathSegment());
             imageProfilePath.putFile(Profile_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful());
+                    while (!urlTask.isSuccessful()) ;
                     Uri downloadUrlProfile = urlTask.getResult();
                     final String strProfileImage = String.valueOf(downloadUrlProfile);
                     mReference.child(getString(R.string.users)).child(guideId).child("profile_image").setValue(strProfileImage);
 
                 }
             });
+
         }
-        if (Certificate_imageUri != null){
+
+        if (Certificate_imageUri != null) {
             StorageReference imageCertificatePath = mStorage.child(getString(R.string.users)).child(guideId).child(Certificate_imageUri.getLastPathSegment());
             imageCertificatePath.putFile(Certificate_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful());
+                    while (!urlTask.isSuccessful()) ;
                     Uri downloadUrlCertificate = urlTask.getResult();
                     final String strCertificateImage = String.valueOf(downloadUrlCertificate);
                     mReference.child(getString(R.string.users)).child(guideId).child("certificate_image").setValue(strCertificateImage);
@@ -257,13 +261,14 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 }
             });
         }
-        if (License_imageUri != null){
+
+        if (License_imageUri != null) {
             StorageReference imageLicensePath = mStorage.child(getString(R.string.users)).child(guideId).child(License_imageUri.getLastPathSegment());
             imageLicensePath.putFile(License_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful());
+                    while (!urlTask.isSuccessful()) ;
                     Uri downloadUrlLicense = urlTask.getResult();
                     final String strLicenseImage = String.valueOf(downloadUrlLicense);
                     mReference.child(getString(R.string.users)).child(guideId).child("license_image").setValue(strLicenseImage);
@@ -271,19 +276,20 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 }
             });
         }
-        if (Citizen_imageUri != null){
+        if (Citizen_imageUri != null) {
             StorageReference imageCitizenPath = mStorage.child(getString(R.string.users)).child(guideId).child(Citizen_imageUri.getLastPathSegment());
             imageCitizenPath.putFile(Citizen_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful());
+                    while (!urlTask.isSuccessful()) ;
                     Uri downloadUrlCitizen = urlTask.getResult();
                     final String strCitizenImage = String.valueOf(downloadUrlCitizen);
                     mReference.child(getString(R.string.users)).child(guideId).child("citizen_image").setValue(strCitizenImage);
 
                 }
             });
+
         }
     }
 
@@ -298,57 +304,87 @@ public class RegisterGuideActivity extends AppCompatActivity {
         strAge = spinnerAge.getSelectedItem().toString();
 
 //        if (check_input(strEmail,strName,strPhone,strPassword)){
-        if (strName.trim().isEmpty()){
+
+        if (Profile_imageUri == null) {
+            Toast.makeText(getApplicationContext(), "กรุณาอัพโหลดรูปภาพโปรไฟล์", Toast.LENGTH_SHORT).show();
+            profile_image.requestFocus();
+            return false;
+        }
+
+        if (Certificate_imageUri == null){
+            Toast.makeText(getApplicationContext(), "กรุณาอัพโหลดรูปภาพสำเนาใบรับรองประวัติพฤจิกรรม", Toast.LENGTH_SHORT).show();
+            mUploadCertificate.requestFocus();
+            return false;
+        }
+
+        if (License_imageUri == null){
+            Toast.makeText(getApplicationContext(), "กรุณาอัพโหลดรูปภาพสำเนาบัตรไกด์", Toast.LENGTH_SHORT).show();
+            mLicense.requestFocus();
+            return false;
+        }
+        if (Citizen_imageUri ==null){
+            Toast.makeText(getApplicationContext(), "กรุณาอัพโหลดรูปภาพสำเนาบัตรประชาชน", Toast.LENGTH_SHORT).show();
+            mCitizen.requestFocus();
+            return false;
+        }
+
+        if (strName.trim().isEmpty()) {
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
             mName.requestFocus();
             return false;
         }
-        if (strSurname.trim().isEmpty()){
+        if (strSurname.trim().isEmpty()) {
             Toast.makeText(this, "Please input SurName", Toast.LENGTH_SHORT).show();
             mSurname.requestFocus();
             return false;
         }
-        if (strEmail.trim().isEmpty() || !isValidEmail(strEmail) ){
+        if (strEmail.trim().isEmpty() || !isValidEmail(strEmail)) {
             Toast.makeText(this, "Please input Email", Toast.LENGTH_SHORT).show();
             mEmail.requestFocus();
             return false;
         }
-        if (strPhone.trim().isEmpty()){
+        if (strPhone.trim().isEmpty()) {
             Toast.makeText(this, "Please input Phone", Toast.LENGTH_SHORT).show();
             mPhone.requestFocus();
             return false;
         }
-        if (strPassword.trim().isEmpty()){
+        if (strPassword.trim().isEmpty()) {
             Toast.makeText(this, "Please input Password", Toast.LENGTH_SHORT).show();
             mPassword.requestFocus();
             return false;
         }
-        if (strProvince.trim().isEmpty()){
+        if (strPassword.length() < 8) {
+            Toast.makeText(this, "please enter  password (min 7 chars)", Toast.LENGTH_SHORT).show();
+            mPassword.requestFocus();
+            return false;
+        }
+
+        if (strProvince.trim().isEmpty()) {
             Toast.makeText(this, "Please input Province", Toast.LENGTH_SHORT).show();
             mProvince.requestFocus();
             return false;
         }
-        if (strDistrict.trim().isEmpty()){
+        if (strDistrict.trim().isEmpty()) {
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
             mDistrict.requestFocus();
             return false;
         }
-        if (mGender.getCheckedRadioButtonId()== -1){
-            Toast.makeText(this,"Please input Gender",Toast.LENGTH_SHORT).show();
+        if (mGender.getCheckedRadioButtonId() == -1) {
+            Toast.makeText(this, "Please input Gender", Toast.LENGTH_SHORT).show();
             mGender.requestFocus();
             return false;
         }
-        firebase_guide_method.register_new_email(strEmail,strPassword);
+        firebase_guide_method.register_new_email(strEmail, strPassword);
         return true;
     }
 
-    private boolean isValidEmail(String strEmail){
+    private boolean isValidEmail(String strEmail) {
         return !TextUtils.isEmpty(strEmail) && Patterns.EMAIL_ADDRESS.matcher(strEmail).matches();
     }
 
-    private void setupFirebaseAuthentication(){
+    private void setupFirebaseAuthentication() {
         mAuth = FirebaseAuth.getInstance();
-        Log.d(TAG,"setupFirebaseAuthentication: ready for send data");
+        Log.d(TAG, "setupFirebaseAuthentication: ready for send data");
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -356,15 +392,17 @@ public class RegisterGuideActivity extends AppCompatActivity {
                 FirebaseUser guide = mAuth.getCurrentUser();
                 final String devicetoken = FirebaseInstanceId.getInstance().getToken();
 
-                if (guide != null){
+                if (guide != null) {
                     guideId = mAuth.getCurrentUser().getUid();
-                    Log.d(TAG,"onAuthStateChaged: guideId " +guideId);
+                    Log.d(TAG, "onAuthStateChaged: guideId " + guideId);
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_guide_method.send_new_guide_data(strEmail,strName,strSurname,strPhone,strPassword,strGender,"default","default","default","default",strProvince,strDistrict,strAge,"guide","false" , devicetoken);
+                            firebase_guide_method.send_new_guide_data(strEmail, strName, strSurname, strPhone, strPassword, strGender, "default", "default", "default", "default", strProvince, strDistrict, strAge, "guide", "Pending for Approval", devicetoken);
+
                             select_image();
-                            Toast.makeText(RegisterGuideActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
+
+                            Toast.makeText(RegisterGuideActivity.this, "Registration Success", Toast.LENGTH_SHORT).show();
                             mAuth.signOut();
                         }
 
@@ -372,6 +410,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                         }
                     });
+
                     finish();
                 }
             }
@@ -387,7 +426,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (mAuthListener !=null){
+        if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }

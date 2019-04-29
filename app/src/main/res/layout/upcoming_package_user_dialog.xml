@@ -14,7 +14,7 @@
         android:layout_marginTop="36dp"
         android:fontFamily="@font/fclamoon"
         android:gravity="center"
-        android:text='เลือก "ดูรายละเลียด" เพื่อทำการดูรายละเอียดการจอง และเลือก "จบทริป" เพื่อทำการจบทริป'
+        android:text='เลือก "ดูรายละเอียด" เพื่อทำการดูรายละเอียดการจอง และเลือก "จบทริป" เพื่อทำการจบทริป'
         android:textColor="@color/colorAccent"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

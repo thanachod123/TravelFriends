@@ -17,6 +17,13 @@
         android:layout_marginBottom="16dp"
         android:background="@drawable/background_register">
 
+        <ImageView
+            android:id="@+id/bgrequest"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:srcCompat="@drawable/bgrequest" />
 
         <ScrollView
             android:layout_width="match_parent"

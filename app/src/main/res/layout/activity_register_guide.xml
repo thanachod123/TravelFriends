@@ -268,7 +268,7 @@
                     </android.support.design.widget.TextInputLayout>
 
                     <ImageView
-                        android:id="@+id/imageView8"
+                        android:id="@+id/mUploadCitizen"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
                         android:layout_below="@id/imageView7"
@@ -283,7 +283,7 @@
                         android:layout_below="@+id/TextInputLayout_7"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="16dp"
-                        android:layout_toRightOf="@+id/imageView8"
+                        android:layout_toRightOf="@+id/mUploadCitizen"
                         app:ms_arrowColor="@color/colorAccent"
                         app:ms_arrowSize="16dp"
                         app:ms_floatingLabelColor="@color/colorAccent"
@@ -294,7 +294,7 @@
                         android:id="@+id/tv_gender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/imageView8"
+                        android:layout_below="@id/mUploadCitizen"
                         android:layout_marginLeft="16dp"
                         android:layout_marginTop="44dp"
                         android:fontFamily="@font/fclamoon"

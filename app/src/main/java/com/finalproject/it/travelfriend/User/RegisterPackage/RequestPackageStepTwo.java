@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.MainUserActivity;
 import com.finalproject.it.travelfriend.Model.BookingData;
+import com.finalproject.it.travelfriend.Model.MessageModel;
 import com.finalproject.it.travelfriend.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,21 +32,25 @@ import com.google.firebase.storage.UploadTask;
 import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 public class RequestPackageStepTwo extends AppCompatActivity {
     Toolbar toolbar;
-    TextView txtBank,txtNumberBank,txtTotalPrice;
-    String strBank,strBankNumber,strTotalMoney,strBookingId,strPackageID ;
-    String touristID;
+    TextView txtBank, txtNumberBank, txtTotalPrice;
+    String strBank, strBankNumber, strTotalMoney, strBookingId, strPackageID;
+    String touristID, strMessage, strGuideID;
     ImageView imgMoneyTransferSlip;
     private static final int request_Code_IMG_Money_Transfer_Slip = 11;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferencePackage , mReferenceNotificationPayment;
+    DatabaseReference mReferenceBooking, mReferencePackage, mReferenceNotificationPayment, mReferencemessage;
     StorageReference mStorage;
     FirebaseAuth mAuth;
     Uri IMG_Money_Transfer_Slip_Uri;
     Button btnRequestPackage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,16 +72,19 @@ public class RequestPackageStepTwo extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        StatusBarUtil.setColor(this,getResources().getColor(R.color.yellow));
+        StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
 
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceBooking = mDatabase.getReference().child("Booking");
+        mReferencemessage = mDatabase.getReference().child("MessagesGuide");
         mReferencePackage = mDatabase.getReference().child("Packages");
         mStorage = FirebaseStorage.getInstance().getReference();
         strBookingId = getIntent().getExtras().getString("BookingId");
         mReferenceNotificationPayment = mDatabase.getReference().child("Notification").child("NotificationPayment");
         mAuth = FirebaseAuth.getInstance();
         touristID = mAuth.getCurrentUser().getUid();
+
+        strMessage = mReferencemessage.push().getKey();
 
         bindData();
 
@@ -86,40 +94,53 @@ public class RequestPackageStepTwo extends AppCompatActivity {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
                 intent.setType("image/*");
-                startActivityForResult(intent,request_Code_IMG_Money_Transfer_Slip);
+                startActivityForResult(intent, request_Code_IMG_Money_Transfer_Slip);
             }
         });
 
         btnRequestPackage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentRequestPackageStepTwo = new Intent(RequestPackageStepTwo.this,MainUserActivity.class);
-                select_image();
-                startActivity(intentRequestPackageStepTwo);
 
-                mReferenceBooking.child(strBookingId).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String tid = dataSnapshot.child("guideId").getValue().toString();
+                setUpMessage();
 
-                        HashMap<String , String > notification = new HashMap<>();
-                        notification.put("from" , touristID);
-                        mReferenceNotificationPayment.child(tid).push()
-                                .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
-                                    Toast.makeText(getApplicationContext() , "send notification !! " , Toast.LENGTH_SHORT).show();
+                if (IMG_Money_Transfer_Slip_Uri != null) {
+                    Intent intentRequestPackageStepTwo = new Intent(RequestPackageStepTwo.this, MainUserActivity.class);
+                    select_image();
+                    startActivity(intentRequestPackageStepTwo);
+
+                    mReferenceBooking.child(strBookingId).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String tid = dataSnapshot.child("guideId").getValue().toString();
+
+                            HashMap<String, String> notification = new HashMap<>();
+                            notification.put("from", touristID);
+                            mReferenceNotificationPayment.child(tid).push()
+                                    .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getApplicationContext(), "send notification !! ", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                            });
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "กรุณาอัพโหลดรูปภาพ", Toast.LENGTH_SHORT).show();
+
+                }
+
             }
+
+
         });
     }
 
@@ -128,7 +149,7 @@ public class RequestPackageStepTwo extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == request_Code_IMG_Money_Transfer_Slip && resultCode == RESULT_OK
-                && data != null &&data.getData() != null){
+                && data != null && data.getData() != null) {
             IMG_Money_Transfer_Slip_Uri = data.getData();
             Picasso.with(this).load(IMG_Money_Transfer_Slip_Uri).into(imgMoneyTransferSlip);
         }
@@ -140,6 +161,7 @@ public class RequestPackageStepTwo extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 strPackageID = dataSnapshot.child("packageId").getValue(String.class);
                 strTotalMoney = dataSnapshot.child("booking_total_price").getValue(String.class);
+                strGuideID = dataSnapshot.child("guideId").getValue(String.class);
 
                 mReferencePackage.child(strPackageID).addValueEventListener(new ValueEventListener() {
                     @Override
@@ -149,7 +171,7 @@ public class RequestPackageStepTwo extends AppCompatActivity {
 
                         txtBank.setText(strBank);
                         txtNumberBank.setText(strBankNumber);
-                        txtTotalPrice.setText(strTotalMoney+ " THB");
+                        txtTotalPrice.setText(strTotalMoney + " THB");
                     }
 
                     @Override
@@ -167,21 +189,36 @@ public class RequestPackageStepTwo extends AppCompatActivity {
 
     }
 
-    private void select_image(){
-        if (IMG_Money_Transfer_Slip_Uri != null){
+    private void select_image() {
+        if (IMG_Money_Transfer_Slip_Uri != null) {
             StorageReference imageMTSPath = mStorage.child("Booking").child(strBookingId).child("Money_Transfer_Slip.jpg");
             imageMTSPath.putFile(IMG_Money_Transfer_Slip_Uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful());
+                    while (!urlTask.isSuccessful()) ;
                     Uri downloadUrlMTS = urlTask.getResult();
                     final String strMTSimage = String.valueOf(downloadUrlMTS);
                     mReferenceBooking.child(strBookingId).child("booking_money_transfer_slip").setValue(strMTSimage);
                     mReferenceBooking.child(strBookingId).child("request_status").setValue("wait_check_payment");
                 }
             });
+
         }
+
+    }
+
+    private void setUpMessage() {
+
+        DateFormat dateFormat = new SimpleDateFormat(" HH:mm ,dd-MM-yyyy  ");
+        Date date = new Date();
+        String strDate = dateFormat.format(date);
+        String type = "ชำระเงินแล้ว";
+
+        final MessageModel message = new MessageModel(strPackageID, strGuideID, strBookingId, touristID, strDate, type);
+        mReferencemessage.child(strMessage).setValue(message);
+
+
     }
 
 }

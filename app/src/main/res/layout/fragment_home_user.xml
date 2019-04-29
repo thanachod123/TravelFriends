@@ -30,8 +30,10 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_bar">
@@ -88,41 +90,22 @@
                 <!--Colum1-->
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardviewAdventure"
-                    android:layout_width="70dp"
-                    android:layout_height="20dp"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="@color/white"
-                    app:cardCornerRadius="8dp">
+                    app:cardCornerRadius="8dp"
+                    app:cardElevation="8dp">
 
-                    <LinearLayout
-                        android:id="@+id/CvAdventure"
+                    <ImageView
+                        android:id="@+id/imageView12"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:layout_margin="10dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/adventure" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fclamoon"
-                            android:text="ผจญภัย"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/adventure" />
                 </android.support.v7.widget.CardView>
 
                 <!--Coloumn 2-->
@@ -130,84 +113,44 @@
                 <android.support.v7.widget.CardView
 
                     android:id="@+id/cardviewNature"
-                    android:layout_width="70dp"
-                    android:layout_height="20dp"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
 
-                    <LinearLayout
-                        android:id="@+id/CvSea"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/imageView13"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:layout_margin="10dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center_horizontal"
-                            app:srcCompat="@drawable/sunumbrella" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fclamoon"
-                            android:text="ธรรมชาติ"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
+                        android:scaleType="fitXY"
+                        android:src="@drawable/nature" />
                 </android.support.v7.widget.CardView>
 
                 <!--Column 3 -->
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardviewArt"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="30dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
-                    <LinearLayout
-                        android:id="@+id/CvFoods"
-                        android:layout_width="match_parent"
+                    <ImageView
+                        android:id="@+id/imageView14"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:layout_margin="10dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/art" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fclamoon"
-                            android:text="ศิลปะ"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
+                        android:scaleType="fitXY"
+                        android:src="@drawable/art" />
                 </android.support.v7.widget.CardView>
 
                 <!--row2-->
@@ -215,7 +158,7 @@
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardviewHistory"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="30dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
@@ -223,81 +166,39 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
 
-                    <LinearLayout
-                        android:id="@+id/CvNighttour"
+                    <ImageView
+                        android:id="@+id/imageView15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:layout_margin="10dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/wat_phra_kaew" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fclamoon"
-                            android:text="ประวัติศาสตร์"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="15sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
+                        android:scaleType="fitXY"
+                        android:src="@drawable/history" />
                 </android.support.v7.widget.CardView>
 
                 <!--column2-->
 
                 <android.support.v7.widget.CardView
                     android:id="@+id/cardviewCulture"
-                    android:layout_width="70dp"
-                    android:layout_height="0dp"
+                    android:layout_width="80dp"
+                    android:layout_height="30dp"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="2"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    app:cardBackgroundColor="@color/white"
                     app:cardCornerRadius="8dp"
                     app:cardElevation="8dp">
 
-                    <LinearLayout
-                        android:id="@+id/CvHistory"
+                    <ImageView
+                        android:id="@+id/imageView16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal|center_vertical"
-                        android:layout_margin="10dp"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="match_parent"
-                            android:layout_height="150dp"
-                            android:layout_gravity="center_horizontal"
-                            android:src="@drawable/thai" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/fclamoon"
-                            android:text="วัฒนธรรม"
-                            android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
+                        android:scaleType="fitXY"
+                        android:src="@drawable/caltures" />
                 </android.support.v7.widget.CardView>
 
             </GridLayout>
@@ -306,7 +207,7 @@
                 android:id="@+id/recyclerViewRecommended"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:clipToPadding="false"
                 android:orientation="horizontal"
                 android:overScrollMode="never"
@@ -315,6 +216,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+            <TextView
+                android:id="@+id/seeall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/fclamoon"
+                android:text="ดูทั้งหมด"
+                android:textAppearance="@style/PlacesAutocompleteErrorButtonText"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView8"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView8" />
 
 
         </android.support.constraint.ConstraintLayout>

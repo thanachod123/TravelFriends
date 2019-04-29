@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +23,16 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.finalproject.it.travelfriend.Model.UserDataSocial;
 import com.finalproject.it.travelfriend.User.ForgotPasswordUser;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -60,6 +64,7 @@ public class LoginUserActivity extends AppCompatActivity {
     DatabaseReference mReference, Userref;
 
     //    GoogleVariables
+    SignInButton mGooglebtn;
     Button gSignInButton;
     GoogleApiClient mGoogleApiClient;
 
@@ -71,6 +76,9 @@ public class LoginUserActivity extends AppCompatActivity {
     Button mLogin;
     EditText mEmail, mPassword;
     TextView mforgot;
+    LoginButton mLoginFb;
+
+    ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +98,9 @@ public class LoginUserActivity extends AppCompatActivity {
             }
         });
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
+        loading = findViewById(R.id.loadloginuser);
+
+        loading.setVisibility(View.GONE);
 
         //Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -97,16 +108,22 @@ public class LoginUserActivity extends AppCompatActivity {
 
         //google
         signinGSO();
+        mGooglebtn  = findViewById(R.id.mGoogle);
         gSignInButton = findViewById(R.id.google_sign_in);
         gSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mGooglebtn.performClick();
                 google_sign_in_process();
+
             }
         });
 
+
+
         //Facebook
         fSignInButton = findViewById(R.id.facebook_sign_in);
+        mLoginFb = findViewById(R.id.buttonFacebookMain);
         fSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,11 +154,12 @@ public class LoginUserActivity extends AppCompatActivity {
                 startActivity(intentUser);
 
 
+
             }
         });
 
-    }
 
+    }
 
     /**
      * Email&Password
@@ -160,6 +178,7 @@ public class LoginUserActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
 
+                        loading.setVisibility(View.VISIBLE);
                         String currentUserId = mAuth.getCurrentUser().getUid();
                         String devicetoken = FirebaseInstanceId.getInstance().getToken();
 
@@ -221,9 +240,19 @@ public class LoginUserActivity extends AppCompatActivity {
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
         fSignInButton = findViewById(R.id.facebook_sign_in);
-        LoginManager.getInstance().logInWithReadPermissions(LoginUserActivity.this, Arrays.asList("email", "public_profile"));
 
-        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        fSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLoginFb.performClick();
+            }
+        });
+
+        mLoginFb.setReadPermissions(Arrays.asList("email", "public_profile"));
+//        LoginManager.getInstance().logInWithReadPermissions(LoginUserActivity.this,
+//                Arrays.asList("email", "public_profile"));
+
+        mLoginFb.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
@@ -262,6 +291,7 @@ public class LoginUserActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (newUserFacebook) {
+
                                                 FirebaseUser firebaseUserFacebook = mAuth.getCurrentUser();
                                                 UserDataSocial userData = new UserDataSocial(firebaseUserFacebook.getEmail(), firebaseUserFacebook.getDisplayName(), "", "ชาย", "", "", "", "", "", "tourist");
                                                 FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUserFacebook.getUid()).setValue(userData);
@@ -321,7 +351,7 @@ public class LoginUserActivity extends AppCompatActivity {
                                         UserDataSocial userData = new UserDataSocial(firebaser.getEmail(), firebaser.getDisplayName(), "", "", firebaser.getPhotoUrl().toString(), "", "", "", "", "tourist");
                                         FirebaseDatabase.getInstance().getReference().child("Users").child(firebaser.getUid()).setValue(userData);
 
-
+                                        startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
                                     } else {
 
                                         startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));

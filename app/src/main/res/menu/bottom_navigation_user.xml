@@ -23,7 +23,7 @@
     <item
         android:id="@+id/navigation_profile_user"
         android:icon="@drawable/ic_name_24dp"
-        android:title="ข้อมูฃส่วนตัว"
+        android:title="ข้อมูลส่วนตัว"
         app:showAsAction="withText"
         />
 

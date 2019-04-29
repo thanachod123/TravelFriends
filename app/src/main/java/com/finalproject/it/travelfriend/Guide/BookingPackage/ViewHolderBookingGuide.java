@@ -10,8 +10,13 @@ import com.finalproject.it.travelfriend.R;
 
 public class ViewHolderBookingGuide extends RecyclerView.ViewHolder {
 
-ImageView imgProfileTourist;
-TextView txtBookingStatus,txtTouristName,txtNameTrip,txtDescription,txtDay,txtNumTourist;
+public ImageView imgProfileTourist;
+public TextView txtBookingStatus;
+    public TextView txtTouristName;
+    public TextView txtNameTrip;
+    public TextView txtDescription;
+    public TextView txtDay;
+    public TextView txtNumTourist;
 
     public ViewHolderBookingGuide(@NonNull View itemView) {
         super(itemView);

@@ -8,19 +8,21 @@ public class MessageModel {
     private String guideId;
     private String bookingId;
     private String touristId;
-    private String date ;
+    private String date;
+    private String type;
 
     public MessageModel(){
 
     }
 
-    public MessageModel(String packageId, String guideId, String bookingId, String touristId , String date) {
+    public MessageModel(String packageId, String guideId, String bookingId, String touristId , String date , String type) {
 
         this.packageId = packageId;
         this.guideId = guideId;
         this.bookingId = bookingId;
         this.touristId = touristId;
         this.date = date;
+        this.type = type;
     }
 
 
@@ -64,14 +66,23 @@ public class MessageModel {
         this.date = date;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
         return "MessageModel{" +
-                ", packageId='" + packageId + '\'' +
+                "packageId='" + packageId + '\'' +
                 ", guideId='" + guideId + '\'' +
                 ", bookingId='" + bookingId + '\'' +
                 ", touristId='" + touristId + '\'' +
-                ", date=" + date +
+                ", date='" + date + '\'' +
+                ", type='" + type + '\'' +
                 '}';
     }
 }

@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.finalproject.it.travelfriend.Model.BookingData;
 import com.finalproject.it.travelfriend.R;
@@ -30,17 +32,22 @@ public class PostTripPackageUserFragment extends Fragment {
     FirebaseRecyclerOptions<BookingData> options;
     FirebaseRecyclerAdapter<BookingData,ViewHolderBookingUser> bookingAdapter;
     String touristID;
+    ImageView imageView;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_post_trip_user_package, container, false);
         recyclerPostTripPackageUser = view.findViewById(R.id.recyclerPostTripUser);
 
+//        progressBarFirst = view.findViewById(R.id.progressBarFirst);
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
+        imageView = view.findViewById(R.id.bgrequest);
         mReferenceBooking = mDatabase.getReference().child("Booking");
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceTourist = mDatabase.getReference().child("Users");
         touristID = mAuth.getCurrentUser().getUid();
+        imageView.setVisibility(View.VISIBLE);
 
         options = new FirebaseRecyclerOptions.Builder<BookingData>()
                 .setQuery(mReferenceBooking.orderByChild("status_touristId").equalTo("จบลงไปแล้ว_"+touristID),BookingData.class).build();
@@ -51,8 +58,11 @@ public class PostTripPackageUserFragment extends Fragment {
                 holder.txtNumTourist.setText(model.getBooking_number_tourist()+" คน");
                 holder.txtBookingStatus.setText("จบลงไปแล้ว");
 
+                imageView.setVisibility(View.GONE);
+
                 final String guideId = model.getGuideId();
                 final String packageId = model.getPackageId();
+
                 mReferenceTourist.child(guideId).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -90,7 +100,6 @@ public class PostTripPackageUserFragment extends Fragment {
 
                     }
                 });
-
 
             }
 

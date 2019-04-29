@@ -19,6 +19,12 @@ import android.widget.TextView;
 
 import com.finalproject.it.travelfriend.R;
 import com.google.android.gms.common.internal.Constants;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,16 +35,19 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailBooking extends AppCompatActivity {
+public class DetailBooking extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_CALL = 1;
     Toolbar toolbar;
     TextView txtProvince, txtPackage_type, txtVehicle_type, txtDescription, txtPackageName, txtNumTourist, txtSchedule, txtLanguage, txtNameGuide, txtDate;
     ImageView img_package;
-    String bookingId, packageId, guideId, strProvince, strPackage_type, strVehicle_type, strDescription, strPackageImage, strPackageName, strNumTourist, strSchedule, strLanguage, strDate, strGuideName, strGuideSurname, strGuideImage, strGuidePhone;
+    String bookingId, packageId, guideId, strProvince, strPackage_type, strVehicle_type, strDescription, strPackageImage, strPackageName, strNumTourist, strSchedule, strLanguage, strDate, strGuideName, strGuideSurname, strGuideImage, strGuidePhone , strLat, strLng, strLocationName;
     CircleImageView img_guide_image;
     FirebaseDatabase mDatabase;
     Button btnCallGuide, btnEmergencyCall;
     DatabaseReference mReferencePackage, mReferenceGuide, mReferenceBooking;
+    Double lat;
+    Double lng;
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,11 @@ public class DetailBooking extends AppCompatActivity {
         });
         toolbar.setTitleTextAppearance(DetailBooking.this, R.style.FontForActionBar);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
 
         txtProvince = findViewById(R.id.txt_province);
         txtPackage_type = findViewById(R.id.txt_activity);
@@ -173,5 +187,46 @@ public class DetailBooking extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+        mReferenceBooking.child(bookingId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                packageId = dataSnapshot.child("packageId").getValue().toString();
+
+                mReferencePackage.child(packageId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        strLat = dataSnapshot.child("lat").getValue(String.class);
+                        strLng = dataSnapshot.child("lng").getValue(String.class);
+                        strLocationName = dataSnapshot.child("location_name").getValue(String.class);
+
+                        lat = Double.parseDouble(strLat);
+                        lng = Double.parseDouble(strLng);
+
+                        mMap = googleMap;
+                        LatLng latLng = new LatLng(lat, lng);
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(strLocationName));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15.0f));
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

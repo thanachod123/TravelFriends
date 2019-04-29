@@ -130,7 +130,7 @@ public class DetailPackageGuide extends AppCompatActivity implements OnMapReadyC
 
                     }
                 });
-                ;
+
 
             }
 
@@ -168,6 +168,7 @@ public class DetailPackageGuide extends AppCompatActivity implements OnMapReadyC
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                         strPackage_type = dataSnapshot.child("package_type").getValue(String.class);
                         strProvince = dataSnapshot.child("province").getValue(String.class);
                         strVehicle_type = dataSnapshot.child("vehicle_type").getValue(String.class);

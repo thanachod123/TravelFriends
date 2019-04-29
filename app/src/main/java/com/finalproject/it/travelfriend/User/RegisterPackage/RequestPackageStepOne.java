@@ -95,6 +95,8 @@ public class RequestPackageStepOne extends AppCompatActivity {
         mReference = mDatabase.getReference();
         touristID = mAuth.getCurrentUser().getUid();
         packageID = getIntent().getExtras().getString("PackageID");
+        mReferencemessage = mDatabase.getReference().child("MessagesGuide");
+        strMessage = mReferencemessage.push().getKey();
         strNumTourist = "1";
         numberTourist = 1;
 
@@ -153,9 +155,9 @@ public class RequestPackageStepOne extends AppCompatActivity {
         DateFormat dateFormat = new SimpleDateFormat(" HH:mm ,dd-MM-yyyy  ");
         Date date = new Date();
         String strDate = dateFormat.format(date);
+        String type = "สมัครแพ็คเกจ" ;
 
-
-        final MessageModel message = new MessageModel(packageID, guideID, strBookingId, touristID, strDate);
+        final MessageModel message = new MessageModel(packageID, guideID, strBookingId, touristID, strDate , type);
         mReferencemessage.child(strMessage).setValue(message);
 
         HashMap<String, String> notification = new HashMap<>();

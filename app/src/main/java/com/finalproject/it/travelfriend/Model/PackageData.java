@@ -1,7 +1,7 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class PackageData {
-    String guideId,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status,status_type,lat,lng,location_name,average_rating;
+    private String guideId,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status,status_type,lat,lng,location_name,average_rating;
 
     public PackageData(){
     }

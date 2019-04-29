@@ -15,8 +15,10 @@ public class ViewholderMessage extends RecyclerView.ViewHolder {
     TextView message;
     public TextView packagename;
     public TextView nametour;
+    public TextView status;
     public CircleImageView imgUser;
     public TextView textDate;
+
 
     public ViewholderMessage(@NonNull View itemView) {
         super(itemView);
@@ -26,5 +28,6 @@ public class ViewholderMessage extends RecyclerView.ViewHolder {
         nametour = itemView.findViewById(R.id.nametour);
         imgUser = itemView.findViewById(R.id.Imageuser);
         textDate = itemView.findViewById(R.id.textDate);
+        status = itemView.findViewById(R.id.textstatus);
     }
 }

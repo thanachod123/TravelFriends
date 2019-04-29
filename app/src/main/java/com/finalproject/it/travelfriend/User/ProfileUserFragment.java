@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.finalproject.it.travelfriend.Guide.AdapterProfileGuide;
 import com.finalproject.it.travelfriend.Guide.ChangePasswordGuide;
 import com.finalproject.it.travelfriend.Guide.EditProfileGuide;
@@ -72,6 +73,7 @@ public class ProfileUserFragment extends Fragment {
                         break;
                     case 1:
                         mAuth.signOut();
+                        LoginManager.getInstance().logOut();
                         Intent signOut = new Intent(getActivity(), HomeActivity.class);
                         startActivity(signOut);
                 }

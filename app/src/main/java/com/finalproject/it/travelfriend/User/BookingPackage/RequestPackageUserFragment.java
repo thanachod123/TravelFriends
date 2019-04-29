@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Model.BookingData;
@@ -39,11 +40,13 @@ public class RequestPackageUserFragment extends Fragment {
     FirebaseRecyclerAdapter<BookingData,ViewHolderBookingUser> bookingAdapter;
     String touristID;
     Dialog mDialog1,mDialog2,mDialog3;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_request_user_package, container, false);
         recyclerRequestPackageUser = view.findViewById(R.id.recyclerRequestPackageUser);
+        progressBar = view.findViewById(R.id.progressBarTwo);
         mDialog1 = new Dialog(getContext());
         mDialog1.setContentView(R.layout.request_package_user_dialog_one);
         mDialog1.getWindow().setLayout(900,500);
@@ -65,7 +68,7 @@ public class RequestPackageUserFragment extends Fragment {
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceTourist = mDatabase.getReference().child("Users");
         touristID = mAuth.getCurrentUser().getUid();
-
+        progressBar.setVisibility(View.GONE);
         options = new FirebaseRecyclerOptions.Builder<BookingData>()
                 .setQuery(mReferenceBooking.orderByChild("status_touristId").equalTo("รอการตอบรับ_"+touristID) ,BookingData.class).build();
 
@@ -75,6 +78,8 @@ public class RequestPackageUserFragment extends Fragment {
                 final String guideId = model.getGuideId();
                 final String packageId = model.getPackageId();
                 final String requestStatus = model.getRequest_status();
+
+                progressBar.setVisibility(View.GONE);
 
                 holder.txtDay.setText(model.getBooking_date());
                 holder.txtNumTourist.setText(model.getBooking_number_tourist()+" คน");

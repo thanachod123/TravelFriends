@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.finalproject.it.travelfriend.Model.PackageData;
 import com.finalproject.it.travelfriend.R;
@@ -36,12 +37,15 @@ public class Nature extends AppCompatActivity {
     FirebaseRecyclerAdapter<PackageData,ViewHolderPackageUser> packageAdapter;
     RecyclerView recyclerNature;
     FirebaseAuth mAuth;
+    ProgressBar progressBar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nature);
         toolbar = findViewById(R.id.app_bar);
+        progressBar = findViewById(R.id.progressBartype);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -71,6 +75,9 @@ public class Nature extends AppCompatActivity {
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderPackageUser holder, final int position, @NonNull PackageData model) {
+
+                progressBar.setVisibility(View.GONE);
+
                 holder.txtNamePackage.setText(model.getName());
                 holder.txtProvincePackage.setText(model.getProvince());
                 holder.txtActivity.setText(model.getPackage_type());

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.finalproject.it.travelfriend.Model.MessageModel;
 import com.finalproject.it.travelfriend.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -21,6 +22,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 public class CheckPayment extends AppCompatActivity {
@@ -28,9 +32,9 @@ public class CheckPayment extends AppCompatActivity {
     TextView txtBank,txtNumberBank,txtTotalPrice;
     ImageView imgMoneyTransferSlip;
     Button btnCheckPayment;
-    String strBookingId,strPackageID,strBank,strBankNumber,strTotalMoney,strMTS,strGuideId,strTouristId;
+    String strBookingId,strPackageID,strBank,strBankNumber,strTotalMoney,strMTS,strGuideId,strTouristId ,  strMessage;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferencePackage , mReferenceNotification;
+    DatabaseReference mReferenceBooking,mReferencePackage , mReferenceNotification , mReferencemessage , mReferenceMessageGuide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +62,13 @@ public class CheckPayment extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceBooking = mDatabase.getReference().child("Booking");
         mReferencePackage = mDatabase.getReference().child("Packages");
+        mReferencemessage = mDatabase.getReference().child("MessagesUser");
+        mReferenceMessageGuide = mDatabase.getReference().child("MessagesGuide");
         mReferenceNotification = mDatabase.getReference().child("Notification").child("NotificationAcceptPayment");
         strBookingId = getIntent().getExtras().getString("BookingId");
+        strMessage = mReferencemessage.push().getKey();
+
+
 
         bindData();
         btnCheckPayment.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +77,10 @@ public class CheckPayment extends AppCompatActivity {
                 mReferenceBooking.child(strBookingId).child("request_status").setValue("Success");
                 mReferenceBooking.child(strBookingId).child("status_guideId").setValue("กำลังจะเกิดขึ้น_"+strGuideId);
                 mReferenceBooking.child(strBookingId).child("status_touristId").setValue("กำลังจะเกิดขึ้น_"+strTouristId);
+                setUpMessage();
                 finish();
+
+
 
                 HashMap<String , String > notification = new HashMap<>();
                 notification.put("from" , strGuideId);
@@ -125,5 +137,18 @@ public class CheckPayment extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void setUpMessage() {
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String strDate = dateFormat.format(date);
+        String type = "ตรวจสอบการชำระเงินแล้ว";
+
+        final MessageModel message = new MessageModel(strPackageID, strGuideId, strBookingId, strTouristId, strDate, type);
+        mReferencemessage.child(strMessage).setValue(message);
+
+
     }
 }

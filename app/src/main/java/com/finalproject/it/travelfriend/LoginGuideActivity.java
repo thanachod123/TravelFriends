@@ -1,10 +1,13 @@
 package com.finalproject.it.travelfriend;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -43,7 +47,7 @@ public class LoginGuideActivity extends AppCompatActivity {
     Button mLogin;
     EditText mEmail,mPassword;
     Toolbar toolbar;
-
+    ProgressBar loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,8 @@ public class LoginGuideActivity extends AppCompatActivity {
             }
         });
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
+        loading  = findViewById(R.id.loadloginguide);
+        loading.setVisibility(View.GONE);
 
         //Firebase
         mAuth = FirebaseAuth.getInstance();
@@ -100,6 +106,8 @@ public class LoginGuideActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
 
+                        loading.setVisibility(View.VISIBLE);
+
                         String currentUserId = mAuth.getCurrentUser().getUid();
                         String devicetoken = FirebaseInstanceId.getInstance().getToken();
 
@@ -114,25 +122,31 @@ public class LoginGuideActivity extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             String userType = dataSnapshot.child("role").getValue().toString();
-                                            if (userType.equals("tourist")) {
-                                                Intent intentGuide = new Intent(LoginGuideActivity.this, MainUserActivity.class);
+                                            if (userType.equals("guide")) {
+                                                Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
                                                 intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(intentGuide);
+
                                             } else if (userType.equals("guide")) {
                                                 String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                                                if (guideStatus.equals("true")) {
+                                                if (guideStatus.equals("Approve")) {
                                                     Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
                                                     intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     startActivity(intentGuide);
                                                 }
                                             } else if (userType.equals("guide")) {
                                                 String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                                                if (guideStatus.equals("false")) {
-                                                    mAuth.signOut();
+                                                if (guideStatus.equals("Pending for Approval")) {
+                                                    Intent intentGuide = new Intent(LoginGuideActivity.this, MainGuideActivity.class);
+                                                    intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intentGuide);
                                                     Toast.makeText(LoginGuideActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
                                                 }
                                             }
-                                        }
+
+
+                                            }
+
 
                                         @Override
                                         public void onCancelled(@NonNull DatabaseError databaseError) {

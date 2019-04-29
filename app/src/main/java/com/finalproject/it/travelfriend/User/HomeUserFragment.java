@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Model.PackageData;
@@ -44,6 +45,7 @@ public class HomeUserFragment extends Fragment {
     FloatingActionButton floatingSearch;
     FirebaseDatabase mDatabase;
     Toolbar toolbar;
+    TextView seeall;
     DatabaseReference mReferencePackage,mReferenceGuide;
 
     @Nullable
@@ -59,6 +61,16 @@ public class HomeUserFragment extends Fragment {
         cardViewNature = view.findViewById(R.id.cardviewNature);
         cardViewHistory = view.findViewById(R.id.cardviewHistory);
         floatingSearch = view.findViewById(R.id.SearchButton);
+        seeall = view.findViewById(R.id.seeall);
+
+        seeall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentEditPackage = new Intent(getActivity(),SeeallPackageActivity.class);
+
+                startActivity(intentEditPackage);
+            }
+        });
 
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
@@ -66,7 +78,7 @@ public class HomeUserFragment extends Fragment {
         recyclerRecommended = view.findViewById(R.id.recyclerViewRecommended);
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
-                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5"),PackageData.class).build();
+                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5.0"),PackageData.class).build();
 
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override

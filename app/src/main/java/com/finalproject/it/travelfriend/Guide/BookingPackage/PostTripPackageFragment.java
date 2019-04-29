@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.finalproject.it.travelfriend.Model.BookingData;
 import com.finalproject.it.travelfriend.R;
@@ -30,24 +31,28 @@ public class PostTripPackageFragment extends Fragment {
     FirebaseRecyclerOptions<BookingData> options;
     FirebaseRecyclerAdapter<BookingData,ViewHolderBookingGuide> bookingAdapter;
     String guideID;
-
+    ImageView bg;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_post_trip_package, container, false);
         recyclerPostTrip = view.findViewById(R.id.recyclerPostTripPackage);
 
         mAuth = FirebaseAuth.getInstance();
+        bg = view.findViewById(R.id.bgrequest);
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceBooking = mDatabase.getReference().child("Booking");
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceTourist = mDatabase.getReference().child("Users");
         guideID = mAuth.getCurrentUser().getUid();
-
+        bg.setVisibility(View.VISIBLE);
         options = new FirebaseRecyclerOptions.Builder<BookingData>()
                 .setQuery(mReferenceBooking.orderByChild("status_guideId").equalTo("จบลงไปแล้ว_"+guideID),BookingData.class).build();
         bookingAdapter = new FirebaseRecyclerAdapter<BookingData, ViewHolderBookingGuide>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderBookingGuide holder, int position, @NonNull BookingData model) {
+
+                bg.setVisibility(View.GONE);
+
                 holder.txtDay.setText(model.getBooking_date());
                 holder.txtNumTourist.setText(model.getBooking_number_tourist()+" คน");
                 holder.txtBookingStatus.setText("จบลงไปแล้ว");

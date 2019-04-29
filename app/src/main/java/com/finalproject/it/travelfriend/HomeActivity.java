@@ -68,23 +68,16 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     String userType = dataSnapshot.child("role").getValue().toString();
-                    if (userType.equals("tourist")){
+                    if (userType.equals("tourist")) {
                         Intent intentTourist = new Intent(HomeActivity.this, MainUserActivity.class);
                         intentTourist.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intentTourist);
+
                     } else if (userType.equals("guide")) {
-                        String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                        if (guideStatus.equals("true")){
                             Intent intentGuide = new Intent(HomeActivity.this, MainGuideActivity.class);
                             intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intentGuide);
-                        }
-                    } else if (userType.equals("guide")) {
-                        String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                        if (guideStatus.equals("false")){
-                            mAuth.signOut();
-                            Toast.makeText(HomeActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
-                        }
+
                     }
                 }
                 @Override

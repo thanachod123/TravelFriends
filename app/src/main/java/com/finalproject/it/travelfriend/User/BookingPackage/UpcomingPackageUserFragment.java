@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -25,6 +26,8 @@ import com.finalproject.it.travelfriend.User.RegisterPackage.RequestPackageStepT
 import com.finalproject.it.travelfriend.User.WorkProceduresUser.DetailBooking;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,15 +36,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+
 public class UpcomingPackageUserFragment extends Fragment {
     RecyclerView recyclerUpcomingPackageUser;
     FirebaseAuth mAuth;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferenceBooking,mReferenceTourist,mReferencePackage,mReferenceReview;
+    DatabaseReference mReferenceBooking,mReferenceTourist,mReferencePackage,mReferenceReview , mReferenceNotiEndtrip;
     FirebaseRecyclerOptions<BookingData> options;
     FirebaseRecyclerAdapter<BookingData,ViewHolderBookingUser> bookingAdapter;
     String touristID,guideId,packageId,guideName,guideSurname,guideImage,packageName,packageDescription,rating;
     Dialog mDialog,mDialog2;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -56,13 +62,15 @@ public class UpcomingPackageUserFragment extends Fragment {
         mDialog2.setContentView(R.layout.rating_comment_dialog);
         mDialog2.getWindow().setLayout(900,1000);
         mDialog2.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+        progressBar = view.findViewById(R.id.progressBarThree);
+        progressBar.setVisibility(View.GONE);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mReferenceBooking = mDatabase.getReference().child("Booking");
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceTourist = mDatabase.getReference().child("Users");
         mReferenceReview = mDatabase.getReference().child("Reviews");
+        mReferenceNotiEndtrip = mDatabase.getReference().child("Notification").child("NotificationEndtrip");
         touristID = mAuth.getCurrentUser().getUid();
 
         options = new FirebaseRecyclerOptions.Builder<BookingData>()
@@ -73,6 +81,8 @@ public class UpcomingPackageUserFragment extends Fragment {
                 holder.txtDay.setText(model.getBooking_date());
                 holder.txtNumTourist.setText(model.getBooking_number_tourist()+" คน");
                 holder.txtBookingStatus.setText("กำลังจะเกิดขึ้น_");
+
+                progressBar.setVisibility(View.GONE);
 
                 guideId = model.getGuideId();
                 packageId = model.getPackageId();
@@ -193,6 +203,21 @@ public class UpcomingPackageUserFragment extends Fragment {
                 mReferenceReview.child(packageId).child(touristID).child("comment").setValue(strComment);
                 mReferenceBooking.child(bookingId).child("status_touristId").setValue("จบลงไปแล้ว_"+touristID);
                 setAverageRating(packageId);
+
+
+                HashMap<String, String> notification = new HashMap<>();
+                notification.put("from : ", touristID);
+
+                mReferenceNotiEndtrip.child(guideId).push()
+                        .setValue(notification).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(getActivity() , "ขอบคุณที่คำแนะนำ " , Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+
                 mDialog2.dismiss();
             }
         });

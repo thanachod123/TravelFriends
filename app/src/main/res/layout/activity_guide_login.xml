@@ -21,111 +21,132 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="@drawable/background_register"
-            android:gravity="center_vertical"
-            android:paddingTop="50dp"
-            android:paddingBottom="50dp">
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
 
             <RelativeLayout
-                android:id="@+id/relative1"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_text_size"
-                android:layout_marginTop="10dp">
-
-
-                <ImageView
-                    android:id="@+id/img_profileMenu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    app:srcCompat="@drawable/ic_name_24dp" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="10dp"
-                    android:layout_toRightOf="@+id/img_profileMenu"
-                    android:background="@drawable/edittext_circle_bg">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/edt_Email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@null"
-                        android:fontFamily="@font/fclamoon"
-                        android:hint="อีเมลล์" />
-                </android.support.design.widget.TextInputLayout>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relative2"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/edit_text_size"
-                android:layout_below="@id/relative1"
-                android:layout_marginTop="10dp">
-
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
-                    app:srcCompat="@drawable/ic_password_24dp" />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_toRightOf="@+id/imageView2"
-                    android:background="@drawable/edittext_circle_bg">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/edt_Password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@null"
-                        android:fontFamily="@font/fclamoon"
-                        android:hint="รหัสผ่าน"
-                        android:inputType="textPassword" />
-                </android.support.design.widget.TextInputLayout>
-            </RelativeLayout>
-
-            <Button
-                android:id="@+id/btn_register"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/relative2"
-                android:layout_centerHorizontal="true"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bt_border"
-                android:fontFamily="@font/fclamoon"
-                android:paddingStart="50dp"
-                android:paddingTop="10dp"
-                android:paddingEnd="50dp"
-                android:paddingBottom="10dp"
-                android:text="เข้าสู่ระบบ"
-                android:textAllCaps="false"
-                android:textColor="@color/colorAccent"
-                android:textSize="24sp" />
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/background_register"
+                android:gravity="center_vertical"
+                android:paddingTop="50dp"
+                android:paddingBottom="50dp">
 
 
+                <ProgressBar
+                    android:id="@+id/loadloginguide"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:visibility="gone"
+                    android:backgroundTint="@color/white"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"/>
+
+                <RelativeLayout
+                    android:id="@+id/relative1"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edit_text_size"
+                    android:layout_marginTop="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/img_profileMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        app:srcCompat="@drawable/ic_name_24dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:layout_toRightOf="@+id/img_profileMenu"
+                        android:background="@drawable/edittext_circle_bg">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edt_Email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@null"
+                            android:fontFamily="@font/fclamoon"
+                            android:hint="อีเมลล์" />
+                    </android.support.design.widget.TextInputLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/relative2"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/edit_text_size"
+                    android:layout_below="@id/relative1"
+                    android:layout_marginTop="10dp">
+
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:srcCompat="@drawable/ic_password_24dp" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_toRightOf="@+id/imageView2"
+                        android:background="@drawable/edittext_circle_bg">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/edt_Password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@null"
+                            android:fontFamily="@font/fclamoon"
+                            android:hint="รหัสผ่าน"
+                            android:inputType="textPassword" />
+                    </android.support.design.widget.TextInputLayout>
+                </RelativeLayout>
+
+                <Button
+                    android:id="@+id/btn_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/relative2"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bt_border"
+                    android:fontFamily="@font/fclamoon"
+                    android:paddingStart="50dp"
+                    android:paddingTop="10dp"
+                    android:paddingEnd="50dp"
+                    android:paddingBottom="10dp"
+                    android:text="เข้าสู่ระบบ"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="24sp" />
+
+
+            </RelativeLayout>
         </RelativeLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>

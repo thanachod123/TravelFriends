@@ -16,6 +16,12 @@ import android.widget.TextView;
 
 import com.finalproject.it.travelfriend.R;
 import com.finalproject.it.travelfriend.User.WorkProceduresUser.DetailBooking;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,16 +32,20 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DetailBookingGuide extends AppCompatActivity {
+public class DetailBookingGuide extends AppCompatActivity implements OnMapReadyCallback {
     private static final int REQUEST_CALL = 1;
     Toolbar toolbar;
     TextView txtProvince, txtPackage_type, txtVehicle_type, txtDescription, txtPackageName, txtNumTourist, txtSchedule, txtLanguage, txtNameGuide, txtDate;
     ImageView img_package;
-    String bookingId, packageId, guideId, touristId, strProvince, strPackage_type, strVehicle_type, strDescription, strPackageImage, strPackageName, strNumTourist, strSchedule, strLanguage, strDate, strGuideName, strGuideSurname, strGuideImage, strTouristPhone;
+    String bookingId, packageId, guideId, touristId, strProvince, strPackage_type, strVehicle_type, strDescription, strPackageImage, strPackageName, strNumTourist, strSchedule, strLanguage, strDate, strGuideName, strGuideSurname, strGuideImage, strTouristPhone, strLat, strLng, strLocationName;
     CircleImageView img_guide_image;
     FirebaseDatabase mDatabase;
     Button btnCallTourist, btnEmergencyCall;
     DatabaseReference mReferencePackage, mReferenceUsers, mReferenceBooking;
+    Double lat;
+    Double lng;
+    private GoogleMap mMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +66,10 @@ public class DetailBookingGuide extends AppCompatActivity {
         toolbar.setTitleTextAppearance(DetailBookingGuide.this, R.style.FontForActionBar);
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
 
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         txtProvince = findViewById(R.id.txt_province);
         txtPackage_type = findViewById(R.id.txt_activity);
         txtVehicle_type = findViewById(R.id.txt_vehicle_type);
@@ -72,10 +86,11 @@ public class DetailBookingGuide extends AppCompatActivity {
         btnEmergencyCall = findViewById(R.id.btn_emergency_call);
 
         mDatabase = FirebaseDatabase.getInstance();
-        mReferencePackage = mDatabase.getReference().child("Packages");
+        mReferencePackage = mDatabase.getReference("Packages");
         mReferenceUsers = mDatabase.getReference("Users");
         mReferenceBooking = mDatabase.getReference().child("Booking");
         bookingId = getIntent().getStringExtra("BookingId");
+
         bindData();
 
         btnCallTourist.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +99,7 @@ public class DetailBookingGuide extends AppCompatActivity {
                 Intent callGuide = new Intent(Intent.ACTION_CALL);
                 callGuide.setData(Uri.parse("tel:" + strTouristPhone));
                 if (ActivityCompat.checkSelfPermission(DetailBookingGuide.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(DetailBookingGuide.this,new String[] {Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+                    ActivityCompat.requestPermissions(DetailBookingGuide.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
                     return;
                 }
                 startActivity(callGuide);
@@ -97,7 +112,7 @@ public class DetailBookingGuide extends AppCompatActivity {
                 Intent callEmergency = new Intent(Intent.ACTION_CALL);
                 callEmergency.setData(Uri.parse("tel:" + "191"));
                 if (ActivityCompat.checkSelfPermission(DetailBookingGuide.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(DetailBookingGuide.this,new String[] {Manifest.permission.CALL_PHONE}, REQUEST_CALL);
+                    ActivityCompat.requestPermissions(DetailBookingGuide.this, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_CALL);
                     return;
                 }
                 startActivity(callEmergency);
@@ -110,7 +125,7 @@ public class DetailBookingGuide extends AppCompatActivity {
         mReferenceBooking.child(bookingId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                packageId = dataSnapshot.child("packageId").getValue(String.class);
+                final String packageIds = dataSnapshot.child("packageId").getValue(String.class);
                 guideId = dataSnapshot.child("guideId").getValue(String.class);
                 touristId = dataSnapshot.child("touristId").getValue(String.class);
                 strDate = dataSnapshot.child("booking_date").getValue(String.class);
@@ -118,7 +133,7 @@ public class DetailBookingGuide extends AppCompatActivity {
 
                 txtDate.setText(strDate);
                 txtNumTourist.setText(strNumTourist);
-                mReferencePackage.child(packageId).addValueEventListener(new ValueEventListener() {
+                mReferencePackage.child(packageIds).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         strPackage_type = dataSnapshot.child("package_type").getValue(String.class);
@@ -129,7 +144,6 @@ public class DetailBookingGuide extends AppCompatActivity {
                         strDescription = dataSnapshot.child("description").getValue(String.class);
                         strLanguage = dataSnapshot.child("language").getValue(String.class);
                         strSchedule = dataSnapshot.child("schedule").getValue(String.class);
-
 
                         toolbar.setTitle(strPackageName);
                         txtLanguage.setText(strLanguage);
@@ -183,5 +197,47 @@ public class DetailBookingGuide extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onMapReady(final GoogleMap googleMap) {
+
+        mReferenceBooking.child(bookingId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                packageId = dataSnapshot.child("packageId").getValue().toString();
+
+                mReferencePackage.child(packageId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                        strLat = dataSnapshot.child("lat").getValue(String.class);
+                        strLng = dataSnapshot.child("lng").getValue(String.class);
+                        strLocationName = dataSnapshot.child("location_name").getValue(String.class);
+
+                        lat = Double.parseDouble(strLat);
+                        lng = Double.parseDouble(strLng);
+
+                        mMap = googleMap;
+                        LatLng latLng = new LatLng(lat, lng);
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(strLocationName));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 15.0f));
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

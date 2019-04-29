@@ -103,7 +103,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         mDistrict = findViewById(R.id.edt_District);
         tv_gender = findViewById(R.id.tv_gender);
         tv_citizen = findViewById(R.id.tv_citizen);
-        mUploadCitizen = findViewById(R.id.imageView8);
+        mUploadCitizen = findViewById(R.id.mUploadCitizen);
         mCitizen = findViewById(R.id.citizen_img);
 
         mRegister.setOnClickListener(new View.OnClickListener() {
@@ -185,6 +185,7 @@ public class RegisterUserActivity extends AppCompatActivity {
             imageCitizenPath.putFile(Citizen_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
                     Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
                     while (!urlTask.isSuccessful());
                     Uri downloadUrlCitizen = urlTask.getResult();
@@ -233,16 +234,48 @@ public class RegisterUserActivity extends AppCompatActivity {
             mEmail.requestFocus();
             return false;
         }
+
+        if (!strEmail.matches(Patterns.EMAIL_ADDRESS.toString())){
+            Toast.makeText(this, "Invalid Email Address", Toast.LENGTH_SHORT).show();
+            mEmail.requestFocus();
+            return false;
+        }
         if (strPhone.trim().isEmpty()){
             Toast.makeText(this, "Please input Phone", Toast.LENGTH_SHORT).show();
             mPhone.requestFocus();
             return false;
         }
+
+        if (strPhone.length() < 10 || strPhone.length() > 10) {
+            Toast.makeText(this, "Please Enter valid phone number", Toast.LENGTH_SHORT).show();
+            mPhone.requestFocus();
+            return false;
+        }
+
+        if (strPhone.matches("[a-zA-Z]+")){
+            Toast.makeText(this, "Please Enter valid phone number 0-9", Toast.LENGTH_SHORT).show();
+            mPhone.requestFocus();
+            return false;
+        }
+
         if (strPassword.trim().isEmpty()){
             Toast.makeText(this, "Please input Password", Toast.LENGTH_SHORT).show();
             mPassword.requestFocus();
             return false;
         }
+
+        if (strPassword.length() < 8) {
+            Toast.makeText(this, "please enter  password (min 7 chars)", Toast.LENGTH_SHORT).show();
+            mPassword.requestFocus();
+            return false;
+        }
+
+        if (strPassword.length() < 8 || strPassword.length() > 8) {
+            Toast.makeText(this, "please enter  password (min 8 chars)", Toast.LENGTH_SHORT).show();
+            mPassword.requestFocus();
+            return false;
+        }
+
         if (strProvince.trim().isEmpty()){
             Toast.makeText(this, "Please input Province", Toast.LENGTH_SHORT).show();
             mProvince.requestFocus();
