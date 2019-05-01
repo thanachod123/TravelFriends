@@ -1,6 +1,7 @@
 package com.finalproject.it.travelfriend.Guide.WorkProceduresGuide;
 
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Model.MessageModel;
 import com.finalproject.it.travelfriend.R;
+import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -68,7 +70,12 @@ public class CheckPayment extends AppCompatActivity {
         strBookingId = getIntent().getExtras().getString("BookingId");
         strMessage = mReferencemessage.push().getKey();
 
-
+        imgMoneyTransferSlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imagezoom();
+            }
+        });
 
         bindData();
         btnCheckPayment.setOnClickListener(new View.OnClickListener() {
@@ -150,5 +157,15 @@ public class CheckPayment extends AppCompatActivity {
         mReferencemessage.child(strMessage).setValue(message);
 
 
+    }
+
+    private void imagezoom(){
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(CheckPayment.this);
+        View mView = getLayoutInflater().inflate(R.layout.dialog_image_checkmoney, null);
+        PhotoView photoView = mView.findViewById(R.id.imageZoom);
+        Picasso.with(CheckPayment.this).load(strMTS).placeholder(R.drawable.package_image).into(photoView);
+        mBuilder.setView(mView);
+        AlertDialog mDialog = mBuilder.create();
+        mDialog.show();
     }
 }

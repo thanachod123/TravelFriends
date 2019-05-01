@@ -193,6 +193,16 @@
             app:layout_constraintEnd_toStartOf="@+id/img_ribbon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgWish"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/unlove" />
     </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

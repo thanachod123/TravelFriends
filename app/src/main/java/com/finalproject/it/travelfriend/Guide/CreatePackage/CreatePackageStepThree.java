@@ -34,7 +34,7 @@ public class CreatePackageStepThree extends Fragment {
     FirebaseAuth mAuth;
     TextView txtPlace;
     String strProvince,strPackage_type,strVehicle_type,strBank,strBank_number,strDescription,strImage,strName,strNumberTourist,strPrice_per_person,strSchedule,strLanguage,strNameLocation,strLat,strLng,strLocationName;
-    String guideID,packageID;
+    String guideID,packageID,strGuideName;
 
     @Nullable
     @Override
@@ -99,7 +99,7 @@ public class CreatePackageStepThree extends Fragment {
                         strLat = dataSnapshot.child("lat").getValue(String.class);
                         strLng = dataSnapshot.child("lng").getValue(String.class);
                         strLocationName = dataSnapshot.child("location_name").getValue(String.class);
-
+                        strGuideName = dataSnapshot.child("guideName").getValue(String.class);
                         txtPlace.setText(strNameLocation);
                         edt_schedule.setText(strSchedule);
                     }
@@ -125,7 +125,7 @@ public class CreatePackageStepThree extends Fragment {
             txtPlace.requestFocus();
             return false;
         }
-        PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type,strLat,strLng,strLocationName,"0.0");
+        PackageData packageData = new PackageData(guideID,strGuideName,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"ยังไม่สมบูรณ์","ยังไม่สมบูรณ์_"+strPackage_type,strLat,strLng,strLocationName,"0.0");
         mReference.child("Packages").child(packageID).setValue(packageData);
         viewPager.setCurrentItem(getItemFornext(+1),true);
         return true;

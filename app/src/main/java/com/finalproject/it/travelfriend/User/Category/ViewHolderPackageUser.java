@@ -1,5 +1,6 @@
 package com.finalproject.it.travelfriend.User.Category;
 
+import android.media.Image;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -21,6 +22,7 @@ public class ViewHolderPackageUser extends RecyclerView.ViewHolder {
     public CircleImageView imgGuide;
     public ImageView imgPackage;
     public ImageView img_vehicle_type;
+    public ImageView img_wish;
     public RatingBar ratingBar;
     CardView cardView;
 
@@ -37,5 +39,6 @@ public class ViewHolderPackageUser extends RecyclerView.ViewHolder {
         imgGuide = itemView.findViewById(R.id.profile_image_guide);
         cardView = itemView.findViewById(R.id.cardView);
         ratingBar = itemView.findViewById(R.id.ratingBar);
+        img_wish = itemView.findViewById(R.id.imgWish);
     }
 }

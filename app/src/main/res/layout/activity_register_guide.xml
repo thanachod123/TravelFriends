@@ -311,6 +311,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="3dp"
                         android:layout_toEndOf="@id/tv_gender"
+                        android:checkedButton="@+id/rb_male"
                         android:orientation="horizontal">
 
                         <RadioButton

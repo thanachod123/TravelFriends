@@ -43,6 +43,7 @@ public class NotificationUserFragment extends Fragment {
     FirebaseRecyclerAdapter<MessageModel, ViewholderMessage> firebaseRecyclerAdapter;
     ImageView bgNotification;
     Dialog mDialog1;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -223,26 +224,4 @@ public class NotificationUserFragment extends Fragment {
         });
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(firebaseRecyclerAdapter != null)
-            firebaseRecyclerAdapter.startListening();
-    }
-
-    @Override
-    public void onStop() {
-        if (firebaseRecyclerAdapter != null)
-            firebaseRecyclerAdapter.stopListening();
-        super.onStop();
-    }
-//
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(firebaseRecyclerAdapter!= null)
-            firebaseRecyclerAdapter.startListening();
-    }
 }
-
-

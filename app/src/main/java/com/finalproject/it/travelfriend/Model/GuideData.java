@@ -1,17 +1,16 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class GuideData {
-    String email, name, surname, phone, password, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age, role,status_allow , device_token;
+    String email, name, surname, phone, gender, profile_image, certificate_image, license_image,citizen_image, province, district, age, role,status_allow , device_token;
 
     public GuideData() {
     }
 
-    public GuideData(String email, String name, String surname, String phone, String password, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role,String status_allow , String device_token)  {
+    public GuideData(String email, String name, String surname, String phone, String gender, String profile_image, String certificate_image, String license_image, String citizen_image, String province, String district, String age, String role, String status_allow, String device_token) {
         this.email = email;
         this.name = name;
         this.surname = surname;
         this.phone = phone;
-        this.password = password;
         this.gender = gender;
         this.profile_image = profile_image;
         this.certificate_image = certificate_image;
@@ -55,14 +54,6 @@ public class GuideData {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getGender() {
@@ -160,7 +151,6 @@ public class GuideData {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
                 ", gender='" + gender + '\'' +
                 ", profile_image='" + profile_image + '\'' +
                 ", certificate_image='" + certificate_image + '\'' +

@@ -1,13 +1,14 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class PackageData {
-    private String guideId,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status,status_type,lat,lng,location_name,average_rating;
+    private String guideId,guideName,name,description,image,province,package_type,vehicle_type,schedule,number_tourist,price_per_person,bank,bank_number,language,package_status,status_type,lat,lng,location_name,average_rating;
 
     public PackageData(){
     }
 
-    public PackageData(String guideId, String name, String description, String image, String province, String package_type, String vehicle_type, String schedule, String number_tourist, String price_per_person, String bank, String bank_number, String language, String package_status, String status_type, String lat, String lng, String location_name, String average_rating) {
+    public PackageData(String guideId, String guideName, String name, String description, String image, String province, String package_type, String vehicle_type, String schedule, String number_tourist, String price_per_person, String bank, String bank_number, String language, String package_status, String status_type, String lat, String lng, String location_name, String average_rating) {
         this.guideId = guideId;
+        this.guideName = guideName;
         this.name = name;
         this.description = description;
         this.image = image;
@@ -34,6 +35,14 @@ public class PackageData {
 
     public void setGuideId(String guideId) {
         this.guideId = guideId;
+    }
+
+    public String getGuideName() {
+        return guideName;
+    }
+
+    public void setGuideName(String guideName) {
+        this.guideName = guideName;
     }
 
     public String getName() {
@@ -184,6 +193,7 @@ public class PackageData {
     public String toString() {
         return "PackageData{" +
                 "guideId='" + guideId + '\'' +
+                ", guideName='" + guideName + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", image='" + image + '\'' +

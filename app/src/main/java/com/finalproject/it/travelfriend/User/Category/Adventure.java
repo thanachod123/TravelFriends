@@ -76,7 +76,6 @@ public class Adventure extends AppCompatActivity {
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderPackageUser holder, final int position, @NonNull PackageData model) {
-
                 progressBar.setVisibility(View.GONE);
 
                 holder.txtNamePackage.setText(model.getName());

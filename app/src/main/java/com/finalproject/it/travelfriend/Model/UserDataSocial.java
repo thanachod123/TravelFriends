@@ -1,12 +1,12 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class UserDataSocial {
-    private String email, name, surname, phone, gender, profile_image, province, district, citizen_image,role;
+    private String email, name, surname, phone, gender, profile_image, province, district, citizen_image,role , device_token;
 
     public UserDataSocial(){
     }
 
-    public UserDataSocial(String email, String name, String phone, String gender, String profile_image, String surname, String province, String district, String citizen_image, String role) {
+    public UserDataSocial(String email, String name, String phone, String gender, String profile_image, String surname, String province, String district, String citizen_image, String role , String device_token) {
         this.email = email;
         this.name = name;
         this.surname = surname;
@@ -17,6 +17,7 @@ public class UserDataSocial {
         this.district = district;
         this.citizen_image = citizen_image;
         this.role = role;
+        this.device_token = device_token;
     }
 
     public String getEmail() {
@@ -49,6 +50,14 @@ public class UserDataSocial {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getDevice_token() {
+        return device_token;
+    }
+
+    public void setDevice_token(String device_token) {
+        this.device_token = device_token;
     }
 
     public String getProfile_image() {
@@ -112,6 +121,7 @@ public class UserDataSocial {
                 ", district='" + district + '\'' +
                 ", citizen_image='" + citizen_image + '\'' +
                 ", role='" + role + '\'' +
+                ", device_token='" + device_token + '\'' +
                 '}';
     }
 }

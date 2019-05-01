@@ -1,14 +1,13 @@
 package com.finalproject.it.travelfriend.Model;
 
 public class UserData {
-    String email, name, surname, phone, password, gender, profile_image, province, district, citizen_image, role , device_token;
+    String email, name, surname, phone, gender, profile_image, province, district, citizen_image, role , device_token;
 
-    public UserData(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district, String citizen_image, String role , String device_token) {
+    public UserData(String email, String name, String surname, String phone, String gender, String profile_image, String province, String district, String citizen_image, String role, String device_token) {
         this.email = email;
         this.name = name;
         this.surname = surname;
         this.phone = phone;
-        this.password = password;
         this.gender = gender;
         this.profile_image = profile_image;
         this.province = province;
@@ -34,20 +33,20 @@ public class UserData {
         this.name = name;
     }
 
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     public String getPhone() {
         return phone;
     }
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getGender() {
@@ -64,14 +63,6 @@ public class UserData {
 
     public void setProfile_image(String profile_image) {
         this.profile_image = profile_image;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public String getProvince() {
@@ -121,7 +112,6 @@ public class UserData {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", phone='" + phone + '\'' +
-                ", password='" + password + '\'' +
                 ", gender='" + gender + '\'' +
                 ", profile_image='" + profile_image + '\'' +
                 ", province='" + province + '\'' +

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.finalproject.it.travelfriend.Guide.AdapterProfileGuide;
@@ -38,7 +39,7 @@ public class ProfileUserFragment extends Fragment {
     DatabaseReference mReference;
     FirebaseAuth mAuth;
 
-    String userId,name,surname,password,profile_image;
+    String userId,name,surname,profile_image;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,10 +55,10 @@ public class ProfileUserFragment extends Fragment {
         setFont();
         getUser_Profile_Data();
 
-        int[] resId = {R.drawable.resume
+        int[] resId = {R.drawable.resume,R.drawable.wishlist
                 , R.drawable.power_button};
 
-        String[] list = { "แก้ไขโปรไฟล์","ออกจากระบบ"};
+        String[] list = { "แก้ไขโปรไฟล์","รายการที่ถูกใจ","ออกจากระบบ"};
 
         AdapterProfileUser adapterProfileUser  = new AdapterProfileUser(getContext(),list,resId);
         ListView listView = view.findViewById(R.id.listViewSetting);
@@ -72,6 +73,9 @@ public class ProfileUserFragment extends Fragment {
                         startActivity(intentEditProfile);
                         break;
                     case 1:
+                        Toast.makeText(getActivity(), "EIEI", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
                         mAuth.signOut();
                         LoginManager.getInstance().logOut();
                         Intent signOut = new Intent(getActivity(), HomeActivity.class);

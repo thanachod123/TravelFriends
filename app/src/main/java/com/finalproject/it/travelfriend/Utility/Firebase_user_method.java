@@ -46,12 +46,12 @@ public class Firebase_user_method {
                 });
     }
 
-    public void send_new_user_data(String email, String name, String phone, String password, String gender, String profile_image, String surname, String province, String district, String citizen_image , String device_token){
+    public void send_new_user_data(String email, String name, String phone,String gender, String profile_image, String surname, String province, String district, String citizen_image , String device_token){
 
         String devicetoken = FirebaseInstanceId.getInstance().getToken();
 
 
-        UserData userData = new UserData(email,name,phone,password,gender,profile_image,surname,province,district,citizen_image,"tourist" , device_token);
+        UserData userData = new UserData(email,name,surname,phone,gender,"default",province,district,"default","tourist",device_token);
         mReference.child("Users").child(userID).setValue(userData);
     }
 

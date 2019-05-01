@@ -105,6 +105,20 @@ public class RegisterUserActivity extends AppCompatActivity {
         tv_citizen = findViewById(R.id.tv_citizen);
         mUploadCitizen = findViewById(R.id.mUploadCitizen);
         mCitizen = findViewById(R.id.citizen_img);
+        mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                mGenderOption = mGender.findViewById(i);
+                switch (i){
+                    case R.id.rb_male:
+                        strGender = mGenderOption.getText().toString();
+                        break;
+                    case R.id.rb_female:
+                        strGender = mGenderOption.getText().toString();
+                        break;
+                }
+            }
+        });
 
         mRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,20 +218,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         strPassword = mPassword.getText().toString();
         strProvince = mProvince.getText().toString();
         strDistrict = mDistrict.getText().toString();
-        mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                mGenderOption = mGender.findViewById(i);
-                switch (i){
-                    case R.id.rb_male:
-                        strGender = mGenderOption.getText().toString();
-                        break;
-                    case R.id.rb_female:
-                        strGender = mGenderOption.getText().toString();
-                        break;
-                }
-            }
-        });
+
 
         if (strName.trim().isEmpty()){
             Toast.makeText(this, "Please input Name", Toast.LENGTH_SHORT).show();
@@ -317,7 +318,7 @@ public class RegisterUserActivity extends AppCompatActivity {
 
                             String devicetoken = FirebaseInstanceId.getInstance().getToken();
 
-                            firebase_user_method.send_new_user_data(strEmail,strName,strPhone,strPassword,strGender,"Default",strSurname,strProvince,strDistrict,"Default" , devicetoken);
+                            firebase_user_method.send_new_user_data(strEmail,strName,strPhone,strGender,"Default",strSurname,strProvince,strDistrict,"Default" , devicetoken);
                             select_image();
                             Toast.makeText(RegisterUserActivity.this,"Registration Success",Toast.LENGTH_SHORT).show();
                             mAuth.signOut();

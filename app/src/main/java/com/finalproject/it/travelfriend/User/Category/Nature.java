@@ -32,12 +32,13 @@ public class Nature extends AppCompatActivity {
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferencePackage,mReferenceGuide;
+    DatabaseReference mReferencePackage,mReferenceGuide,mReferenceFavorite;
     FirebaseRecyclerOptions<PackageData> options;
     FirebaseRecyclerAdapter<PackageData,ViewHolderPackageUser> packageAdapter;
     RecyclerView recyclerNature;
     FirebaseAuth mAuth;
     ProgressBar progressBar;
+    String toursitId;
 
 
     @Override
@@ -65,9 +66,11 @@ public class Nature extends AppCompatActivity {
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
 
         mAuth = FirebaseAuth.getInstance();
+        toursitId = mAuth.getUid();
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceGuide = mDatabase.getReference().child("Users");
+        mReferenceFavorite = mDatabase.getReference().child("Favorites");
         recyclerNature = findViewById(R.id.recyclerNature);
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
@@ -75,8 +78,6 @@ public class Nature extends AppCompatActivity {
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderPackageUser holder, final int position, @NonNull PackageData model) {
-
-                progressBar.setVisibility(View.GONE);
 
                 holder.txtNamePackage.setText(model.getName());
                 holder.txtProvincePackage.setText(model.getProvince());

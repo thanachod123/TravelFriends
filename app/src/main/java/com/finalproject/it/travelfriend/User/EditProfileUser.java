@@ -77,7 +77,7 @@ public class EditProfileUser extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        StatusBarUtil.setTransparent(EditProfileUser.this);
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.yellow));
 
         iv_profile_image = findViewById(R.id.iv_profile_image);
         mName = findViewById(R.id.edt_Name);

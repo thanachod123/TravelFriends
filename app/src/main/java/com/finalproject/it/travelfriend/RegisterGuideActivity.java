@@ -398,7 +398,7 @@ public class RegisterGuideActivity extends AppCompatActivity {
                     mReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            firebase_guide_method.send_new_guide_data(strEmail, strName, strSurname, strPhone, strPassword, strGender, "default", "default", "default", "default", strProvince, strDistrict, strAge, "guide", "Pending for Approval", devicetoken);
+                            firebase_guide_method.send_new_guide_data(strEmail, strName, strSurname, strPhone, strGender, "default", "default", "default", "default", strProvince, strDistrict, strAge, "guide", "Pending for Approval", devicetoken);
 
                             select_image();
 

@@ -154,12 +154,13 @@ public class PackageGuideFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String status_allow = dataSnapshot.child("status_allow").getValue().toString();
+                        String strGuideName = dataSnapshot.child("name").getValue().toString();
 
                         if (status_allow.equals("Approve")) {
                             Intent intentCreatePackage = new Intent(getActivity(), CreatePackageGuide.class);
                             String packageId = mReference.push().getKey();
                             intentCreatePackage.putExtra("PackageID", packageId);
-                            PackageData packageData = new PackageData(guideID, "เพิ่มชื่อแพ็คเกจของคุณที่นี่", "เพิ่มรายละเอียดกแพ็คเกจของคุณ", "default", "", "", "", "", "", "", "", "", "", "ยังไม่สมบูรณ์", "", "", "", "", "0.0");
+                            PackageData packageData = new PackageData(guideID,strGuideName, "เพิ่มชื่อแพ็คเกจของคุณที่นี่", "เพิ่มรายละเอียดกแพ็คเกจของคุณ", "default", "", "", "", "", "", "", "", "", "", "ยังไม่สมบูรณ์", "", "", "", "", "0.0");
                             mReference.child(packageId).setValue(packageData);
                             startActivity(intentCreatePackage);
                         }

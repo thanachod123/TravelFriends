@@ -32,7 +32,7 @@ public class CreatePackageStepFive extends Fragment {
     DatabaseReference mReference;
     ImageView img_upload;
     TextView txt_name_trip,txt_summary_trip,txt_province,txt_activities,txt_language,txt_vehicle,txt_schedule,txt_max_guests,txt_price,txt_bank,txt_bank_number;
-    String guideID,packageID;
+    String guideID,packageID,strGuideName;
     String strProvince, strPackage_type, strVehicle_type, strBank, strBank_number, strDescription, strImage, strName, strNumberTourist, strPrice_per_person, strSchedule, strLanguage,strLat,strLng,strLocationName;
 
 
@@ -67,7 +67,7 @@ public class CreatePackageStepFive extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), MainGuideActivity.class);
-                PackageData packageData = new PackageData(guideID,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"รอการตรวจสอบ","รอการตรวจสอบ_"+strPackage_type,strLat,strLng,strLocationName,"0.0");
+                PackageData packageData = new PackageData(guideID,strGuideName,strName,strDescription,strImage,strProvince,strPackage_type,strVehicle_type,strSchedule,strNumberTourist,strPrice_per_person,strBank,strBank_number,strLanguage,"รอการตรวจสอบ","รอการตรวจสอบ_"+strPackage_type,strLat,strLng,strLocationName,"0.0");
                 mReference.child("Packages").child(packageID).setValue(packageData);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -104,6 +104,7 @@ public class CreatePackageStepFive extends Fragment {
                         strLat = dataSnapshot.child("lat").getValue(String.class);
                         strLng = dataSnapshot.child("lng").getValue(String.class);
                         strLocationName = dataSnapshot.child("location_name").getValue(String.class);
+                        strGuideName = dataSnapshot.child("guideName").getValue(String.class);
 
                         txt_name_trip.setText(strName);
                         txt_summary_trip.setText(strDescription);
@@ -121,7 +122,6 @@ public class CreatePackageStepFive extends Fragment {
                             strImage = "default";
                         }
                         Picasso.with(getActivity()).load(strImage).placeholder(R.drawable.package_image).into(img_upload);
-
 
                     }
 

@@ -25,6 +25,7 @@ import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.finalproject.it.travelfriend.Model.UserDataSocial;
+import com.finalproject.it.travelfriend.User.EditProfileUser;
 import com.finalproject.it.travelfriend.User.ForgotPasswordUser;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -118,8 +119,6 @@ public class LoginUserActivity extends AppCompatActivity {
 
             }
         });
-
-
 
         //Facebook
         fSignInButton = findViewById(R.id.facebook_sign_in);
@@ -283,7 +282,7 @@ public class LoginUserActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             final String currentUserId = mAuth.getCurrentUser().getUid();
-                            String devicetoken = FirebaseInstanceId.getInstance().getToken();
+                            final String devicetoken = FirebaseInstanceId.getInstance().getToken();
 
                             final boolean newUserFacebook = task.getResult().getAdditionalUserInfo().isNewUser();
                             Userref.child(currentUserId).child("device_token").setValue(devicetoken)
@@ -293,9 +292,9 @@ public class LoginUserActivity extends AppCompatActivity {
                                             if (newUserFacebook) {
 
                                                 FirebaseUser firebaseUserFacebook = mAuth.getCurrentUser();
-                                                UserDataSocial userData = new UserDataSocial(firebaseUserFacebook.getEmail(), firebaseUserFacebook.getDisplayName(), "", "ชาย", "", "", "", "", "", "tourist");
+                                                UserDataSocial userData = new UserDataSocial(firebaseUserFacebook.getEmail(), firebaseUserFacebook.getDisplayName(), "", "ชาย", "", "", "", "", "", "tourist" , devicetoken);
                                                 FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUserFacebook.getUid()).setValue(userData);
-                                                startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
+                                                startActivity(new Intent(LoginUserActivity.this, EditProfileUser.class));
                                             } else {
                                                 startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
                                             }
@@ -338,7 +337,7 @@ public class LoginUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             final String currentUserId = mAuth.getCurrentUser().getUid();
-                            String devicetoken = FirebaseInstanceId.getInstance().getToken();
+                            final String devicetoken = FirebaseInstanceId.getInstance().getToken();
 
                             final boolean newuser = task.getResult().getAdditionalUserInfo().isNewUser();
 
@@ -348,10 +347,10 @@ public class LoginUserActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (newuser) {
                                         FirebaseUser firebaser = mAuth.getCurrentUser();
-                                        UserDataSocial userData = new UserDataSocial(firebaser.getEmail(), firebaser.getDisplayName(), "", "", firebaser.getPhotoUrl().toString(), "", "", "", "", "tourist");
+                                        UserDataSocial userData = new UserDataSocial(firebaser.getEmail(), firebaser.getDisplayName(), "", "", firebaser.getPhotoUrl().toString(), "", "", "", "", "tourist" , devicetoken);
                                         FirebaseDatabase.getInstance().getReference().child("Users").child(firebaser.getUid()).setValue(userData);
 
-                                        startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
+                                        startActivity(new Intent(LoginUserActivity.this, EditProfileUser.class));
                                     } else {
 
                                         startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
