@@ -255,8 +255,8 @@ public class EditProfileGuide extends AppCompatActivity {
                 mReference.child(getString(R.string.users)).child(guideId).child("district").setValue(district);
                 mReference.child(getString(R.string.users)).child(guideId).child("age").setValue(age);
                 mReference.child(getString(R.string.users)).child(guideId).child("gender").setValue(gender);
-
-
+//                mReference.child(getString(R.string.users)).child(guideId).child("profile_image").setValue("default");
+                select_image();
                 Toast.makeText(getApplicationContext(), "Edit profile success", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -269,6 +269,21 @@ public class EditProfileGuide extends AppCompatActivity {
         return true;
     }
 
+    private void select_image() {
+        if (Profile_imageUri != null){
+            StorageReference imageProfilePath = mStorage.child(getString(R.string.users)).child(guideId).child("profile.jpg");
+            imageProfilePath.putFile(Profile_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!urlTask.isSuccessful()) ;
+                    Uri downloadUrlProfile = urlTask.getResult();
+                    final String strProfileImage = String.valueOf(downloadUrlProfile);
+                    mReference.child(getString(R.string.users)).child(guideId).child("profile_image").setValue(strProfileImage);
+                }
+            });
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -288,17 +303,6 @@ public class EditProfileGuide extends AppCompatActivity {
                 Profile_imageUri = result.getUri();
                 iv_profile_image.setImageURI(Profile_imageUri);
 
-                StorageReference imageProfilePath = mStorage.child(getString(R.string.users)).child(guideId).child("profile.jpg");
-                imageProfilePath.putFile(Profile_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                        while (!urlTask.isSuccessful()) ;
-                        Uri downloadUrlProfile = urlTask.getResult();
-                        final String strProfileImage = String.valueOf(downloadUrlProfile);
-                        mReference.child(getString(R.string.users)).child(guideId).child("profile_image").setValue(strProfileImage);
-                    }
-                });
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

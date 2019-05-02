@@ -55,7 +55,7 @@ public class SeeallPackageActivity extends AppCompatActivity {
 
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
-                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5.0"), PackageData.class).build();
+                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5"), PackageData.class).build();
 
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override

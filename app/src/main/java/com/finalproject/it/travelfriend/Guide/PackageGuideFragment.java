@@ -148,19 +148,18 @@ public class PackageGuideFragment extends Fragment {
         btn_CreatePackage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 mReferenceUser.child(guideID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         String status_allow = dataSnapshot.child("status_allow").getValue().toString();
                         String strGuideName = dataSnapshot.child("name").getValue().toString();
+                        String strGuideSurname = dataSnapshot.child("surname").getValue().toString();
 
                         if (status_allow.equals("Approve")) {
                             Intent intentCreatePackage = new Intent(getActivity(), CreatePackageGuide.class);
                             String packageId = mReference.push().getKey();
                             intentCreatePackage.putExtra("PackageID", packageId);
-                            PackageData packageData = new PackageData(guideID,strGuideName, "เพิ่มชื่อแพ็คเกจของคุณที่นี่", "เพิ่มรายละเอียดกแพ็คเกจของคุณ", "default", "", "", "", "", "", "", "", "", "", "ยังไม่สมบูรณ์", "", "", "", "", "0.0");
+                            PackageData packageData = new PackageData(guideID,strGuideName+" "+strGuideSurname, "เพิ่มชื่อแพ็คเกจของคุณที่นี่", "เพิ่มรายละเอียดกแพ็คเกจของคุณ", "default", "", "", "", "", "", "", "", "", "", "ยังไม่สมบูรณ์", "", "", "", "", "0.0");
                             mReference.child(packageId).setValue(packageData);
                             startActivity(intentCreatePackage);
                         }

@@ -73,7 +73,8 @@ public class ProfileUserFragment extends Fragment {
                         startActivity(intentEditProfile);
                         break;
                     case 1:
-                        Toast.makeText(getActivity(), "EIEI", Toast.LENGTH_SHORT).show();
+                        Intent intentWishList = new Intent(getActivity(),WishListActivity.class);
+                        startActivity(intentWishList);
                         break;
                     case 2:
                         mAuth.signOut();
@@ -94,6 +95,7 @@ public class ProfileUserFragment extends Fragment {
                         name = dataSnapshot.child("name").getValue().toString();
                         surname = dataSnapshot.child("surname").getValue().toString();
                         profile_image = dataSnapshot.child("profile_image").getValue().toString();
+
                         mName.setText(name+" "+surname);
                         if ("".equalsIgnoreCase(profile_image)){
                             profile_image = "default";

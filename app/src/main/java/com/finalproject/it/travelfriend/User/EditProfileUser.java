@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.finalproject.it.travelfriend.Guide.EditProfileGuide;
@@ -56,8 +57,9 @@ public class EditProfileUser extends AppCompatActivity {
     DatabaseReference mReference;
     FirebaseAuth mAuth;
     StorageReference mStorage;
-    String userId;
+    String userId,strCitizenImage;
     Toolbar toolbar;
+    TextView tvCitizen;
     ImageView citizen_img, mUploadCitizen;
 
     @Override
@@ -95,6 +97,7 @@ public class EditProfileUser extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         mReference = mDatabase.getReference();
         mStorage = FirebaseStorage.getInstance().getReference();
+        tvCitizen = findViewById(R.id.tv_citizen);
 
         mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -156,6 +159,12 @@ public class EditProfileUser extends AppCompatActivity {
                         district = dataSnapshot.child("district").getValue().toString();
                         gender = dataSnapshot.child("gender").getValue().toString();
                         profile_image = dataSnapshot.child("profile_image").getValue().toString();
+                        strCitizenImage = dataSnapshot.child("citizen_image").getValue().toString();
+                        if (!"default".equalsIgnoreCase(strCitizenImage)){
+                            mUploadCitizen.setVisibility(View.GONE);
+                            citizen_img.setVisibility(View.GONE);
+                            tvCitizen.setVisibility(View.GONE);
+                        }
                         mName.setText(name);
                         mSurname.setText(surname);
                         mPhone.setText(phone);
@@ -240,7 +249,9 @@ public class EditProfileUser extends AppCompatActivity {
                 mReference.child(getString(R.string.users)).child(userId).child("province").setValue(province);
                 mReference.child(getString(R.string.users)).child(userId).child("district").setValue(district);
                 mReference.child(getString(R.string.users)).child(userId).child("gender").setValue(gender);
-
+//                mReference.child(getString(R.string.users)).child(userId).child("profile_image").setValue("default");
+//                mReference.child(getString(R.string.users)).child(userId).child("citizen_image").setValue("default");
+                select_image();
                 Toast.makeText(getApplicationContext(), "Edit profile success", Toast.LENGTH_SHORT).show();
 
                 finish();
@@ -272,6 +283,21 @@ public class EditProfileUser extends AppCompatActivity {
                 Profile_imageUri = result.getUri();
                 iv_profile_image.setImageURI(Profile_imageUri);
 
+            }  else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+
+        if (requestCode == request_Code_CitizenIMG && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            citizen_imageUri = data.getData();
+            Picasso.with(this).load(citizen_imageUri).into(citizen_img);
+
+        }
+    }
+
+    private void select_image(){
+        if (Profile_imageUri != null){
                 StorageReference imageProfilePath = mStorage.child(getString(R.string.users)).child(userId).child("profile.jpg");
                 imageProfilePath.putFile(Profile_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -283,36 +309,20 @@ public class EditProfileUser extends AppCompatActivity {
                         mReference.child(getString(R.string.users)).child(userId).child("profile_image").setValue(strProfileImage);
                     }
                 });
-
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-
-
-            }
         }
 
-        if (requestCode == request_Code_CitizenIMG && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            citizen_imageUri = data.getData();
-            Picasso.with(this).load(citizen_imageUri).into(citizen_img);
-
-            StorageReference imageCitizenPath = mStorage.child("Users")
-                    .child(citizen_imageUri.getLastPathSegment());
-            imageCitizenPath.putFile(citizen_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!urlTask.isSuccessful()) ;
-                    Uri downloadUrlCitizen = urlTask.getResult();
-                    final String strCitizenImage = String.valueOf(downloadUrlCitizen);
-                    mReference.child(getString(R.string.users)).child(userId)
-                            .child("citizen_image").setValue(strCitizenImage);
-
-                  }
+        if (citizen_imageUri != null){
+                StorageReference imageCitizenPath = mStorage.child("Users").child(citizen_imageUri.getLastPathSegment());
+                imageCitizenPath.putFile(citizen_imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!urlTask.isSuccessful()) ;
+                        Uri downloadUrlCitizen = urlTask.getResult();
+                        final String strCitizenImage = String.valueOf(downloadUrlCitizen);
+                        mReference.child(getString(R.string.users)).child(userId).child("citizen_image").setValue(strCitizenImage);
+                }
             });
-
-        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-
-
         }
     }
 

@@ -192,23 +192,30 @@ public class LoginUserActivity extends AppCompatActivity {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             String userType = dataSnapshot.child("role").getValue().toString();
-                                            if (userType.equals("tourist")) {
-                                                Intent intentGuide = new Intent(LoginUserActivity.this, MainUserActivity.class);
+                                            if (userType.equals("guide")) {
+                                                Intent intentGuide = new Intent(LoginUserActivity.this, MainGuideActivity.class);
                                                 intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(intentGuide);
+
                                             } else if (userType.equals("guide")) {
                                                 String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                                                if (guideStatus.equals("true")) {
+                                                if (guideStatus.equals("Approve")) {
                                                     Intent intentGuide = new Intent(LoginUserActivity.this, MainGuideActivity.class);
                                                     intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     startActivity(intentGuide);
                                                 }
                                             } else if (userType.equals("guide")) {
                                                 String guideStatus = dataSnapshot.child("status_allow").getValue().toString();
-                                                if (guideStatus.equals("false")) {
-                                                    mAuth.signOut();
+                                                if (guideStatus.equals("Pending for Approval")) {
+                                                    Intent intentGuide = new Intent(LoginUserActivity.this, MainGuideActivity.class);
+                                                    intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    startActivity(intentGuide);
                                                     Toast.makeText(LoginUserActivity.this, "กรุณารอการตรวจสอบข้อมูลจากผู้ดูแลระบบ", Toast.LENGTH_SHORT).show();
                                                 }
+                                            } else if (userType.equals("tourist")){
+                                                Intent intentGuide = new Intent(LoginUserActivity.this, MainUserActivity.class);
+                                                intentGuide.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(intentGuide);
                                             }
                                         }
 
@@ -290,11 +297,10 @@ public class LoginUserActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (newUserFacebook) {
-
                                                 FirebaseUser firebaseUserFacebook = mAuth.getCurrentUser();
-                                                UserDataSocial userData = new UserDataSocial(firebaseUserFacebook.getEmail(), firebaseUserFacebook.getDisplayName(), "", "ชาย", "", "", "", "", "", "tourist" , devicetoken);
+                                                UserDataSocial userData = new UserDataSocial(firebaseUserFacebook.getEmail(), firebaseUserFacebook.getDisplayName(), "", "ชาย", "default", "", "", "", "default", "tourist" , devicetoken);
                                                 FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUserFacebook.getUid()).setValue(userData);
-                                                startActivity(new Intent(LoginUserActivity.this, EditProfileUser.class));
+                                                startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
                                             } else {
                                                 startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
                                             }

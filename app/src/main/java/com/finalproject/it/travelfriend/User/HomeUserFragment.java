@@ -1,6 +1,9 @@
 package com.finalproject.it.travelfriend.User;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +35,7 @@ import com.finalproject.it.travelfriend.User.Category.ViewHolderPackageUser;
 import com.finalproject.it.travelfriend.User.RegisterPackage.DetailPackage;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,12 +47,17 @@ public class HomeUserFragment extends Fragment {
     CardView cardViewAdventure,cardViewCulture,cardViewArt,cardViewNature,cardViewHistory;
     FirebaseRecyclerOptions<PackageData> options;
     FirebaseRecyclerAdapter<PackageData,ViewHolderPackageUser> packageAdapter;
+    FirebaseAuth mAuth;
     RecyclerView recyclerRecommended;
     FloatingActionButton floatingSearch;
     FirebaseDatabase mDatabase;
     Toolbar toolbar;
     TextView seeall;
-    DatabaseReference mReferencePackage,mReferenceGuide;
+    DatabaseReference mReferencePackage,mReferenceGuide,mReferenceFavorite;
+    String touristId;
+    String favoriteStatus;
+    String packageId2;
+    Dialog mDialog;
 
     @Nullable
     @Override
@@ -67,27 +78,65 @@ public class HomeUserFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intentEditPackage = new Intent(getActivity(),SeeallPackageActivity.class);
-
                 startActivity(intentEditPackage);
             }
         });
 
+        mDialog = new Dialog(getActivity());
+        mDialog.setContentView(R.layout.check_detail_user_dialog);
+        mDialog.getWindow().setLayout(900, 500);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        mAuth = FirebaseAuth.getInstance();
+        touristId = mAuth.getUid();
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceGuide = mDatabase.getReference().child("Users");
+        mReferenceFavorite = mDatabase.getReference().child("Favorites");
         recyclerRecommended = view.findViewById(R.id.recyclerViewRecommended);
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
-                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5.0"),PackageData.class).build();
+                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5"),PackageData.class).build();
 
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderPackageUser holder, final int position, @NonNull PackageData model) {
+                packageId2 = packageAdapter.getRef(position).getKey();
+
                 holder.txtNamePackage.setText(model.getName());
                 holder.txtProvincePackage.setText(model.getProvince());
                 holder.txtActivity.setText(model.getPackage_type());
                 holder.txtPrice.setText(model.getPrice_per_person()+" THB");
                 holder.txtVehicleType.setText(model.getVehicle_type());
+
+                mReferenceFavorite.child(touristId).child(packageId2).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        favoriteStatus = dataSnapshot.child("status").getValue(String.class);
+                        if ("true".equalsIgnoreCase(favoriteStatus)){
+                            holder.img_wish.setImageResource(R.drawable.love);
+                        }else if ("false".equalsIgnoreCase(favoriteStatus)){
+                            holder.img_wish.setImageResource(R.drawable.unlove);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                holder.img_wish.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ("true".equalsIgnoreCase(favoriteStatus)){
+                            mReferenceFavorite.child(touristId).child(packageId2).removeValue();
+                            holder.img_wish.setImageResource(R.drawable.unlove);
+                        } else {
+                            mReferenceFavorite.child(touristId).child(packageId2).child("status").setValue("true");
+                        }
+                    }
+                });
 
                 float averageRating = Float.parseFloat(model.getAverage_rating());
                 holder.ratingBar.setRating(averageRating);
@@ -128,10 +177,32 @@ public class HomeUserFragment extends Fragment {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intentEditPackage = new Intent(getActivity(),DetailPackage.class);
-                        String packageId = packageAdapter.getRef(position).getKey();
-                        intentEditPackage.putExtra("PackageID",packageId);
-                        startActivity(intentEditPackage);
+                        mReferenceGuide.child(touristId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String strTouristName, strTouristSurname, strProvince, strProfile_image, strPhone, strDistrict, strCitizen_image;
+                                strTouristName = dataSnapshot.child("name").getValue(String.class);
+                                strTouristSurname = dataSnapshot.child("surname").getValue(String.class);
+                                strProvince = dataSnapshot.child("province").getValue(String.class);
+                                strProfile_image = dataSnapshot.child("profile_image").getValue(String.class);
+                                strPhone = dataSnapshot.child("phone").getValue(String.class);
+                                strDistrict = dataSnapshot.child("district").getValue(String.class);
+                                strCitizen_image = dataSnapshot.child("citizen_image").getValue(String.class);
+
+                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "".equalsIgnoreCase(strCitizen_image)){
+                                    setupDialog();
+                                } else {
+                                    Intent intentEditPackage = new Intent(getActivity(),DetailPackage.class);
+                                    intentEditPackage.putExtra("PackageID",packageId2);
+                                    startActivity(intentEditPackage);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
             }
@@ -158,7 +229,6 @@ public class HomeUserFragment extends Fragment {
             }
 
         });
-
         cardViewAdventure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,8 +259,30 @@ public class HomeUserFragment extends Fragment {
                 startActivity(new Intent(getActivity(),History.class));
             }
         });
-
         return view;
+    }
+
+    private void setupDialog() {
+        Button btnOk = mDialog.findViewById(R.id.btn_ok);
+        ImageView btnExit = mDialog.findViewById(R.id.btn_exit);
+
+        mDialog.show();
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentEditUser = new Intent(getActivity(),EditProfileUser.class);
+                startActivity(intentEditUser);
+                mDialog.dismiss();
+            }
+        });
     }
 
     private void updatePackageAdapter() {

@@ -1,9 +1,13 @@
 package com.finalproject.it.travelfriend.User.Category;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,10 +16,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 
 import com.finalproject.it.travelfriend.Model.PackageData;
 import com.finalproject.it.travelfriend.R;
+import com.finalproject.it.travelfriend.User.EditProfileUser;
 import com.finalproject.it.travelfriend.User.RegisterPackage.DetailPackage;
+import com.finalproject.it.travelfriend.User.SearchActivity;
+import com.finalproject.it.travelfriend.User.WishListActivity;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,12 +40,16 @@ public class History extends AppCompatActivity {
     Toolbar toolbar;
     CollapsingToolbarLayout collapsingToolbarLayout;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferencePackage,mReferenceGuide;
+    DatabaseReference mReferencePackage,mReferenceGuide,mReferenceFavorite;
     FirebaseRecyclerOptions<PackageData> options;
     FirebaseRecyclerAdapter<PackageData,ViewHolderPackageUser> packageAdapter;
     RecyclerView recyclerHistory;
     FirebaseAuth mAuth;
-
+    String touristId;
+    String favoriteStatus;
+    String packageId2;
+    Dialog mDialog;
+    FloatingActionButton floatingSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,23 +72,69 @@ public class History extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleTypeface(myCustomFont);
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
         StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
+        floatingSearch = findViewById(R.id.SearchButton);
+
+        mDialog = new Dialog(this);
+        mDialog.setContentView(R.layout.check_detail_user_dialog);
+        mDialog.getWindow().setLayout(900, 500);
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceGuide = mDatabase.getReference().child("Users");
+        mReferenceFavorite = mDatabase.getReference().child("Favorites");
         recyclerHistory = findViewById(R.id.recyclerHistory);
+
+        floatingSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(History.this, SearchActivity.class));
+            }
+
+        });
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
                 .setQuery(mReferencePackage.orderByChild("status_type").equalTo("ตรวจสอบแล้ว_ท่องเที่ยวทางประวัติศาสตร์"),PackageData.class).build();
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderPackageUser holder, final int position, @NonNull PackageData model) {
+                packageId2 = packageAdapter.getRef(position).getKey();
+
                 holder.txtNamePackage.setText(model.getName());
                 holder.txtProvincePackage.setText(model.getProvince());
                 holder.txtActivity.setText(model.getPackage_type());
                 holder.txtPrice.setText(model.getPrice_per_person()+" THB");
                 holder.txtVehicleType.setText(model.getVehicle_type());
+
+                mReferenceFavorite.child(touristId).child(packageId2).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        favoriteStatus = dataSnapshot.child("status").getValue(String.class);
+                        if ("true".equalsIgnoreCase(favoriteStatus)){
+                            holder.img_wish.setImageResource(R.drawable.love);
+                        }else if ("false".equalsIgnoreCase(favoriteStatus)){
+                            holder.img_wish.setImageResource(R.drawable.unlove);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+                holder.img_wish.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ("true".equalsIgnoreCase(favoriteStatus)){
+                            mReferenceFavorite.child(touristId).child(packageId2).removeValue();
+                            holder.img_wish.setImageResource(R.drawable.unlove);
+                        } else {
+                            mReferenceFavorite.child(touristId).child(packageId2).child("status").setValue("true");
+                        }
+                    }
+                });
 
                 float averageRating = Float.parseFloat(model.getAverage_rating());
                 holder.ratingBar.setRating(averageRating);
@@ -118,10 +177,32 @@ public class History extends AppCompatActivity {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intentEditPackage = new Intent(History.this,DetailPackage.class);
-                        String packageId = packageAdapter.getRef(position).getKey();
-                        intentEditPackage.putExtra("PackageID",packageId);
-                        startActivity(intentEditPackage);
+                        mReferenceGuide.child(touristId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String strTouristName, strTouristSurname, strProvince, strProfile_image, strPhone, strDistrict, strCitizen_image;
+                                strTouristName = dataSnapshot.child("name").getValue(String.class);
+                                strTouristSurname = dataSnapshot.child("surname").getValue(String.class);
+                                strProvince = dataSnapshot.child("province").getValue(String.class);
+                                strProfile_image = dataSnapshot.child("profile_image").getValue(String.class);
+                                strPhone = dataSnapshot.child("phone").getValue(String.class);
+                                strDistrict = dataSnapshot.child("district").getValue(String.class);
+                                strCitizen_image = dataSnapshot.child("citizen_image").getValue(String.class);
+
+                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "".equalsIgnoreCase(strCitizen_image)){
+                                    setupDialog();
+                                } else {
+                                    Intent intentEditPackage = new Intent(History.this,DetailPackage.class);
+                                    intentEditPackage.putExtra("PackageID",packageId2);
+                                    startActivity(intentEditPackage);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 });
             }
@@ -137,6 +218,30 @@ public class History extends AppCompatActivity {
         packageAdapter.startListening();
         recyclerHistory.setAdapter(packageAdapter);
         updatePackageAdapter();
+    }
+
+    private void setupDialog() {
+
+        Button btnOk = mDialog.findViewById(R.id.btn_ok);
+        ImageView btnExit = mDialog.findViewById(R.id.btn_exit);
+
+        mDialog.show();
+
+        btnExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mDialog.dismiss();
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentEditUser = new Intent(History.this,EditProfileUser.class);
+                startActivity(intentEditUser);
+                mDialog.dismiss();
+            }
+        });
     }
 
     private void updatePackageAdapter() {

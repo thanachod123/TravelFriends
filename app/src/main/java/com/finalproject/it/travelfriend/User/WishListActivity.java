@@ -1,13 +1,11 @@
-package com.finalproject.it.travelfriend.User.Category;
+package com.finalproject.it.travelfriend.User;
+
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,14 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
 import com.finalproject.it.travelfriend.Model.PackageData;
 import com.finalproject.it.travelfriend.R;
-import com.finalproject.it.travelfriend.User.EditProfileUser;
+
+import com.finalproject.it.travelfriend.User.Category.ViewHolderPackageUser;
 import com.finalproject.it.travelfriend.User.RegisterPackage.DetailPackage;
-import com.finalproject.it.travelfriend.User.SearchActivity;
-import com.finalproject.it.travelfriend.User.WishListActivity;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,29 +34,23 @@ import com.google.firebase.database.ValueEventListener;
 import com.jaeger.library.StatusBarUtil;
 import com.squareup.picasso.Picasso;
 
-public class Nature extends AppCompatActivity {
+public class WishListActivity extends AppCompatActivity {
     Toolbar toolbar;
-    CollapsingToolbarLayout collapsingToolbarLayout;
     FirebaseDatabase mDatabase;
-    DatabaseReference mReferencePackage,mReferenceGuide,mReferenceFavorite;
+    DatabaseReference mReferencePackage,mReferenceGuide,mReferenceWishList;
     FirebaseRecyclerOptions<PackageData> options;
     FirebaseRecyclerAdapter<PackageData,ViewHolderPackageUser> packageAdapter;
-    RecyclerView recyclerNature;
+    RecyclerView recyclerWishList;
     FirebaseAuth mAuth;
-    ProgressBar progressBar;
-    String touristId;
-    String favoriteStatus;
-    String packageId2;
+    String touristId,favoriteStatus;
     Dialog mDialog;
-    FloatingActionButton floatingSearch;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nature);
+        setContentView(R.layout.activity_wish_list);
         toolbar = findViewById(R.id.app_bar);
-        progressBar = findViewById(R.id.progressBartype);
+        toolbar.setTitleTextAppearance(this, R.style.FontForActionBar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -70,14 +61,7 @@ public class Nature extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
-        Typeface myCustomFont = Typeface.createFromAsset(getAssets(), "fonts/FC Lamoon Bold ver 1.00.ttf");
-        collapsingToolbarLayout.setCollapsedTitleTypeface(myCustomFont);
-        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorAccent));
-        collapsingToolbarLayout.setExpandedTitleTypeface(myCustomFont);
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
-        StatusBarUtil.setColor(this, getResources().getColor(R.color.yellow));
-        floatingSearch = findViewById(R.id.SearchButton);
+        StatusBarUtil.setColor(this,getResources().getColor(R.color.yellow));
 
         mDialog = new Dialog(this);
         mDialog.setContentView(R.layout.check_detail_user_dialog);
@@ -85,44 +69,102 @@ public class Nature extends AppCompatActivity {
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mAuth = FirebaseAuth.getInstance();
-        touristId = mAuth.getUid();
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceGuide = mDatabase.getReference().child("Users");
-        mReferenceFavorite = mDatabase.getReference().child("Favorites");
-        recyclerNature = findViewById(R.id.recyclerNature);
-
-        floatingSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Nature.this, SearchActivity.class));
-            }
-
-        });
-
+        mReferenceWishList = mDatabase.getReference().child("Favorites");
+        recyclerWishList = findViewById(R.id.recyclerWishList);
+        touristId = mAuth.getUid();
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
-                .setQuery(mReferencePackage.orderByChild("status_type").equalTo("ตรวจสอบแล้ว_ท่องเที่ยวทางธรรมชาติ"),PackageData.class).build();
-
+                .setQuery(mReferenceWishList.child(touristId).orderByChild("status").equalTo("true"),PackageData.class).build();
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override
             protected void onBindViewHolder(@NonNull final ViewHolderPackageUser holder, final int position, @NonNull PackageData model) {
-                packageId2 = packageAdapter.getRef(position).getKey();
-
-                holder.txtNamePackage.setText(model.getName());
-                holder.txtProvincePackage.setText(model.getProvince());
-                holder.txtActivity.setText(model.getPackage_type());
-                holder.txtPrice.setText(model.getPrice_per_person()+" THB");
-                holder.txtVehicleType.setText(model.getVehicle_type());
-
-                mReferenceFavorite.child(touristId).child(packageId2).addValueEventListener(new ValueEventListener() {
+                final String packageId2 = packageAdapter.getRef(position).getKey();
+                mReferencePackage.child(packageId2).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        favoriteStatus = dataSnapshot.child("status").getValue(String.class);
-                        if ("true".equalsIgnoreCase(favoriteStatus)){
-                            holder.img_wish.setImageResource(R.drawable.love);
-                        }else if ("false".equalsIgnoreCase(favoriteStatus)){
-                            holder.img_wish.setImageResource(R.drawable.unlove);
+                        String strNamePackage = dataSnapshot.child("name").getValue(String.class);
+                        String strProvincePackage = dataSnapshot.child("province").getValue(String.class);
+                        String strActivity = dataSnapshot.child("package_type").getValue(String.class);
+                        String strPrice = dataSnapshot.child("price_per_person").getValue(String.class);
+                        String strVehicleType = dataSnapshot.child("vehicle_type").getValue(String.class);
+                        String strAverageRating = dataSnapshot.child("average_rating").getValue(String.class);
+                        String strGuideId = dataSnapshot.child("guideId").getValue(String.class);
+                        String strImage = dataSnapshot.child("image").getValue(String.class);
+
+                        if (strVehicleType.equals("Car")){
+                            Picasso.with(WishListActivity.this).load(R.drawable.car)
+                                    .into(holder.img_vehicle_type);
+                        } else if (strVehicleType.equals("Motorcycle")){
+                            Picasso.with(WishListActivity.this).load(R.drawable.scooter)
+                                    .into(holder.img_vehicle_type);
+                        }else if (strVehicleType.equals("Van")){
+                            Picasso.with(WishListActivity.this).load(R.drawable.van)
+                                    .into(holder.img_vehicle_type);
+                        }else if (strVehicleType.equals("Jetski")){
+                            Picasso.with(WishListActivity.this).load(R.drawable.jetboating)
+                                    .into(holder.img_vehicle_type);
+                        }else {
+                            Picasso.with(WishListActivity.this).load(R.drawable.car)
+                                    .into(holder.img_vehicle_type);
                         }
+                        holder.txtNamePackage.setText(strNamePackage);
+                        holder.txtProvincePackage.setText(strProvincePackage);
+                        holder.txtActivity.setText(strActivity);
+                        holder.txtPrice.setText(strPrice+" THB");
+                        holder.txtVehicleType.setText(strVehicleType);
+                        float averageRating = Float.parseFloat(strAverageRating);
+                        holder.ratingBar.setRating(averageRating);
+                        Picasso.with(WishListActivity.this).load(strImage).placeholder(R.drawable.package_image).into(holder.imgPackage);
+
+                        mReferenceWishList.child(touristId).child(packageId2).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                favoriteStatus = dataSnapshot.child("status").getValue(String.class);
+                                if ("true".equalsIgnoreCase(favoriteStatus)){
+                                    holder.img_wish.setImageResource(R.drawable.love);
+                                }else if ("false".equalsIgnoreCase(favoriteStatus)){
+                                    holder.img_wish.setImageResource(R.drawable.unlove);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        holder.img_wish.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if ("true".equalsIgnoreCase(favoriteStatus)){
+                                    mReferenceWishList.child(touristId).child(packageId2).removeValue();
+                                    holder.img_wish.setImageResource(R.drawable.unlove);
+                                } else {
+                                    mReferenceWishList.child(touristId).child(packageId2).child("status").setValue("true");
+                                }
+
+
+                            }
+                        });
+
+                        mReferenceGuide.child(strGuideId).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String guideName,guideImage,guideSurname;
+                                guideName = dataSnapshot.child("name").getValue().toString();
+                                guideSurname = dataSnapshot.child("surname").getValue().toString();
+                                holder.txtNameGuide.setText(guideName + " " + guideSurname);
+                                guideImage = dataSnapshot.child("profile_image").getValue().toString();
+                                Picasso.with(WishListActivity.this).load(guideImage).placeholder(R.drawable.default_profile).into(holder.imgGuide);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
 
                     @Override
@@ -130,57 +172,6 @@ public class Nature extends AppCompatActivity {
 
                     }
                 });
-
-                holder.img_wish.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if ("true".equalsIgnoreCase(favoriteStatus)){
-                            mReferenceFavorite.child(touristId).child(packageId2).removeValue();
-                            holder.img_wish.setImageResource(R.drawable.unlove);
-                        } else {
-                            mReferenceFavorite.child(touristId).child(packageId2).child("status").setValue("true");
-                        }
-                    }
-                });
-
-                float averageRating = Float.parseFloat(model.getAverage_rating());
-                holder.ratingBar.setRating(averageRating);
-
-                if (model.getVehicle_type().equals("Car")){
-                    Picasso.with(Nature.this).load(R.drawable.car)
-                            .into(holder.img_vehicle_type);
-                } else if (model.getVehicle_type().equals("Motorcycle")){
-                    Picasso.with(Nature.this).load(R.drawable.scooter)
-                            .into(holder.img_vehicle_type);
-                }else if (model.getVehicle_type().equals("Van")){
-                    Picasso.with(Nature.this).load(R.drawable.van)
-                            .into(holder.img_vehicle_type);
-                }else if (model.getVehicle_type().equals("Jetski")){
-                    Picasso.with(Nature.this).load(R.drawable.jetboating)
-                            .into(holder.img_vehicle_type);
-                }else {
-                    Picasso.with(Nature.this).load(R.drawable.car)
-                            .into(holder.img_vehicle_type);
-                }
-                Picasso.with(Nature.this).load(model.getImage()).placeholder(R.drawable.package_image).into(holder.imgPackage);
-                String guideId = model.getGuideId();
-                mReferenceGuide.child(guideId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String guideName,guideImage,guideSurname;
-                        guideName = dataSnapshot.child("name").getValue().toString();
-                        guideSurname = dataSnapshot.child("surname").getValue().toString();
-                        holder.txtNameGuide.setText(guideName + " " + guideSurname);
-                        guideImage = dataSnapshot.child("profile_image").getValue().toString();
-                        Picasso.with(Nature.this).load(guideImage).placeholder(R.drawable.default_profile).into(holder.imgGuide);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -199,7 +190,7 @@ public class Nature extends AppCompatActivity {
                                 if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "".equalsIgnoreCase(strCitizen_image)){
                                     setupDialog();
                                 } else {
-                                    Intent intentEditPackage = new Intent(Nature.this,DetailPackage.class);
+                                    Intent intentEditPackage = new Intent(WishListActivity.this,DetailPackage.class);
                                     intentEditPackage.putExtra("PackageID",packageId2);
                                     startActivity(intentEditPackage);
                                 }
@@ -210,6 +201,7 @@ public class Nature extends AppCompatActivity {
 
                             }
                         });
+
                     }
                 });
             }
@@ -221,13 +213,14 @@ public class Nature extends AppCompatActivity {
                 return new ViewHolderPackageUser(view);
             }
         };
-        recyclerNature.setLayoutManager(new LinearLayoutManager(Nature.this));
+        recyclerWishList.setLayoutManager(new LinearLayoutManager(WishListActivity.this));
         packageAdapter.startListening();
-        recyclerNature.setAdapter(packageAdapter);
+        recyclerWishList.setAdapter(packageAdapter);
         updatePackageAdapter();
     }
 
     private void setupDialog() {
+
         Button btnOk = mDialog.findViewById(R.id.btn_ok);
         ImageView btnExit = mDialog.findViewById(R.id.btn_exit);
 
@@ -243,7 +236,7 @@ public class Nature extends AppCompatActivity {
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentEditUser = new Intent(Nature.this,EditProfileUser.class);
+                Intent intentEditUser = new Intent(WishListActivity.this,EditProfileUser.class);
                 startActivity(intentEditUser);
                 mDialog.dismiss();
             }

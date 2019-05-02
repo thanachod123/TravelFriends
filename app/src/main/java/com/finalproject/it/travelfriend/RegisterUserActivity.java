@@ -105,6 +105,7 @@ public class RegisterUserActivity extends AppCompatActivity {
         tv_citizen = findViewById(R.id.tv_citizen);
         mUploadCitizen = findViewById(R.id.mUploadCitizen);
         mCitizen = findViewById(R.id.citizen_img);
+        strGender = "ชาย";
         mGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
