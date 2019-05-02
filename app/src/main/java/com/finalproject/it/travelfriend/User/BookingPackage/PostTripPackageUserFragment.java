@@ -1,5 +1,6 @@
 package com.finalproject.it.travelfriend.User.BookingPackage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,9 @@ import android.widget.ProgressBar;
 
 import com.finalproject.it.travelfriend.Model.BookingData;
 import com.finalproject.it.travelfriend.R;
+import com.finalproject.it.travelfriend.User.Category.Adventure;
+import com.finalproject.it.travelfriend.User.RegisterPackage.DetailPackage;
+import com.finalproject.it.travelfriend.User.RegisterPackage.DetailPackage2;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -98,6 +102,14 @@ public class PostTripPackageUserFragment extends Fragment {
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
+                    }
+                });
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intentEditPackage = new Intent(getActivity(), DetailPackage2.class);
+                        intentEditPackage.putExtra("PackageID",packageId);
+                        startActivity(intentEditPackage);
                     }
                 });
 

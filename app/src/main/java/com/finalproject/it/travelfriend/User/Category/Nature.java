@@ -81,7 +81,7 @@ public class Nature extends AppCompatActivity {
 
         mDialog = new Dialog(this);
         mDialog.setContentView(R.layout.check_detail_user_dialog);
-        mDialog.getWindow().setLayout(900, 500);
+        mDialog.getWindow().setLayout(900, 600);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mAuth = FirebaseAuth.getInstance();
@@ -196,8 +196,7 @@ public class Nature extends AppCompatActivity {
                                 strDistrict = dataSnapshot.child("district").getValue(String.class);
                                 strCitizen_image = dataSnapshot.child("citizen_image").getValue(String.class);
 
-                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "".equalsIgnoreCase(strCitizen_image)){
-                                    setupDialog();
+                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "default".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "default".equalsIgnoreCase(strCitizen_image)){                                    setupDialog();
                                 } else {
                                     Intent intentEditPackage = new Intent(Nature.this,DetailPackage.class);
                                     intentEditPackage.putExtra("PackageID",packageId2);

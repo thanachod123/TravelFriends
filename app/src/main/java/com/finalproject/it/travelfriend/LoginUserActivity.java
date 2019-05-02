@@ -353,10 +353,10 @@ public class LoginUserActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (newuser) {
                                         FirebaseUser firebaser = mAuth.getCurrentUser();
-                                        UserDataSocial userData = new UserDataSocial(firebaser.getEmail(), firebaser.getDisplayName(), "", "", firebaser.getPhotoUrl().toString(), "", "", "", "", "tourist" , devicetoken);
+                                        UserDataSocial userData = new UserDataSocial(firebaser.getEmail(), firebaser.getDisplayName(), "", "", firebaser.getPhotoUrl().toString(), "", "", "", "default", "tourist" , devicetoken);
                                         FirebaseDatabase.getInstance().getReference().child("Users").child(firebaser.getUid()).setValue(userData);
 
-                                        startActivity(new Intent(LoginUserActivity.this, EditProfileUser.class));
+                                        startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));
                                     } else {
 
                                         startActivity(new Intent(LoginUserActivity.this, MainUserActivity.class));

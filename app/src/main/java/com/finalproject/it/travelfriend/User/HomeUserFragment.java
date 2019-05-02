@@ -84,7 +84,7 @@ public class HomeUserFragment extends Fragment {
 
         mDialog = new Dialog(getActivity());
         mDialog.setContentView(R.layout.check_detail_user_dialog);
-        mDialog.getWindow().setLayout(900, 500);
+        mDialog.getWindow().setLayout(900, 600);
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mAuth = FirebaseAuth.getInstance();
@@ -96,7 +96,7 @@ public class HomeUserFragment extends Fragment {
         recyclerRecommended = view.findViewById(R.id.recyclerViewRecommended);
 
         options = new FirebaseRecyclerOptions.Builder<PackageData>()
-                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5"),PackageData.class).build();
+                .setQuery(mReferencePackage.orderByChild("average_rating").equalTo("5.0"),PackageData.class).build();
 
         packageAdapter = new FirebaseRecyclerAdapter<PackageData, ViewHolderPackageUser>(options) {
             @Override
@@ -189,7 +189,7 @@ public class HomeUserFragment extends Fragment {
                                 strDistrict = dataSnapshot.child("district").getValue(String.class);
                                 strCitizen_image = dataSnapshot.child("citizen_image").getValue(String.class);
 
-                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "".equalsIgnoreCase(strCitizen_image)){
+                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "default".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "default".equalsIgnoreCase(strCitizen_image)){
                                     setupDialog();
                                 } else {
                                     Intent intentEditPackage = new Intent(getActivity(),DetailPackage.class);
