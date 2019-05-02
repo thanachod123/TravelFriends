@@ -16,7 +16,7 @@ public class BookingPageAdapter extends FragmentPagerAdapter {
         super(fm);
         this.numOfTabs = numOfTabs;
     }
-
+//
     @Override
     public Fragment getItem(int position) {
         switch (position){
