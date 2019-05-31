@@ -47,7 +47,7 @@ public class History extends AppCompatActivity {
     FirebaseAuth mAuth;
     String touristId;
     String favoriteStatus;
-    String packageId2;
+    String packageId2,packageId3,packageId4;
     Dialog mDialog;
     FloatingActionButton floatingSearch;
     @Override
@@ -80,6 +80,7 @@ public class History extends AppCompatActivity {
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mAuth = FirebaseAuth.getInstance();
+        touristId = mAuth.getUid();
         mDatabase = FirebaseDatabase.getInstance();
         mReferencePackage = mDatabase.getReference().child("Packages");
         mReferenceGuide = mDatabase.getReference().child("Users");
@@ -127,11 +128,12 @@ public class History extends AppCompatActivity {
                 holder.img_wish.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        packageId4 = packageAdapter.getRef(position).getKey();
                         if ("true".equalsIgnoreCase(favoriteStatus)){
-                            mReferenceFavorite.child(touristId).child(packageId2).removeValue();
+                            mReferenceFavorite.child(touristId).child(packageId4).removeValue();
                             holder.img_wish.setImageResource(R.drawable.unlove);
                         } else {
-                            mReferenceFavorite.child(touristId).child(packageId2).child("status").setValue("true");
+                            mReferenceFavorite.child(touristId).child(packageId4).child("status").setValue("true");
                         }
                     }
                 });
@@ -189,10 +191,12 @@ public class History extends AppCompatActivity {
                                 strDistrict = dataSnapshot.child("district").getValue(String.class);
                                 strCitizen_image = dataSnapshot.child("citizen_image").getValue(String.class);
 
-                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "default".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "default".equalsIgnoreCase(strCitizen_image)){                                    setupDialog();
+                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "default".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "default".equalsIgnoreCase(strCitizen_image)){
+                                    setupDialog();
                                 } else {
+                                    packageId3 = packageAdapter.getRef(position).getKey();
                                     Intent intentEditPackage = new Intent(History.this,DetailPackage.class);
-                                    intentEditPackage.putExtra("PackageID",packageId2);
+                                    intentEditPackage.putExtra("PackageID",packageId3);
                                     startActivity(intentEditPackage);
                                 }
                             }

@@ -44,6 +44,7 @@ public class WishListActivity extends AppCompatActivity {
     FirebaseAuth mAuth;
     String touristId,favoriteStatus;
     Dialog mDialog;
+    String packageId3,packageId4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,11 +139,12 @@ public class WishListActivity extends AppCompatActivity {
                         holder.img_wish.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
+                                packageId4 = packageAdapter.getRef(position).getKey();
                                 if ("true".equalsIgnoreCase(favoriteStatus)){
-                                    mReferenceWishList.child(touristId).child(packageId2).removeValue();
+                                    mReferenceWishList.child(touristId).child(packageId4).removeValue();
                                     holder.img_wish.setImageResource(R.drawable.unlove);
                                 } else {
-                                    mReferenceWishList.child(touristId).child(packageId2).child("status").setValue("true");
+                                    mReferenceWishList.child(touristId).child(packageId4).child("status").setValue("true");
                                 }
 
 
@@ -187,10 +189,12 @@ public class WishListActivity extends AppCompatActivity {
                                 strDistrict = dataSnapshot.child("district").getValue(String.class);
                                 strCitizen_image = dataSnapshot.child("citizen_image").getValue(String.class);
 
-                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "default".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "default".equalsIgnoreCase(strCitizen_image)){                                    setupDialog();
+                                if ("".equalsIgnoreCase(strTouristName) | "".equalsIgnoreCase(strTouristSurname) | "".equalsIgnoreCase(strProvince) | "default".equalsIgnoreCase(strProfile_image) | "".equalsIgnoreCase(strPhone) | "".equalsIgnoreCase(strDistrict) | "default".equalsIgnoreCase(strCitizen_image)){
+                                    setupDialog();
                                 } else {
+                                    packageId3 = packageAdapter.getRef(position).getKey();
                                     Intent intentEditPackage = new Intent(WishListActivity.this,DetailPackage.class);
-                                    intentEditPackage.putExtra("PackageID",packageId2);
+                                    intentEditPackage.putExtra("PackageID",packageId3);
                                     startActivity(intentEditPackage);
                                 }
                             }
